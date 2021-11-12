@@ -80,6 +80,18 @@ DATABASES = {
     }
 }
 
+# Lines 84-93, establishes the connection, just uncomment these lines when ready to use.
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'dashboard',
+#         'HOST': 'data.czjngffm4iwg.us-east-1.rds.amazonaws.com',
+#         'PORT': '3306',
+#         'USER': 'admin',
+#         'PASSWORD': 'Messenger1',
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
