@@ -89,6 +89,10 @@ def percentage_access_black_hispanic(request):
     print(mean_perc)
     print("The final state is", len(mean_perc))
     print("The final perc is", len(states))
-    pct_ethnic = get_plot(states, mean_perc)
 
-    return render(request, 'index.html', {'chart': pct_ethnic})
+    #pct_ethnic = get_plot(states, mean_perc)
+    final_state_list = json.dumps(states)
+    final_mean_perc_list = json.dumps(mean_perc)
+    return render(request, 'index.html', {'state': final_state_list, 'perc': final_mean_perc_list})
+
+    #return render(request, 'index.html', {'chart': pct_ethnic})

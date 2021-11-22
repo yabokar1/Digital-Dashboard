@@ -20,12 +20,12 @@
     <!-- Custom CSS -->
     <link href="{% static 'css/style.min.css' %}" rel="stylesheet" />
     <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
-    <!-- HTML5 Shim and Respond.js' %} IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js' %} doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js' %}"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
-      <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+
+
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js' %}"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+
     <![endif]-->
   </head>
 
@@ -33,12 +33,12 @@
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css' %} -->
     <!-- ============================================================== -->
-    <div class="preloader">
-      <div class="lds-ripple">
-        <div class="lds-pos"></div>
-        <div class="lds-pos"></div>
-      </div>
-    </div>
+<!--    <div class="preloader">-->
+<!--      <div class="lds-ripple">-->
+<!--        <div class="lds-pos"></div>-->
+<!--        <div class="lds-pos"></div>-->
+<!--      </div>-->
+<!--    </div>-->
     <!-- ============================================================== -->
     <!-- Main wrapper - style you can find in pages.scss -->
     <!-- ============================================================== -->
@@ -547,12 +547,164 @@
             <!-- Column -->
           </div>
 
-          {% block content %}
-            {% if chart %}
-                <img src="data:image/png;base64, {{chart|safe}}">
-            {% endif %}
-          {% endblock content %}
+<!--          {% block content %}-->
+<!--            {% if chart %}-->
+<!--                <img src="data:image/png;base64, {{chart|safe}}">-->
+<!--            {% endif %}-->
+<!--          {% endblock content %}-->
 
+
+            <canvas id="myChart" width="400" height="100"></canvas>
+              <script>
+                const ctx = document.getElementById('myChart').getContext('2d');
+                var label = JSON.parse('{{ state | safe }}')
+                var p = JSON.parse('{{ perc | safe }}')
+                const myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: label,
+                        datasets: [{
+                            label: 'Percentage Access',
+                            data: p,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+              </script>
+
+          <!-- ============================================================== -->
+          <!-- Sales chart -->
+          <!-- ============================================================== -->
+
+          <!-- ============================================================== -->
+          <!-- Sales chart -->
+          <!-- ============================================================== -->
+          <!-- ============================================================== -->
+          <!-- Recent comment and chats -->
+          <!-- ============================================================== -->
+
+              <!-- Card -->
+              <!-- card -->
+
+              <!-- card new -->
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title m-b-0">Posts</h4>
+                </div>
+                <ul class="list-style-none">
+                  <li class="d-flex no-block card-body">
+                    <i class="fa fa-check-circle w-30px m-t-5"></i>
+                    <div>
+                      <a href="#" class="m-b-0 font-medium p-0"
+                        >Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit.</a
+                      >
+                      <span class="text-muted"
+                        >dolor sit amet, consectetur adipiscing</span
+                      >
+                    </div>
+                    <div class="ml-auto">
+                      <div class="tetx-right">
+                        <h5 class="text-muted m-b-0">20</h5>
+                        <span class="text-muted font-16">Jan</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="d-flex no-block card-body border-top">
+                    <i class="fa fa-gift w-30px m-t-5"></i>
+                    <div>
+                      <a href="#" class="m-b-0 font-medium p-0"
+                        >Congratulation Maruti, Happy Birthday</a
+                      >
+                      <span class="text-muted"
+                        >many many happy returns of the day</span
+                      >
+                    </div>
+                    <div class="ml-auto">
+                      <div class="tetx-right">
+                        <h5 class="text-muted m-b-0">11</h5>
+                        <span class="text-muted font-16">Jan</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="d-flex no-block card-body border-top">
+                    <i class="fa fa-plus w-30px m-t-5"></i>
+                    <div>
+                      <a href="#" class="m-b-0 font-medium p-0"
+                        >Maruti is a Responsive Admin theme</a
+                      >
+                      <span class="text-muted"
+                        >But already everything was solved. It will ...</span
+                      >
+                    </div>
+                    <div class="ml-auto">
+                      <div class="tetx-right">
+                        <h5 class="text-muted m-b-0">19</h5>
+                        <span class="text-muted font-16">Jan</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="d-flex no-block card-body border-top">
+                    <i class="fa fa-leaf w-30px m-t-5"></i>
+                    <div>
+                      <a href="#" class="m-b-0 font-medium p-0"
+                        >Envato approved Maruti Admin template</a
+                      >
+                      <span class="text-muted"
+                        >i am very happy to approved by TF</span
+                      >
+                    </div>
+                    <div class="ml-auto">
+                      <div class="tetx-right">
+                        <h5 class="text-muted m-b-0">20</h5>
+                        <span class="text-muted font-16">Jan</span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="d-flex no-block card-body border-top">
+                    <i class="fa fa-question-circle w-30px m-t-5"></i>
+                    <div>
+                      <a href="#" class="m-b-0 font-medium p-0">
+                        I am alwayse here if you have any question</a
+                      >
+                      <span class="text-muted"
+                        >we glad that you choose our template</span
+                      >
+                    </div>
+                    <div class="ml-auto">
+                      <div class="tetx-right">
+                        <h5 class="text-muted m-b-0">15</h5>
+                        <span class="text-muted font-16">Jan</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- column -->
 
             
           </div>
