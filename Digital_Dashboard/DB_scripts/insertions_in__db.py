@@ -60,7 +60,7 @@ def insert_district_data():
             mycursor.execute(sql, val)
             mydb.commit()
 
-
+# The product info is inserted
 def insert_product_data():
     for (x, y) in product_df.iterrows():
         if (isnan(y[5])):
@@ -118,5 +118,5 @@ def insert_engagement_data():
 
 
 
-#nsert_product_data()
-insert_engagement_data()
+insert_product_data()
+#insert_engagement_data()
