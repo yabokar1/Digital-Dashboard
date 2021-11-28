@@ -1,14 +1,37 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core import serializers
 from django.http import JsonResponse
 import json
 from django.http import HttpResponse
 from .models import Districts
 from .utils import get_plot
-
+from .forms import DistrictForm
 
 def generate_product_info(request):
-    return render(request, 'index.html')
+    return render(request, 'main.html')
+
+def create_district_graph():
+    form = DistrictForm()
+    return form
+
+
+
+def percentage_access_in_state(state):
+
+    state_list = Districts.objects.filter(state=state)
+    district_list = []
+    county_connection = []
+    for x in state_list:
+        print("The district {}".format(state),x.county_connection)
+        county_connection.append(x.county_connection)
+        district_list.append(x.district_id)
+        print("The county connection",county_connection)
+        print("The district_id", district_list)
+
+    return county_connection,district_list
+
+
+
 
 
 def percentage_access_black_hispanic(request):
@@ -74,7 +97,7 @@ def percentage_access_black_hispanic(request):
             tex.append(district_info.pct_black_hispanic)
 
     mean_perc.append((sum(Utah)) / len(Utah))
-    mean_perc.append((sum(Illi)) / len(Illi))
+    #mean_perc.append((sum(Illi)) / len(Illi))
     mean_perc.append((sum(Wisco)) / len(Wisco))
     mean_perc.append((sum(north)) / len(north))
     mean_perc.append((sum(miss)) / len(miss))
@@ -86,13 +109,27 @@ def percentage_access_black_hispanic(request):
     mean_perc.append((sum(jersey)) / len(jersey))
     mean_perc.append((sum(dis)) / len(dis))
     mean_perc.append((sum(tex)) / len(tex))
-    print(mean_perc)
-    print("The final state is", len(mean_perc))
-    print("The final perc is", len(states))
 
-    #pct_ethnic = get_plot(states, mean_perc)
+
     final_state_list = json.dumps(states)
     final_mean_perc_list = json.dumps(mean_perc)
-    return render(request, 'index.html', {'state': final_state_list, 'perc': final_mean_perc_list})
 
-    #return render(request, 'index.html', {'chart': pct_ethnic})
+    form = create_district_graph()
+    county, district = percentage_access_in_state("Illinois")
+
+    if request.method == 'POST':
+        form = DistrictForm(request.POST)
+        if form.is_valid():
+            input_state = form.cleaned_data['state']
+
+            print("The state is",input_state)
+            county,district = percentage_access_in_state(input_state)
+            print("The county is",county)
+            print("The district is",district)
+
+            return render(request, 'main.html', {'district': district, 'county': county, 'form': form})
+
+    print("The request post is",request.POST)
+    return render(request, 'main.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form})
+
+
