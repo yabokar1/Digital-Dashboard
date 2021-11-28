@@ -127,9 +127,8 @@ def percentage_access_black_hispanic(request):
             print("The county is",county)
             print("The district is",district)
 
-            return render(request, 'main.html', {'district': district, 'county': county, 'form': form})
+            return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list})
 
     print("The request post is",request.POST)
-    return render(request, 'main.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form})
-
+    return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form})
 

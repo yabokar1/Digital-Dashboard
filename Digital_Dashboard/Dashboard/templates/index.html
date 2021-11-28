@@ -506,17 +506,96 @@
             <input type="submit">
           </form>
 
+          <div class="content ">
+            <div class="container-fluid">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card text-center">
+                            <div class="card-header ">
+                                <h4 class="card-title">Graph of Percentage Access in different States </h4>
+                            </div>
+                            <div class="card-body">
+                              <div class="myChart">
+                                <canvas id="Chart1"></canvas>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header ">
+                                <h4 class="card-title">Graph of Products vs Product id's</h4>
+                                <p class="card-category">24 Hours performance</p>
+                            </div>
+                            <div class="card-body">
+                              <div class="myChart">
+                                <canvas id="myChart"></canvas>
+                              </div>
+                            </div>
+                            <div class="card-footer ">
+                                <hr>
+                                <div class="stats">
+                                    <i class="fa fa-history"></i> Updated 3 minutes ago
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+               
+               
+            </div>
+          </div>
+
+    
+        <!-- <canvas id="Chart1" width="400" height="100"></canvas>
+          
+            
+        <canvas id="myChart" width="400" height="100"></canvas> -->
+         
+            
 
 
+        <script>
+          const ctx1 = document.getElementById('Chart1').getContext('2d');
+          var label = JSON.parse('{{ state | safe }}')
+          var p = JSON.parse('{{ perc | safe }}')
+          const Chart1 = new Chart(ctx1, {
+              type: 'bar',
+              data: {
+                  labels: label,
+                  datasets: [{
+                      label: 'Percentage Access',
+                      data: p,
+                      backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(255, 206, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(255, 159, 64, 0.2)'
+                      ],
+                      borderColor: [
+                          'rgba(255, 99, 132, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(255, 206, 86, 1)',
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)'
+                      ],
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  scales: {
+                      y: {
+                          beginAtZero: true
+                      }
+                  }
+              }
+          });
 
-
-
-
-          {% block content %}
-            {% if district %}
-              <canvas id="myChart" width="400" height="100"></canvas>
-                <script>
-                  const ctx = document.getElementById('myChart').getContext('2d');
+          const ctx = document.getElementById('myChart').getContext('2d');
                   var label = JSON.parse('{{ district | safe }}')
                   var p = JSON.parse('{{ county | safe }}')
                   const myChart = new Chart(ctx, {
@@ -553,50 +632,12 @@
                           }
                       }
                   });
-                </script>
-            {% else %}
-              <canvas id="myChart" width="400" height="100"></canvas>
-                <script>
-                  const ctx = document.getElementById('myChart').getContext('2d');
-                  var label = JSON.parse('{{ state | safe }}')
-                  var p = JSON.parse('{{ perc | safe }}')
-                  const myChart = new Chart(ctx, {
-                      type: 'bar',
-                      data: {
-                          labels: label,
-                          datasets: [{
-                              label: 'Percentage Access',
-                              data: p,
-                              backgroundColor: [
-                                  'rgba(255, 99, 132, 0.2)',
-                                  'rgba(54, 162, 235, 0.2)',
-                                  'rgba(255, 206, 86, 0.2)',
-                                  'rgba(75, 192, 192, 0.2)',
-                                  'rgba(153, 102, 255, 0.2)',
-                                  'rgba(255, 159, 64, 0.2)'
-                              ],
-                              borderColor: [
-                                  'rgba(255, 99, 132, 1)',
-                                  'rgba(54, 162, 235, 1)',
-                                  'rgba(255, 206, 86, 1)',
-                                  'rgba(75, 192, 192, 1)',
-                                  'rgba(153, 102, 255, 1)',
-                                  'rgba(255, 159, 64, 1)'
-                              ],
-                              borderWidth: 1
-                          }]
-                      },
-                      options: {
-                          scales: {
-                              y: {
-                                  beginAtZero: true
-                              }
-                          }
-                      }
-                  });
-                </script>
-            {% endif %}
-          {% endblock content %}
+        
+          </script>
+                         
+          
+                              
+                  
 
 
 
