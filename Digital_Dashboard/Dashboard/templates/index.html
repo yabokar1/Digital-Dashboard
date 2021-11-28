@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,11 +21,12 @@
     <!-- Custom CSS -->
     <link href="{% static 'css/style.min.css' %}" rel="stylesheet" />
     <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js' %}"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
     <![endif]-->
   </head>
@@ -42,6 +44,7 @@
     <!-- ============================================================== -->
     <!-- Main wrapper - style you can find in pages.scss -->
     <!-- ============================================================== -->
+    
     <div id="main-wrapper">
       <!-- ============================================================== -->
       <!-- Topbar header - style you can find in pages.scss -->
@@ -122,8 +125,7 @@
                   class="nav-link sidebartoggler waves-effect waves-light"
                   href="javascript:void(0)"
                   data-sidebartype="mini-sidebar"
-                  ><i class="mdi mdi-menu font-24"></i
-                ></a>
+                  ></a>
               </li>
               <!-- ============================================================== -->
               <!-- create new -->
@@ -131,7 +133,7 @@
               <li class="nav-item dropdown">
                 <a
                   class="nav-link dropdown-toggle"
-                  href="#"
+                  href="/dashboard"
                   id="navbarDropdown"
                   role="button"
                   data-toggle="dropdown"
@@ -139,8 +141,7 @@
                   aria-expanded="false"
                 >
                   <span class="d-none d-md-block"
-                    >Create New <i class="fa fa-angle-down"></i
-                  ></span>
+                    >Digital Dashboard</span>
                   <span class="d-block d-md-none"
                     ><i class="fa fa-plus"></i
                   ></span>
@@ -186,7 +187,7 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <i class="mdi mdi-bell font-24"></i>
+                
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="#">Action</a>
@@ -210,7 +211,6 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <i class="font-24 mdi mdi-comment-processing"></i>
                 </a>
                 <div
                   class="
@@ -241,19 +241,12 @@
                           </div>
                         </a>
                         <!-- Message -->
-                        <a href="javascript:void(0)" class="link border-top">
+                        <!-- <a href="javascript:void(0)" class="link border-top">
                           <div class="d-flex no-block align-items-center p-10">
                             <span class="btn btn-primary btn-circle"
-                              ><i class="ti-user"></i
-                            ></span>
-                            <div class="m-l-10">
-                              <h5 class="m-b-0">Pavan kumar</h5>
-                              <span class="mail-desc"
-                                >Just see the my admin!</span
-                              >
-                            </div>
+                              Login</span>
                           </div>
-                        </a>
+                        </a> -->
                         <!-- Message -->
                         <a href="javascript:void(0)" class="link border-top">
                           <div class="d-flex no-block align-items-center p-10">
@@ -293,12 +286,7 @@
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
-                  ><img
-                    src="{% static 'images/users/1.jpg' %}"
-                    alt="user"
-                    class="rounded-circle"
-                    width="31"
-                /></a>
+                  >Login</a>
                 <div class="dropdown-menu dropdown-menu-right user-dd animated">
                   <a class="dropdown-item" href="javascript:void(0)"
                     ><i class="ti-user m-r-5 m-l-5"></i> My Profile</a
@@ -354,10 +342,10 @@
               <li class="sidebar-item">
                 <a
                   class="sidebar-link has-arrow waves-effect waves-dark"
-                  href="javascript:void(0)"
+                  href="/dashboard"
                   aria-expanded="false"
                   ><i class="mdi mdi-chart-areaspline"></i
-                  ><span class="hide-menu">Graphs </span></a
+                  ><span class="hide-menu">Dashboard </span></a
                 >
                 <ul aria-expanded="false" class="collapse first-level">
                   <li class="sidebar-item">
@@ -370,7 +358,6 @@
                     <a href="form-wizard.html" class="sidebar-link"
                       ><i class="mdi mdi-note-plus"></i
                       ><span class="hide-menu"> Products vs Percentage access </span></a
-                    >
                   </li>
                 </ul>
               </li>
@@ -382,53 +369,10 @@
                   href="javascript:void(0)"
                   aria-expanded="false"
                   ><i class="mdi mdi-account-settings-variant"></i
-                  ><span class="hide-menu">User Settings </span></a
-                >
-                <ul aria-expanded="false" class="collapse first-level">
-                  <li class="sidebar-item">
-                    <a href="pages-gallery.html" class="sidebar-link"
-                      ><i class="mdi mdi-multiplication-box"></i
-                      ><span class="hide-menu"> Gallery </span></a
-                    >
-                  </li>
-
-                  <li class="sidebar-item">
-                    <a href="pages-invoice.html" class="sidebar-link"
-                      ><i class="mdi mdi-bulletin-board"></i
-                      ><span class="hide-menu"> Invoice </span></a
-                    >
-                  </li>
-                  <li class="sidebar-item">
-                    <a href="pages-chat.html" class="sidebar-link"
-                      ><i class="mdi mdi-message-outline"></i
-                      ><span class="hide-menu"> Chat Option </span></a
-                    >
-                  </li>
-                </ul>
+                  ><span class="hide-menu">User Settings </span></a    
+             
               </li>
-              <li class="sidebar-item">
-                <a
-                  class="sidebar-link has-arrow waves-effect waves-dark"
-                  href="javascript:void(0)"
-                  aria-expanded="false"
-                  ><i class="mdi mdi-account-key"></i
-                  ><span class="hide-menu">Authentication </span></a
-                >
-                <ul aria-expanded="false" class="collapse first-level">
-                  <li class="sidebar-item">
-                    <a href="authentication-login.html" class="sidebar-link"
-                      ><i class="mdi mdi-all-inclusive"></i
-                      ><span class="hide-menu"> Login </span></a
-                    >
-                  </li>
-                  <li class="sidebar-item">
-                    <a href="authentication-register.html" class="sidebar-link"
-                      ><i class="mdi mdi-all-inclusive"></i
-                      ><span class="hide-menu"> Register </span></a
-                    >
-                  </li>
-                </ul>
-              </li>
+             
               
             </ul>
           </nav>
@@ -446,36 +390,33 @@
         <!-- ============================================================== -->
         <!-- Bread crumb and right sidebar toggle -->
         <!-- ============================================================== -->
-        <div class="page-breadcrumb">
+        <!-- <div class="page-breadcrumb">
           <div class="row">
             <div class="col-12 d-flex no-block align-items-center">
               <h4 class="page-title">Dashboard</h4>
               <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                   <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                      Library
-                    </li>
+                   
                   </ol>
                 </nav>
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- ============================================================== -->
         <!-- End Bread crumb and right sidebar toggle -->
         <!-- ============================================================== -->
         <!-- ============================================================== -->
         <!-- Container fluid  -->
         <!-- ============================================================== -->
-        <div class="container-fluid">
+        <!-- <div class="container-fluid"> -->
           <!-- ============================================================== -->
           <!-- Sales Cards  -->
           <!-- ============================================================== -->
-          <div class="row">
+          <!-- <div class="row">
             <!-- Column -->
-            <div class="col-md-6 col-lg-2 col-xlg-3">
+            <!-- <div class="col-md-6 col-lg-2 col-xlg-3">
               <div class="card card-hover">
                 <div class="box bg-cyan text-center">
                   <h1 class="font-light text-white">
@@ -486,7 +427,7 @@
               </div>
             </div>
             <!-- Column -->
-            <div class="col-md-6 col-lg-4 col-xlg-3">
+            <!-- <div class="col-md-6 col-lg-4 col-xlg-3">
               <div class="card card-hover">
                 <div class="box bg-success text-center">
                   <h1 class="font-light text-white">
@@ -494,22 +435,25 @@
                   </h1>
                   <h6 class="text-white">Graphs</h6>
                 </div>
-              </div>
+              </div> -->
+            <!-- Column -->
+
+            <!-- Column -->
+          <div class="form-group d-flex justify-content-center">
+              <form method="POST">
+                {% csrf_token %}
+                <div class="col-xs-3">
+                      {{form.as_p}}
+                </div>
+                <button class="btn btn-primary" type="submit">Submit Query</button>
+              </form>
             </div>
-            <!-- Column -->
-
-            <!-- Column -->
-
-          <form method="POST">
-            {% csrf_token %}
-                {{form.as_p}}
-            <input type="submit">
-          </form>
+          
 
           <div class="content ">
             <div class="container-fluid">
                 <div class="row d-flex justify-content-center">
-                    <div class="col-md-8">
+                    <div class="col-md-8"> 
                         <div class="card text-center">
                             <div class="card-header ">
                                 <h4 class="card-title">Graph of Percentage Access in different States </h4>
@@ -521,6 +465,8 @@
                             </div>
                         </div>
                     </div>
+
+                    {% if district %}
                     <div class="col-md-8">
                         <div class="card">
                             <div class="card-header ">
@@ -532,17 +478,49 @@
                                 <canvas id="myChart"></canvas>
                               </div>
                             </div>
-                            <div class="card-footer ">
-                                <hr>
-                                <div class="stats">
-                                    <i class="fa fa-history"></i> Updated 3 minutes ago
+                            
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+               <!-- <h2> tHIS IS FOR TEST</h2>
+               <br>
+               <div class="content">
+                <div class="container-fluid">
+                    <div class="row justify-content-md-center">
+                        <div class="col">
+
+
+                        </div>
+                        <div class="col-md-5"> 
+                            <div class="card">
+                                <div class="card-header ">
+                                    <h4 class="card-title">Graph of Percentage Access in different States </h4>
+                                </div>
+                                <div class="card-body">
+                                  <div class="myChart">
+                                    <canvas id="Chart1"></canvas>
+                                  </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-               
+    
+                        {% if district %}
+                        <div class="col-md-5">
+                            <div class="card">
+                                <div class="card-header ">
+                                    <h4 class="card-title">Graph of Products vs Product id's</h4>
+                                </div>
+                                <div class="card-body">
+                                  <div class="myChart">
+                                    <canvas id="myChart"></canvas>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div> -->
                
             </div>
           </div>
@@ -596,15 +574,15 @@
           });
 
           const ctx = document.getElementById('myChart').getContext('2d');
-                  var label = JSON.parse('{{ district | safe }}')
-                  var p = JSON.parse('{{ county | safe }}')
+                  var d = JSON.parse('{{ district | safe }}')
+                  var c = JSON.parse('{{ county | safe }}')
                   const myChart = new Chart(ctx, {
                       type: 'bar',
                       data: {
-                          labels: label,
+                          labels: d,
                           datasets: [{
                               label: 'Percentage Access',
-                              data: p,
+                              data: c,
                               backgroundColor: [
                                   'rgba(255, 99, 132, 0.2)',
                                   'rgba(54, 162, 235, 0.2)',

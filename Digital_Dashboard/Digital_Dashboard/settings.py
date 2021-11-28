@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Dashboard',
-    'educator.apps.EducatorConfig'
+    'educator.apps.EducatorConfig',
+    'crispy_forms'
 
 ]
 
