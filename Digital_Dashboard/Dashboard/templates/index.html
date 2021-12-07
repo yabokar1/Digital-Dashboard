@@ -34,6 +34,7 @@
   </head>
 
   <body>
+    
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css' %} -->
     <!-- ============================================================== -->
@@ -66,16 +67,23 @@
             <ul id="sidebarnav" class="p-t-30">
 
 
+
+              {% if user.is_authenticated %}
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  aria-expanded="false"
+                  ><span class="hide-menu"> Logged in as {{ user.username }} </span></a>
+              </li>
               <li class="sidebar-item">
                 <a
                   class="sidebar-link has-arrow waves-effect waves-dark"
-                  href="/dashboard"
+                  href="/dashboard/accounts/logout"
                   aria-expanded="false"
-                  ><i class="material-icons">dashboard</i
-                  ><span class="hide-menu">Dashboard </span></a
+                  ><i class="material-icons">login</i><span class="hide-menu">Logout </span></a
                 >
               </li>
-              
+
 
               <li class="sidebar-item">
                 <a
@@ -87,15 +95,36 @@
              
               </li>
 
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link has-arrow waves-effect waves-dark"
+                  href="/dashboard/accounts/password_change"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Change Password </span></a
+                >
+              </li>
+
+              {% else %}
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link has-arrow waves-effect waves-dark"
+                  href="/dashboard/accounts/login"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Login </span></a
+                >
+              </li>
+              {% endif %}
               
               <li class="sidebar-item">
                 <a
                   class="sidebar-link has-arrow waves-effect waves-dark"
                   href="/dashboard"
                   aria-expanded="false"
-                  ><i class="material-icons">login</i><span class="hide-menu">Login </span></a
+                  ><i class="material-icons">dashboard</i
+                  ><span class="hide-menu">Dashboard </span></a
                 >
               </li>
+
              
               
             </ul>
@@ -170,8 +199,11 @@
 
                   <form class="form-inline justify-content-center" method="POST">
                     <div class="form-group mb-2">
-                      {% csrf_token %}    
-                          {{form.as_p}}                               
+                      {% csrf_token %}
+                        {{form.as_p}}  
+                    
+              
+                                                       
                     </div>  
                     <button class="btn btn-primary btn-sm" style="width: 150px; height: 38px;" type="submit">Submit Query</button>
                                        
@@ -188,7 +220,7 @@
                     <div class="col-md-8"> 
                         <div class="card text-center">
                             <div class="card-header ">
-                                <h4 class="card-title">Graph of Percentage Access in different States </h4>
+                                <h4 class="card-title">Graph of Percentage Access of Black/Hispanic in different States </h4>
                             </div>
                             <div class="card-body">
                               <div class="myChart">
@@ -290,6 +322,7 @@
                           'rgba(75, 192, 192, 0.2)',
                           'rgba(153, 102, 255, 0.2)',
                           'rgba(255, 159, 64, 0.2)'
+                    
                       ],
                       borderColor: [
                           'rgba(255, 99, 132, 1)',
@@ -298,16 +331,19 @@
                           'rgba(75, 192, 192, 1)',
                           'rgba(153, 102, 255, 1)',
                           'rgba(255, 159, 64, 1)'
+                          
                       ],
                       borderWidth: 1
                   }]
               },
               options: {
                   scales: {
-                      y: {
+                    y: {
                           beginAtZero: true
                       }
+                      
                   }
+
               }
           });
 

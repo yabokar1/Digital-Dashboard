@@ -1,11 +1,54 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
 from django.core import serializers
 from django.http import JsonResponse
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.forms import UserCreationForm
+from .forms import UserForm
+
 from .models import Districts
-from .utils import get_plot
+from .models import ProductsInfo
+from .models import EngagementInfo
 from .forms import DistrictForm
+
+
+def create_user_for_signup(request):
+
+    if(request.method == 'POST'):
+        form = UserForm(request.POST)
+        print("The form is", form)
+
+        if(form.is_valid()):
+            print("YESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+            form.save()
+
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+
+            print("The username is",username)
+            print("The password is",raw_password)
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+
+
+            return HttpResponseRedirect('/dashboard',{'form' : form})
+
+        else:
+            # return HttpResponseRedirect('/dashboard/signup',{'form' : form})
+            print(form.errors)
+        
+    else:
+        form = UserForm()
+    return render(request, 'sign-up.html', {'form' : form})
+        
+    
+def show_user_login__page(request):
+    return render(request, 'login.html')
+
+
+def show_sign_up_page(request):
+    return render(request, 'sign-up.html')
 
 def generate_product_info(request):
     return render(request, 'main.html')
@@ -15,18 +58,17 @@ def create_district_graph():
     return form
 
 
-
 def percentage_access_in_state(state):
 
     state_list = Districts.objects.filter(state=state)
     district_list = []
     county_connection = []
     for x in state_list:
-        print("The district {}".format(state),x.county_connection)
+        # print("The district {}".format(state),x.county_connection)
         county_connection.append(x.county_connection)
         district_list.append(x.district_id)
-        print("The county connection",county_connection)
-        print("The district_id", district_list)
+        # print("The county connection",county_connection)
+        # print("The district_id", district_list)
 
     return county_connection,district_list
 
@@ -173,7 +215,7 @@ def avg(li):
 
 def percentage_access_black_hispanic(request):
     states = ['Utah', 'Illinois', 'Wisconsin', 'NC', 'Missouri', 'Washington', 'Massachusetts', 'NY', 'Indiana',
-              'Virginia', 'New Jersey', 'DOC', 'Texas']
+              'Virginia', 'New Jersey', 'Texas', 'DOC']
 
     Utah = []
     Illi = []
@@ -236,7 +278,7 @@ def percentage_access_black_hispanic(request):
             tex.append(district_info.pct_black_hispanic)
 
     mean_perc.append((sum(Utah)) / len(Utah))
-    #mean_perc.append((sum(Illi)) / len(Illi))
+    mean_perc.append((sum(Illi)) / len(Illi))
     mean_perc.append((sum(Wisco)) / len(Wisco))
     mean_perc.append((sum(north)) / len(north))
     mean_perc.append((sum(miss)) / len(miss))
@@ -246,12 +288,14 @@ def percentage_access_black_hispanic(request):
     mean_perc.append((sum(indiana)) / len(indiana))
     mean_perc.append((sum(vir)) / len(vir))
     mean_perc.append((sum(jersey)) / len(jersey))
-    mean_perc.append((sum(dis)) / len(dis))
     mean_perc.append((sum(tex)) / len(tex))
-
-
+    mean_perc.append((sum(dis)) / len(dis))
+    
     final_state_list = json.dumps(states)
     final_mean_perc_list = json.dumps(mean_perc)
+    # print("The list is ",final_state_list)
+    # print("The perc list is ",final_mean_perc_list)
+
     s, exp = expenditure_per_pupil_in_different_states()
     print("Expenditure is",exp)
     form = create_district_graph()
@@ -262,15 +306,13 @@ def percentage_access_black_hispanic(request):
         if form.is_valid():
             input_state = form.cleaned_data['state']
 
-            print("The state is",input_state)
+            # print("The state is",input_state)
             county,district = percentage_access_in_state(input_state)
-            print("The county is",county)
-            print("The district is",district)
+            # print("The county is",county)
+            # print("The district is",district)
 
             return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list , 'st':s, 'ex':exp})
 
-    print("The request post is",request.POST)
+    # print("The request post is",request.POST)
     return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp})
-
-
 
