@@ -29,7 +29,7 @@
     <script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
+    <script src="https://d3js.org/d3.v6.js"></script>
     <![endif]-->
   </head>
 
@@ -73,7 +73,7 @@
                 <a
                   class="sidebar-link waves-effect waves-dark"
                   aria-expanded="false"
-                  ><span class="hide-menu"> Logged in as {{ user.username }} </span></a>
+                  ><span class="hide-menu"> Logged in as {{ user.username }} ({{user.userprofile.user_type}}) </span></a>
               </li>
               <li class="sidebar-item">
                 <a
@@ -101,6 +101,15 @@
                   href="/dashboard/accounts/password_change"
                   aria-expanded="false"
                   ><i class="material-icons">login</i><span class="hide-menu">Change Password </span></a
+                >
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link has-arrow waves-effect waves-dark"
+                  href="/dashboard/speedtest/"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Speed Test </span></a
                 >
               </li>
 
@@ -244,6 +253,9 @@
                           
                       </div>
                    </div>
+
+                   
+                 </div>
                       
                   {% if district %}
                     <div class="col-md-8">
@@ -385,6 +397,7 @@
                   }
               }
           });
+
 
           </script>
                          

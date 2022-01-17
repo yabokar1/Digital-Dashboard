@@ -8,5 +8,6 @@ urlpatterns = [
     # path('login/', views.show_user_login__page),
     path('signup/', views.create_user_for_signup),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('speedtest/', views.show_speed_test_page),
     path('', RedirectView.as_view(url='home/', permanent=True)),
 ]

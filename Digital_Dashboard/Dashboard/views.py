@@ -5,7 +5,7 @@ from django.http import JsonResponse
 import json
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
-from .forms import UserForm
+from .forms import UserForm, ProfileForm
 
 from .models import Districts
 from .models import ProductsInfo
@@ -17,11 +17,14 @@ def create_user_for_signup(request):
 
     if(request.method == 'POST'):
         form = UserForm(request.POST)
-        print("The form is", form)
+        profile_form = ProfileForm(request.POST)
 
-        if(form.is_valid()):
-            print("YESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-            form.save()
+        if(form.is_valid() and profile_form.is_valid()):
+            
+            user = form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
 
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
@@ -40,9 +43,13 @@ def create_user_for_signup(request):
         
     else:
         form = UserForm()
-    return render(request, 'sign-up.html', {'form' : form})
+        profile_form = ProfileForm()
+    return render(request, 'sign-up.html', {'form' : form, 'profile_form': profile_form})
         
-    
+
+def show_speed_test_page(request):
+    return render(request, 'speed-test.html')  
+
 def show_user_login__page(request):
     return render(request, 'login.html')
 
