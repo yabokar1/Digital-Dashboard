@@ -14,6 +14,22 @@ USER_TYPES= [
     ('policymaker', 'PolicyMaker'),
     ]
 
+
+COUNTRIES= [
+    ('canada', 'Canada'),
+    ('usa', 'USA')
+]
+
+STATES = [
+    ('utah', 'Utah'),
+    ('illinois', 'Ilinois'),
+    ('north carolina', 'North Carolina'),
+    ('missouri', 'Missouri'),
+    ('washington', 'Washington')
+]
+    # states = ['Utah', 'Illinois', 'Wisconsin', 'NC', 'Missouri', 'Washington', 'Connecticut', 'Massachusetts', 'NY', 'Indiana', 'Virginia', 'Ohio', 'New Jersey', 'California', 'DOC', 'Arizona','Texas']
+
+
 class DistrictForm(ModelForm):
     class Meta:
         model = Districts
@@ -44,6 +60,14 @@ class ProfileForm(forms.ModelForm):
             'user_type': forms.Select(choices=USER_TYPES)
             
         }
+
+
+class FilterForm(forms.Form):
+    country = forms.CharField(widget=forms.Select(choices=COUNTRIES))
+    state = forms.CharField(label="State/Province", widget=forms.Select(choices=STATES))
+
+   
+
 
 
 

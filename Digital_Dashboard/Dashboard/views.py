@@ -11,6 +11,7 @@ from .models import Districts
 from .models import ProductsInfo
 from .models import EngagementInfo
 from .forms import DistrictForm
+from .forms import FilterForm
 
 
 def create_user_for_signup(request):
@@ -61,7 +62,8 @@ def generate_product_info(request):
     return render(request, 'main.html')
 
 def create_district_graph():
-    form = DistrictForm()
+    # form = DistrictForm()
+    form = FilterForm
     return form
 
 
@@ -209,9 +211,9 @@ def expenditure_per_pupil_in_different_states():
     else:
         avg_expenditure_for_states.append(0)
 
-    final_states_list = json.dumps(states)
-    final_expenditure_list = json.dumps(avg_expenditure_for_states)
-    return final_states_list,final_expenditure_list
+    # final_states_list = json.dumps(states)
+    # final_expenditure_list = json.dumps(avg_expenditure_for_states)    #commenting lines 212 and 213 for now
+    return states,avg_expenditure_for_states
 
 
 def avg(li):
@@ -308,18 +310,30 @@ def percentage_access_black_hispanic(request):
     form = create_district_graph()
     county, district = percentage_access_in_state("Illinois")
 
-    if request.method == 'POST':
-        form = DistrictForm(request.POST)
-        if form.is_valid():
-            input_state = form.cleaned_data['state']
+    keyVal = {};
+    originalData = []   # Data contains array of objects
 
-            # print("The state is",input_state)
-            county,district = percentage_access_in_state(input_state)
-            # print("The county is",county)
-            # print("The district is",district)
+    i = 0
+    for i in range(len(s)):
+        originalData.append({ "state": s[i], "expenditure": exp[i] });
+    
+    data = json.dumps(originalData)              # data in JSON format ready to be used by d3.js
+
+    print("the data is", data)
+
+    if request.method == 'POST':
+        # form = DistrictForm(request.POST)
+        form = FilterForm(request.POST)
+        if form.is_valid():
+            # input_state = form.cleaned_data['state']
+
+            
+            # county,district = percentage_access_in_state(input_state)
+            
 
             return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list , 'st':s, 'ex':exp})
 
     # print("The request post is",request.POST)
-    return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp})
+    
+    return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp, 'mydata': data})
 
