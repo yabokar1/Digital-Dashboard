@@ -216,6 +216,18 @@ def expenditure_per_pupil_in_different_states():
     return states,avg_expenditure_for_states
 
 
+def totalNumberOfSchoolDistricts():
+    district_ids = []
+    states = []
+    obj = Districts.objects.all()
+    for item in obj:
+        if item.district_id and item.district_id not in district_ids:
+            district_ids.append(item.district_id)
+        if item.state and item.state not in states:
+            states.append(item.state);
+    return len(district_ids), len(states)
+
+
 def avg(li):
     j = 0
     for i in li:
@@ -225,6 +237,7 @@ def avg(li):
 def percentage_access_black_hispanic(request):
     states = ['Utah', 'Illinois', 'Wisconsin', 'NC', 'Missouri', 'Washington', 'Massachusetts', 'NY', 'Indiana',
               'Virginia', 'New Jersey', 'Texas', 'DOC']
+    location_list = []
 
     Utah = []
     Illi = []
@@ -319,21 +332,38 @@ def percentage_access_black_hispanic(request):
     
     data = json.dumps(originalData)              # data in JSON format ready to be used by d3.js
 
-    print("the data is", data)
+    numberofdistricts, numberofstates = totalNumberOfSchoolDistricts()         # statistic 1
+    print('Total number of districts is', numberofdistricts)
 
     if request.method == 'POST':
         # form = DistrictForm(request.POST)
         form = FilterForm(request.POST)
         if form.is_valid():
-            # input_state = form.cleaned_data['state']
 
+            # input_state = form.cleaned_data['state']
+            input_country = request.POST.get('country')
+            print("The country is",input_country)
+
+            if input_country == 'usa':
+                location_list = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington', 'Massachusetts', 'New York', 'Indiana',
+              'Virginia', 'New Jersey', 'Texas', 'District of Columbia']
+            else:
+                location_list = ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon']
+
+
+            print('location list is ', location_list)
+            input_location = ''
+            if (request.POST.get('locations') != None) :
+                 input_location = request.POST.get('locations')
+                 print('input Location is', input_location)
             
+            # print('location value is',input_location)   
             # county,district = percentage_access_in_state(input_state)
             
 
-            return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list , 'st':s, 'ex':exp})
+            return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list , 'st':s, 'ex':exp, 'mydata': data, 'location_list': location_list, 'inputlocation': input_location, 'inputcountry': input_country, 'firststat': numberofdistricts })
 
     # print("The request post is",request.POST)
     
-    return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp, 'mydata': data})
+    return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp, 'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates})
 

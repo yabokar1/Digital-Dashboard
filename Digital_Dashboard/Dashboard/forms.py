@@ -63,10 +63,9 @@ class ProfileForm(forms.ModelForm):
 
 
 class FilterForm(forms.Form):
-    country = forms.CharField(widget=forms.Select(choices=COUNTRIES))
-    state = forms.CharField(label="State/Province", widget=forms.Select(choices=STATES))
+    country = forms.CharField(widget=forms.Select(choices=COUNTRIES, attrs={'onchange': 'form.submit();'}))
+    # state = forms.CharField(label="State/Province", widget=forms.Select(choices=STATES))
 
-   
 
 
 

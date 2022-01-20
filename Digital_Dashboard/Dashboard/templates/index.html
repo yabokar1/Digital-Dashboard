@@ -227,41 +227,88 @@
           <div class="content ">
              <div class="container-fluid">
               <h4><strong>Digital Dashboard</strong></h4><br>
-                  <div class="row">
-                      <!-- {% csrf_token %}
-                      <div class="col-sm-6">
-                        {{form.as_p}}
-                      </div> -->
-                      {% for field in form  %}
-                        <div class="col-sm-1">
-                          {{ field.label }} {{ field }} 
+                <form method="POST">
+                  {% csrf_token %}
+                    <div class="row">
+                      <div>
+                        <div class="col-md-3">
+                          <input type="hidden">Country</input>
+                          <select name="country" id="different_countries" onchange=form.submit()>
+                            <option disabled selected="true"> -- select an option -- </option>
+                            {% if inputcountry == 'usa' %}
+                            <option selected="true" value="usa">USA</option>
+                            <option value="canada">Canada</option>
+                            {% elif inputcountry == 'canada' %}
+                            <option selected="true" value="canada">Canada</option>
+                            <option value="usa">USA</option>
+                            {% else %}
+                             <option value="canada">Canada</option>
+                             <option value="usa">USA</option>
+                            {% endif %}
+                                <!-- <option value="usa">USA</option>
+                                <option value="canada">Canada</option>
+                               -->
+                          </select>
+                        </div> 
+                        <div class="col-md-3">
+                          
+                            <input type="hidden">State/Province</input>
+                            <select name="locations" id="different_locations">
+                              <option disabled selected="true"> -- select an option -- </option>
+                              {% for item in location_list  %}
+                                 {% if inputlocation == item %}
+                                 <option selected="true" value="{{item}}">{{ item }}</option>
+                                 {% else %}
+                                  <option value="{{item}}">{{ item }}</option>
+                                 {% endif %}
+                              {% endfor %}
+                            </select>
                         </div>
-                      {% endfor %}  
-                  </div>
-                  <button type="submit" class="btn btn-primary btn mt-4 w-50">Filter</button>
-      
+                        <div class="col-md-3">
+                         
+                        </div> 
+
+                      </div>
+                      
+                          
+
+                    </div>
+                    <button type="submit" class="btn btn-primary btn mt-4 w-50">Filter</button>
+                  </form> 
+
                  
                 <br><br>
                 <div class="row">
 
-                  <div class="col-sm-4">
+                  <div class="col-sm-3">
                     <div class="card">
                       <div class="card-header ">
                         <h4 class="card-title">Statistic 1 </h4>
                      </div>
                       <div class="card-body">
-                        <!-- <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                        <h5 class="card-title">Total number of School Districts</h5>
                         <!-- <div id="my_dataviz"></div> -->
+                        <h1>{{firststat}}</h1>
                       </div>
                     </div>
                   </div>
 
-                  <div class="col-sm-4">
+                  <div class="col-sm-3">
                     <div class="card">
                       <div class="card-header ">
                         <h4 class="card-title">Statistic 2 </h4>
+                     </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Number Of states</h5>
+                        <h1>{{secondstat}}</h1>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <div class="card">
+                      <div class="card-header ">
+                        <h4 class="card-title">Statistic 3 </h4>
                      </div>
                       <div class="card-body">
                         <!-- <h5 class="card-title">Special title treatment</h5>
@@ -271,10 +318,10 @@
                     </div>
                   </div>
 
-                  <div class="col-sm-4">
+                  <div class="col-sm-3">
                     <div class="card">
                       <div class="card-header ">
-                        <h4 class="card-title">Statistic 3 </h4>
+                        <h4 class="card-title">Statistic 4 </h4>
                      </div>
                       <div class="card-body">
                         <!-- <h5 class="card-title">Special title treatment</h5>
