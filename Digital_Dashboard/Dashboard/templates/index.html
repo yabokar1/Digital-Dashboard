@@ -30,7 +30,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v4.js"></script>
-    <![endif]-->
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+   
+    
   </head>
 
   <body>
@@ -78,14 +81,24 @@
                   aria-expanded="false"
                   ><span class="hide-menu"> Logged in as {{ user.username }} ({{user.userprofile.user_type}}) </span></a>
               </li>
+
               <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/home"
+                  aria-expanded="false"
+                  ><i class="material-icons">dashboard</i
+                  ><span class="hide-menu">Dashboard </span></a
+                >
+              </li>
+              <!-- <li class="sidebar-item">
                 <a
                   class="sidebar-link waves-effect waves-dark"
                   href="/dashboard/accounts/logout"
                   aria-expanded="false"
                   ><i class="material-icons">login</i><span class="hide-menu">Logout </span></a
                 >
-              </li>
+              </li> -->
 
 
               <li class="sidebar-item">
@@ -127,13 +140,13 @@
               </li>
               {% endif %}
               
+
               <li class="sidebar-item">
                 <a
                   class="sidebar-link waves-effect waves-dark"
-                  href="/dashboard"
+                  href="/dashboard/accounts/logout"
                   aria-expanded="false"
-                  ><i class="material-icons">dashboard</i
-                  ><span class="hide-menu">Dashboard </span></a
+                  ><i class="material-icons">logout</i><span class="hide-menu">Logout </span></a
                 >
               </li>
 
@@ -229,29 +242,34 @@
               <h4><strong>Digital Dashboard</strong></h4><br>
                 <form method="POST">
                   {% csrf_token %}
-                    <div class="row">
-                      <div>
-                        <div class="col-md-3">
-                          <input type="hidden">Country</input>
-                          <select name="country" id="different_countries" onchange=form.submit()>
-                            <option disabled selected="true"> -- select an option -- </option>
-                            {% if inputcountry == 'usa' %}
-                            <option selected="true" value="usa">USA</option>
-                            <option value="canada">Canada</option>
-                            {% elif inputcountry == 'canada' %}
-                            <option selected="true" value="canada">Canada</option>
-                            <option value="usa">USA</option>
-                            {% else %}
-                             <option value="canada">Canada</option>
-                             <option value="usa">USA</option>
-                            {% endif %}
-                                <!-- <option value="usa">USA</option>
+                    <!-- <div class="row"> -->
+        
+                        <!-- <div class="col"> -->
+
+                          <div class="form-inline">
+                            <div class="form-group" style="margin-right: 15px;">
+                              <input type="hidden">Country</input>
+                              <select name="country" id="different_countries" onchange=form.submit()>
+                                <option disabled selected="true"> -- select an option -- </option>
+                                {% if inputcountry == 'usa' %}
+                                <option selected="true" value="usa">USA</option>
                                 <option value="canada">Canada</option>
-                               -->
-                          </select>
-                        </div> 
-                        <div class="col-md-3">
-                          
+                                {% elif inputcountry == 'canada' %}
+                                <option selected="true" value="canada">Canada</option>
+                                <option value="usa">USA</option>
+                                {% else %}
+                                <option value="canada">Canada</option>
+                                <option value="usa">USA</option>
+                                {% endif %}
+                                    <!-- <option value="usa">USA</option>
+                                    <option value="canada">Canada</option>
+                                  -->
+                              </select>
+                            </div>
+                            
+                        <!-- </div>  -->
+                        <!-- <div class="col"> -->
+                          <div class="form-group" style="margin-right: 15px;">
                             <input type="hidden">State/Province</input>
                             <select name="locations" id="different_locations">
                               <option disabled selected="true"> -- select an option -- </option>
@@ -263,17 +281,18 @@
                                  {% endif %}
                               {% endfor %}
                             </select>
-                        </div>
-                        <div class="col-md-3">
-                         
-                        </div> 
+                          </div>
+                        <!-- </div> -->
+                        <!-- <div class="col"> -->
+                          <button type="submit" class="btn btn-primary btn w-40">Filter</button>
+                        <!-- </div>  -->
 
-                      </div>
+                      
                       
                           
 
                     </div>
-                    <button type="submit" class="btn btn-primary btn mt-4 w-50">Filter</button>
+                    <!-- <button type="submit" class="btn btn-primary btn mt-4 w-50">Filter</button> -->
                   </form> 
 
                  
@@ -314,6 +333,36 @@
                         <!-- <h5 class="card-title">Special title treatment</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                         <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                        <div class="row">
+                          <h5 class="card-title mr-2">Number Of Learning Products</h5>
+                          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                              Products
+                          </button>
+                          
+                          
+                        </div>
+                        <h1>{{thirdstat}}</h1>
+                        
+                        
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">List of Products</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              {% for product in products %}
+                              <div class="modal-body">
+                                <a href="{{product.url}}">{{product.product_name}}</a>
+                              </div>
+                              {% endfor %}
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                         <!-- <button class="btn btn-primary">List of Learning Products</button> -->
                       </div>
                     </div>
                   </div>
@@ -327,15 +376,19 @@
                         <!-- <h5 class="card-title">Special title treatment</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                         <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                        <!-- <h5 class="card-title">Count of Suburbs, Rural, Town and City</h5> -->
+                        <!-- <h1>{{suburb}}</h1> <h1>{{rural}}</h1> <h1>{{town}}</h1> <h1>{{city}}</h1> -->
+                        <h5 class="card-title">Number Of states</h5>
+                        <h1>{{secondstat}}</h1>
                       </div>
                     </div>
                   </div>
 
 
-                  <div class="col-sm-6">
+                  <div class="col-sm-12 col-md-12 col-lg-6">
                     <div class="card">
                       <div class="card-header ">
-                        <h4 class="card-title">Graph of Percentage Access of Black/Hispanic in different States </h4>
+                        <h4 class="card-title">Average Expenditure per pupil for different states </h4>
                      </div>
                       <div class="card-body align-items-center mx-auto mt-auto mb-auto">
                         <!-- <h5 class="card-title">Special title treatment</h5>
@@ -346,22 +399,21 @@
                     </div>
                   </div>
 
-                  <div class="col-sm-6">
+                  <div class="col-sm-12 col-md-12 col-lg-6">
                     <div class="card">
                       <div class="card-header ">
-                        <h4 class="card-title">Graph of Percentage Access of Black/Hispanic in different States </h4>
+                        <h4 class="card-title">Percentage of Locale in All States </h4>
                      </div>
-                      <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
+                      <div class="card-body align-items-center mx-auto mt-auto mb-auto" >
+                        <!-- <h5 class="card-title">Special title treatment</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                        <div id="my_datadonutviz"></div>
+                        
                       </div>
                     </div>
                   </div>
 
-
-
-
                   <div class="col-sm-6">
                     <div class="card">
                       <div class="card-header ">
@@ -371,7 +423,7 @@
                         <h5 class="card-title">Special title treatment</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                         <a href="#" class="btn btn-primary">Go somewhere</a>
-                        <div id="my_dataviz"></div>
+                        <!-- <div id="my_dataviz"></div> -->
                       </div>
                     </div>
                   </div>
@@ -571,51 +623,6 @@
 
 
 
-
-
-          // var data = JSON.parse('{{ mydata | safe }}');
-          // console.log("The data is", data);
-          // var margin = {top: 50, right: 50, bottom: 50, left: 50},
-          // width = 860 - margin.left - margin.right,
-          // height = 500 - margin.top - margin.bottom;
-
-          // // append the svg object to the body of the page
-          // const svg = d3.select("#my_dataviz")
-          //     .append('svg')
-          //     .attr('width', width - margin.left - margin.right)
-          //     .attr('height', height - margin.top - margin.bottom)
-          //     .attr('viewBox', [0, 0, width, height]);
-          
-          // // X axis
-          // var x = d3.scaleBand()
-          //   .range([ 0, width ])
-          //   .domain(data.map(function(d) { return d.state; }))
-          //   .padding(0.2);
-          // svg.append("g")
-          //   .attr("transform", `translate(0,${height - margin.bottom})`)
-          //   .call(d3.axisBottom(x))
-          //   .selectAll("text")
-          //     .attr("transform", "translate(-10,0)rotate(-45)")
-          //     .style("text-anchor", "end");
-
-          // // Add Y axis
-          // var y = d3.scaleLinear()
-          //   .domain([0, 20000])
-          //   .range([ height - margin.bottom, margin.top ]);
-          // svg.append("g")
-          //   .call(d3.axisLeft(y));
-
-          //   svg.selectAll("mybar")
-          //     .data(data)
-          //     .enter()
-          //     .append("rect")
-          //       .attr('x', function(d) { return x(d.state); })
-          //       .attr("y", function(d) { return y(d.expenditure); })
-          //       .attr("width", x.bandwidth())
-          //       .attr("height", function(d) { return y(0) - y(d.expenditure); })
-          //       .attr("fill", "royalblue")
-
-
           var data = JSON.parse('{{ mydata | safe }}');
           var margin = {top: 30, right: 30, bottom: 70, left: 60},
           width = 560 - margin.left - margin.right,
@@ -624,8 +631,6 @@
           // append the svg object to the body of the page
           var svg = d3.select("#my_dataviz")
             .append("svg")
-              // .attr("width", width + margin.left + margin.right)
-              // .attr("height", height + margin.top + margin.bottom)
               .attr("preserveAspectRatio", "xMinYMin meet")
               .attr("viewBox", "0 0 600 300")
             .append("g")
@@ -663,7 +668,104 @@
               .attr("width", x.bandwidth())
               .attr("height", function(d) { return height - y(d.expenditure); })
               .attr("fill", "royalblue")
+
+
+          //Donut graph
+          var widthofdonut = 700;
+          var heightofdonut = 410;
+          var marginfordonut = 5;
+          let s = JSON.parse('{{ suburb | safe }}');
+          let r = JSON.parse('{{ rural | safe }}');
+          let t = JSON.parse('{{ town | safe }}');
+          let c = JSON.parse('{{ city | safe }}');
+          console.log("value of suburb is", s)
+          console.log("value of rural is", r)
+          console.log("value of town is", t)
+          console.log("value of city is", c)
+          var radius = Math.min(widthofdonut, heightofdonut) / 2 - marginfordonut
         
+
+            var svg1 = d3.select("#my_datadonutviz")
+              .append("svg")
+                .attr("width", widthofdonut)
+                .attr("height", heightofdonut)
+              .append("g")
+                .attr("transform", "translate(" + widthofdonut / 2 + "," + heightofdonut / 2 + ")");
+
+            // Create dummy data
+            // var data = {a: 9, b: 20, c:30, d:8, e:12, f:3, g:7, h:14}
+            let datafordonut = {suburb: s, rural: r, town:t, city:c}
+
+            // set the color scale
+            var colordonut = d3.scaleOrdinal()
+              .domain(["suburb", "rural", "town", "city"])
+              .range(d3.schemeDark2);
+
+            // Compute the position of each group on the pie:
+            var pie = d3.pie()
+              .sort(null) // Do not sort group by size
+              .value(function(d) {return d.value; })
+            var data_ready = pie(d3.entries(datafordonut))
+
+            // The arc generator
+            var arc = d3.arc()
+              .innerRadius(radius * 0.5)         // This is the size of the donut hole
+              .outerRadius(radius * 0.8)
+              
+
+            // Another arc that won't be drawn. Just for labels positioning
+            var outerArc = d3.arc()
+              .innerRadius(radius * 0.9)
+              .outerRadius(radius * 0.9)
+
+            // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+            svg1
+              .selectAll('allSlices')
+              .data(data_ready)
+              .enter()
+              .append('path')
+              .attr('d', arc)
+              .attr('fill', function(d){ return(colordonut(d.data.key)) })
+              .attr("stroke", "white")
+              .style("stroke-width", "2px")
+              .style("opacity", 0.7)
+
+            // Add the polylines between chart and labels:
+            svg1
+              .selectAll('allPolylines')
+              .data(data_ready)
+              .enter()
+              .append('polyline')
+                .attr("stroke", "black")
+                .style("fill", "none")
+                .attr("stroke-width", 1)
+                .attr('points', function(d) {
+                  var posA = arc.centroid(d) // line insertion in the slice
+                  var posB = outerArc.centroid(d) // line break: we use the other arc generator that has been built only for that
+                  var posC = outerArc.centroid(d); // Label position = almost the same as posB
+                  var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2 // we need the angle to see if the X position will be at the extreme right or extreme left
+                  posC[0] = radius * 0.95 * (midangle < Math.PI ? 1 : -1); // multiply by 1 or -1 to put it on the right or on the left
+                  return [posA, posB, posC]
+                })
+
+            // Add the polylines between chart and labels:
+            svg1
+              .selectAll('allLabels')
+              .data(data_ready)
+              .enter()
+              .append('text')
+                .text( function(d) { console.log(d.data.key) ; return d.data.key + ":" + d.data.value } )
+                .attr('transform', function(d) {
+                    var pos = outerArc.centroid(d);
+                    var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
+                    pos[0] = radius * 0.99 * (midangle < Math.PI ? 1 : -1);
+                    return 'translate(' + pos + ')';
+                
+                })
+                .style('text-anchor', function(d) {
+                    var midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
+                    return (midangle < Math.PI ? 'start' : 'end')
+                })
 
           </script>
                          

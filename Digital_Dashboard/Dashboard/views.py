@@ -12,6 +12,7 @@ from .models import ProductsInfo
 from .models import EngagementInfo
 from .forms import DistrictForm
 from .forms import FilterForm
+from django.contrib.auth.decorators import login_required
 
 
 def create_user_for_signup(request):
@@ -53,6 +54,10 @@ def show_speed_test_page(request):
 
 def show_user_login__page(request):
     return render(request, 'login.html')
+
+
+def show_join_us_page(request):
+    return render(request, 'joinustoday.html')
 
 
 def show_sign_up_page(request):
@@ -102,7 +107,7 @@ def expenditure_per_pupil_in_different_states():
     dis = []
     ari = []
     tex = []
-    states = ['Utah', 'Illinois', 'Wisconsin', 'NC', 'Missouri', 'Washington', 'Connecticut', 'Massachusetts', 'NY', 'Indiana', 'Virginia', 'Ohio', 'New Jersey', 'California', 'DOC', 'Arizona','Texas']
+    states = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington', 'Connecticut', 'Massachusetts', 'New York', 'Indiana', 'Virginia', 'Ohio', 'New Jersey', 'California', 'District of Columbia', 'Arizona','Texas']
 
     o = Districts.objects.all()
 
@@ -227,6 +232,39 @@ def totalNumberOfSchoolDistricts():
             states.append(item.state);
     return len(district_ids), len(states)
 
+def total_number_of_products():
+    product_list = ProductsInfo.objects.filter()
+    product_data = []
+
+    for product in product_list:
+        product_data.append({ "product_name": product.product_name, "url": product.url })
+
+    return product_data, len(product_data)
+
+def total_locale_type():
+    suburb = Districts.objects.filter(locale="Suburb")
+    rural = Districts.objects.filter(locale="Rural")
+    town = Districts.objects.filter(locale="Town")
+    city = Districts.objects.filter(locale="City")
+
+    suburb_list = []
+    rural_list = []
+    town_list = []
+    city_list = []
+    for item in suburb:
+        suburb_list.append(item)
+
+    for item in rural:
+        rural_list.append(item)
+
+    for item in town:
+         town_list.append(item)
+
+    for item in city:
+        city_list.append(item)
+
+    return len(suburb_list), len(rural_list), len(town_list), len(city_list)
+
 
 def avg(li):
     j = 0
@@ -234,6 +272,7 @@ def avg(li):
         j = j + i
     return (j/len(li))
 
+@login_required(login_url='/dashboard/accounts/login/')       #forces user to login if they try to go /dashboard/home path
 def percentage_access_black_hispanic(request):
     states = ['Utah', 'Illinois', 'Wisconsin', 'NC', 'Missouri', 'Washington', 'Massachusetts', 'NY', 'Indiana',
               'Virginia', 'New Jersey', 'Texas', 'DOC']
@@ -335,6 +374,10 @@ def percentage_access_black_hispanic(request):
     numberofdistricts, numberofstates = totalNumberOfSchoolDistricts()         # statistic 1
     print('Total number of districts is', numberofdistricts)
 
+    products, numberofproducts = total_number_of_products()                    #statistic 2
+
+    suburb, rural, town, city = total_locale_type()
+
     if request.method == 'POST':
         # form = DistrictForm(request.POST)
         form = FilterForm(request.POST)
@@ -365,5 +408,5 @@ def percentage_access_black_hispanic(request):
 
     # print("The request post is",request.POST)
     
-    return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp, 'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates})
+    return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp, 'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town, 'city': city})
 

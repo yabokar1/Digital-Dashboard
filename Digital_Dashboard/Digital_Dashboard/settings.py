@@ -132,9 +132,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-LOGIN_REDIRECT_URL = '/dashboard'
+LOGIN_REDIRECT_URL = '/dashboard/home'
 LOGOUT_REDIRECT_URL = '/dashboard'
-PASSWORD_CHANGE_REDIRECT_URL = '/dashboard'
+PASSWORD_CHANGE_REDIRECT_URL = '/dashboard/home'
 
 
 
@@ -147,4 +147,5 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
