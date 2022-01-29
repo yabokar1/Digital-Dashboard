@@ -44,60 +44,154 @@
   </head>
 
   <body>
-
     <div id="main-wrapper">
-       
-        <aside class="left-sidebar" data-sidebarbg="skin5">
-          <!-- Sidebar scroll-->
-          <div class="scroll-sidebar">
-            <!-- Sidebar navigation-->
-            <nav class="sidebar-nav">
-              <ul id="sidebarnav" class="p-t-30">
-                    <li class="sidebar-item">
-                    <h4 class="sidebar-link waves-effect waves-dark"> <i class="material-icons">dashboard</i
-                        > App name</h4>
-                    </li>
-    
-                    <li class="sidebar-item">
-                    <a
-                        class="sidebar-link waves-effect waves-dark"
-                        href="/dashboard/accounts/login"
-                        aria-expanded="false"
-                        ><i class="material-icons">login</i><span class="hide-menu">Login </span></a
-                    >
-                    </li>
-               </ul>
-            </nav>
-          </div>
-        </aside>
-        <div class="page-wrapper">
-            <br>
-            <div class="content ">
-                <div class="container-fluid">
+      <aside class="left-sidebar" data-sidebarbg="skin5">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+          <!-- Sidebar navigation-->
+          <nav class="sidebar-nav">
+            <ul id="sidebarnav" class="p-t-30">
+              <li class="sidebar-item">
+                <h4 class="sidebar-link waves-effect waves-dark">
+                  <i class="material-icons">dashboard</i> App name
+                </h4>
+              </li>
 
-                    <div class="row row-cols-1 row-cols-md-2 g-4">
-                        <div class="col">
-                            <h1 class="display-1"> Visualizations regarding the impacts of COVID-19 on digital learning to different users. </h1>
-                        </div>
-                        <div class="col">
-                        <!-- <div class="card">
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/login"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i
+                  ><span class="hide-menu">Login </span></a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+      <div class="page-wrapper">
+        <br />
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+              <div class="col">
+                <h1 class="display-1">
+                  Visualizations regarding the impacts of COVID-19 on digital
+                  learning to different users.
+                </h1>
+              </div>
+              <div class="col">
+                <!-- <div class="card">
                             <img src="..." class="card-img-top" alt="...">
                             <div class="card-body">
                             <h5 class="card-title">Card title</h5>
                             <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                             </div>
                         </div> -->
-                        <img src="{% static 'images/100districts.jpg' %}" >
-                        </div> 
-                    </div>
-                </div>
+                <img src="{% static 'images/100districts.jpg' %}" />
+              </div>
             </div>
+            <br>
+
+            <div class="row pt-5">
+              <div class="col-12">
+                <h1 class="text-uppercase border-bottom mb-4 text-center"">
+                  <strong>Learn Insights for digital learning during COVID-19 period</strong>
+                </h1>
+              </div>
+            </div>
+            <div class="row">
+              <!--ADD CLASSES HERE d-flex align-items-stretch-->
+              <div class="col-lg-4 mb-3 d-flex align-items-stretch d-flex justify-content-center">
+                    <section>
+                    <i class="material-icons" style="font-size: 80px">bolt</i>
+        
+                    <h5 class="card-title">Fast Loadup</h5>
+
+                
+                    </section>
+              </div>
+
+
+                <!--ADD CLASSES HERE d-flex align-items-stretch-->
+                <div class="col-lg-4 mb-3 d-flex align-items-stretch d-flex justify-content-center">
+                        <section>
+                        <i class="material-icons" style="font-size: 80px">analytics</i>
+            
+                        <h5 class="card-title">Meaningful Data</h5>
+                    
+                        </section>
+                </div>
+  
+                  
+                    <div class="col-lg-4 mb-3 d-flex align-items-stretch d-flex justify-content-center">
+                        <section>
+                            <i class="material-icons" style="font-size: 80px">grid_view</i>
+            
+                            <h5 class="card-title">Simple User Interface</h5>
+                        </section>
+                    </div>
+                 
+              </div>
+            </div>
+          </div>
+
+
+          <div class="container">
+            <div class="row pt-5">
+              <div class="col-12">
+                <h1 class="text-uppercase border-bottom mb-4 text-center"><strong>How can you use the Dashboard?</strong></h1>
+              </div>
+            </div>
+            <div class="row">
+              <!--ADD CLASSES HERE d-flex align-items-stretch-->
+              <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+                <div class="card">
+                  <img src="https://i1.wp.com/www.additudemag.com/wp-content/uploads/2014/01/learn-more-in-less-time-scaled-e1584022737199.jpg" class="card-img-top" alt="Card Image" height="270" width="500">
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Study Provided Kaggle Data</h5>
+                    <p class="card-text mb-4">Study and analyze Kaggle Data Patterns and make an impact! </p>
+                    <a href="/dashboard/signup/" class="btn btn-primary mt-auto align-self-start">Sign Up Now</a>
+                  </div>
+                </div>
+              </div>
+              <!--ADD CLASSES HERE d-flex align-items-stretch-->
+              <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+                <div class="card">
+                  <img src="https://14zwbc3frn972icphh2bouf3-wpengine.netdna-ssl.com/wp-content/uploads/2020/09/contact.jpg" class="card-img-top" alt="Card Image" height="270" width="500">
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Contact Change Makers within Dashboard</h5>
+                    <p class="card-text mb-4">Report Statistics/visualizations in dashboard to policy makers/school board/government officials</p>
+                    <a href="/dashboard/signup/" class="btn btn-primary mt-auto align-self-start">Sign Up Now</a>
+                  </div>
+                </div>
+              </div>
+              <!--ADD CLASSES HERE d-flex align-items-stretch-->
+              <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+                <div class="card">
+                  <img src="https://learnenglishteens.britishcouncil.org/sites/teens/files/styles/article/public/istock_000028311770small.jpg?itok=WfpCieCI" class="card-img-top" alt="Card Image" height="270" width="500">
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">No Wifi at Home?</h5>
+                    <p class="card-text mb-4">Utilize the inbuilt maps feature to get to know nearest wifi locations and rate them to benefit everyone</p>
+                    <a href="/dashboard/signup/" class="btn btn-primary mt-auto align-self-start">Sign Up Now</a>
+                  </div>
+                </div>
+              </div>
+              
+              
+              
+            
+            </div>
+          </div>
+
         </div>
+      </div>
 
 
+      
 
-
-
-
+      
+    </div>
   </body>
 </html>

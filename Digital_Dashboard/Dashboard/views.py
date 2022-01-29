@@ -12,6 +12,7 @@ from .models import ProductsInfo
 from .models import EngagementInfo
 from .forms import DistrictForm
 from .forms import FilterForm
+from .models import UserProfile
 from django.contrib.auth.decorators import login_required
 
 
@@ -37,7 +38,7 @@ def create_user_for_signup(request):
             login(request, user)
 
 
-            return HttpResponseRedirect('/dashboard',{'form' : form})
+            return HttpResponseRedirect('/dashboard/home',{'form' : form})
 
         else:
             # return HttpResponseRedirect('/dashboard/signup',{'form' : form})
@@ -73,7 +74,6 @@ def create_district_graph():
 
 
 def percentage_access_in_state(state):
-
     state_list = Districts.objects.filter(state=state)
     district_list = []
     county_connection = []
@@ -272,7 +272,22 @@ def avg(li):
         j = j + i
     return (j/len(li))
 
-@login_required(login_url='/dashboard/accounts/login/')       #forces user to login if they try to go /dashboard/home path
+@login_required(login_url='/dashboard/accounts/login/') 
+def show_graphs_for_users(request):
+    # userObject = UserProfile.objects.filter(user_id=request.user.id)
+   logged_in_user_type = request.user.userprofile.user_type
+   print('Logged in user type is',logged_in_user_type )
+   print('This statement is',logged_in_user_type == 'student')
+   if (logged_in_user_type == 'student'):
+       return HttpResponseRedirect('/dashboard/student/')
+   elif (logged_in_user_type == 'educator'):
+       #call educator methods here
+       print('Hi educator')
+       return HttpResponseRedirect('/dashboard/speedtest/')
+
+      #forces user to login if they try to go /dashboard/home path
+
+@login_required(login_url='/dashboard/accounts/login/') 
 def percentage_access_black_hispanic(request):
     states = ['Utah', 'Illinois', 'Wisconsin', 'NC', 'Missouri', 'Washington', 'Massachusetts', 'NY', 'Indiana',
               'Virginia', 'New Jersey', 'Texas', 'DOC']
@@ -387,26 +402,31 @@ def percentage_access_black_hispanic(request):
             input_country = request.POST.get('country')
             print("The country is",input_country)
 
-            if input_country == 'usa':
-                location_list = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington', 'Massachusetts', 'New York', 'Indiana',
-              'Virginia', 'New Jersey', 'Texas', 'District of Columbia']
-            else:
-                location_list = ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon']
-
-
-            print('location list is ', location_list)
+            # print('location list is ', location_list)
             input_location = ''
             if (request.POST.get('locations') != None) :
                  input_location = request.POST.get('locations')
                  print('input Location is', input_location)
-            
-            # print('location value is',input_location)   
-            # county,district = percentage_access_in_state(input_state)
+
+
+            if input_country == 'usa':
+                location_list = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington', 'Massachusetts', 'New York', 'Indiana',
+              'Virginia', 'New Jersey', 'Texas', 'District of Columbia']
+                if input_location:
+                    #state related data
+                    return render(request, 'state.html')
+                else:
+                    return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list , 'st':s, 'ex':exp, 'mydata': data, 'location_list': location_list, 'inputlocation': input_location, 'inputcountry': input_country, 'firststat': numberofdistricts, 'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town, 'city': city })
+
+            else:
+                # need to check here if user selected only country or also a state, if country show overview, if state show state related graphs
+                location_list = ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon']
+                # return render(request, 'sign-up.html')     # this is where we show canadian data
+
             
 
-            return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list , 'st':s, 'ex':exp, 'mydata': data, 'location_list': location_list, 'inputlocation': input_location, 'inputcountry': input_country, 'firststat': numberofdistricts })
+            # return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list , 'st':s, 'ex':exp, 'mydata': data, 'location_list': location_list, 'inputlocation': input_location, 'inputcountry': input_country, 'firststat': numberofdistricts })
 
-    # print("The request post is",request.POST)
     
     return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp, 'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town, 'city': city})
 

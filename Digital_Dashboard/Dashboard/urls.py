@@ -4,7 +4,8 @@ from django.shortcuts import render
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('home/', views.percentage_access_black_hispanic),
+    path('home/', views.show_graphs_for_users),
+    path('student/', views.percentage_access_black_hispanic),
     path('join-us-today/', views.show_join_us_page),
     # path('login/', views.show_user_login__page),
     path('signup/', views.create_user_for_signup),
