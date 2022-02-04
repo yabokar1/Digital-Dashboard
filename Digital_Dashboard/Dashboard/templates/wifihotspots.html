@@ -1,0 +1,109 @@
+{% load static %}
+<html>
+  <head>
+    <script
+      type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBi7TgK9-VU3DVkMugV795gkWM55y8bMt8&libraries=places"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script>
+      let longitude = 0;
+      let latitude = 0;
+      function initialize() {
+        var input = document.getElementById("searchTextField");
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        google.maps.event.addDomListener(input, 'keydown', function(event) { 
+            if (event.keyCode === 13) { 
+                event.preventDefault(); 
+            }
+        });
+
+        google.maps.event.addListener(
+          autocomplete,
+          "place_changed",
+          function () {
+            var place = autocomplete.getPlace();
+            latitude = place.geometry.location.lat();
+            document.getElementById("cityLat").value =
+              place.geometry.location.lat();
+              console.log(document.getElementById("cityLat").value)
+            longitude = place.geometry.location.lng();
+            document.getElementById("cityLng").value =
+              place.geometry.location.lng();
+            document.getElementById("address").value =
+            place.formatted_address
+            var form = document.getElementById('myform')
+            form.submit();
+          }
+        );
+      }
+      google.maps.event.addDomListener(window, "load", initialize);
+    </script>
+  </head>
+  <body>
+    <div style="margin: auto" class="col-md-6 p-2 align-items-center">
+      
+    
+      <br />
+      <form id="myform" method="POST">
+
+        {% csrf_token %}
+        
+        {% if address %}
+            <input
+            id="searchTextField"
+            class="form-control"
+            type="text"
+            size="50"
+            value="{{ address }}"
+            
+            />
+        {% else %}
+            <input
+            id="searchTextField"
+            class="form-control"
+            type="text"
+            size="50"
+            placeholder="Enter a location"
+            autocomplete="on"
+            
+            /> 
+        {% endif %}
+
+      <input hidden id="address" name="address">
+      <input hidden id="cityLat" name="cityLat"></h1>
+      <input hidden id="cityLng" name="cityLng"></h1>
+
+      <button id="submitbtn" hidden type="submit">Submit</button>
+      </form>
+
+        <div class="row">
+          {% for p in places  %}
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ p.name }}</h5>
+                    <p class="card-text">{{ p.vicinity }}</p>
+                    <p class="card-text">Is place open? {{ p.isOpen }}</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+  </body>
+</html>

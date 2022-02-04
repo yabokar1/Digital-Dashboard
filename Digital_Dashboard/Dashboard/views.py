@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate
 from django.core import serializers
 from django.http import JsonResponse
 import json
+import requests
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserForm, ProfileForm
@@ -14,7 +15,11 @@ from .forms import DistrictForm
 from .forms import FilterForm
 from .models import UserProfile
 from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import api_view
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
+names_of_places = []
 
 def create_user_for_signup(request):
 
@@ -48,7 +53,49 @@ def create_user_for_signup(request):
         form = UserForm()
         profile_form = ProfileForm()
     return render(request, 'sign-up.html', {'form' : form, 'profile_form': profile_form})
+
+def stat_collector_page(request):
+    return render(request, 'informationcollector.html')
+
+def show_wifi_hotspots_information(request):
+    input_address = ''
+    names_of_places.clear();
+    show_wifi_hotspots_page(request, "cafe");
+    show_wifi_hotspots_page(request, "library");
+
+    if (request.method == 'POST'):
+        input_address = request.POST.get('address')
+    print("The address is", input_address)
+    return render(request, 'wifihotspots.html', {'places' : names_of_places, 'address': input_address})
         
+def show_wifi_hotspots_page(request, type):
+    latitude = ''
+    longitude = ''
+    payload={}
+    headers = {}
+    input_address = 'empty'
+    if request.method == 'POST':
+        latitude = request.POST.get('cityLat')
+        longitude = request.POST.get('cityLng')
+        opening_hours = ""
+        open_period = ""
+        url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+latitude+"%2C"+longitude+"&radius=10000&type="+type+"&key=AIzaSyDxQOJK5g7J9P6z9xXHq2hEt7zQMRxlspg";
+        response = requests.request("GET", url, headers=headers, data=payload)
+        json_data = json.loads(response.text)
+        json_results = json_data["results"];
+        for i in range(len(json_results)):
+            if (json_results[i].get("opening_hours") and json_results[i].get("opening_hours").get("open_now")):
+                opening_hours = json_results[i].get("opening_hours").get("open_now")
+            else:
+                opening_hours = "Not listed"
+                
+                                 
+            names_of_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': json_results[i].get("rating")})
+    print(names_of_places)
+    print("Lat is", latitude)
+    print('long is', longitude)
+    
+
 
 def show_speed_test_page(request):
     return render(request, 'speed-test.html')  
@@ -63,6 +110,11 @@ def show_join_us_page(request):
 
 def show_sign_up_page(request):
     return render(request, 'sign-up.html')
+
+# @api_view(['POST'])
+# @csrf_exempt
+# def coordinates_output(request):
+#     print("The latitude is",request.data['%22lat22'])
 
 def generate_product_info(request):
     return render(request, 'main.html')
@@ -272,7 +324,7 @@ def avg(li):
         j = j + i
     return (j/len(li))
 
-@login_required(login_url='/dashboard/accounts/login/') 
+@login_required(login_url='/dashboard/accounts/login/')
 def show_graphs_for_users(request):
     # userObject = UserProfile.objects.filter(user_id=request.user.id)
    logged_in_user_type = request.user.userprofile.user_type
