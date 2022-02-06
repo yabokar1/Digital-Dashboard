@@ -14,6 +14,7 @@ from .models import EngagementInfo
 from .forms import DistrictForm
 from .forms import FilterForm
 from .models import UserProfile
+from .models import StudentFormInfo
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
 from django.http import JsonResponse
@@ -55,6 +56,46 @@ def create_user_for_signup(request):
     return render(request, 'sign-up.html', {'form' : form, 'profile_form': profile_form})
 
 def stat_collector_page(request):
+    student_province = ""
+    school_grade = 0
+    test_score = 0
+    attendance_percentage = 0
+    student_device = ""
+    workstatus = ""
+    parent_salary = ""
+    wifi_present = ""
+    wifi_company = ""
+    wifi_speed = ""
+
+    if (request.method == 'POST'):
+        student_province =  request.POST.get('province')
+        school_grade = int(request.POST.get('grade'))
+        if (request.POST.get('testscore')):
+            test_score = int(request.POST.get('testscore'))
+        attendance_percentage = int(request.POST.get('attendance'))
+        student_device = (request.POST.get('device'))
+        workstatus = request.POST.get('studentstatus')
+        parent_salary = request.POST.get('parentsstatus')
+        wifi_present = request.POST.get('wifi')
+
+        if (request.POST.get('wificompany')):
+            wifi_company = request.POST.get('wificompany')
+        
+        if (request.POST.get('wifispeed')):
+            wifi_speed = request.POST.get('wifispeed')
+        print("student_province is", student_province)
+        print("school_grade is", school_grade)
+        print("test_score is", test_score)
+        print("attendance_percentage is", attendance_percentage)
+        print("student_devices is", student_device)
+        print("workstatus is", workstatus)
+        print("parent_salary is", parent_salary)
+        print("wifi_present is", wifi_present)
+        print("wifi_company is", wifi_company)
+        print("wifi_speed is", wifi_speed)
+
+    if (student_province != "" and school_grade != "" and attendance_percentage != "" ):
+        StudentFormInfo.objects.create(province=student_province,schoolgrade=school_grade, testscore=test_score,attendancepercentage=attendance_percentage,device=student_device,studentworkstatus=workstatus,parentssalary=parent_salary,wifi=wifi_present, wificompany=wifi_company,wifispeed=wifi_speed)  
     return render(request, 'informationcollector.html')
 
 def show_wifi_hotspots_information(request):

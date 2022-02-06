@@ -160,7 +160,7 @@
         <div class="content ">
             <div class="container-fluid">
                 
-                <form class="justify-content-center col-lg-6 offset-lg-3" method="POST">
+                <form class="justify-content-center col-lg-6 offset-lg-3" id="questionform" method="POST">
                     {% csrf_token %}
                     <div class="form-group row ml-2">
                         <h3><i>Please answer the following questions to help us collect most recent data. Note this applies only to Canada.</i></h3>
@@ -189,22 +189,76 @@
                     </div>
                     <div class="form-group row ml-2">
                       <label for="exampleInputPassword1" class="form-label">What grade are you in?</label>
-                      <select required="true" class="form-control" aria-label="Default select example" name="grade">
-                        <option disabled="disabled" selected value="">Choose your province</option>
-                        <option value="Alberta">Grade 1-6</option>
-                        <option value="British Columbia">Grade 7-12</option>
-                        <option value="Manitoba">Post Secondary</option>
+                      <select required="true" class="form-control" aria-label="Default select example" name="grade" id="grade" onclick="enableOssltQuestion()">
+                        <option disabled="disabled" selected value="">Choose your grade</option>
+                        <option value="1">Grade 1</option>
+                        <option value="2">Grade 2</option>
+                        <option value="3">Grade 3</option>
+                        <option value="4">Grade 4</option>
+                        <option value="5">Grade 5</option>
+                        <option value="6">Grade 6</option>
+                        <option value="7">Grade 7</option>
+                        <option value="8">Grade 8</option>
+                        <option value="9">Grade 9</option>
+                        <option value="10">Grade 10</option>
+                        <option value="11">Grade 12</option>
+                        <option value="12">Grade 12</option>
+                        <option value="Post Secondary">Post Secondary</option>
                       </select>
                     </div>
 
+                    <div id="studentscore" hidden class="form-group row ml-2">
+                        <label for="exampleInputPassword1" class="form-label">What was your test score percentage for Ontario Secondary School Literacy Test (OSSLT)?</label>
+                        <select class="form-control" aria-label="Default select example" name="testscore" id="testscore">
+                            <option disabled="disabled" selected value="">Choose your score percentage</option>
+                            <option value="0">0</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="40">40</option>
+                            <option value="50">50</option>
+                            <option value="60">60</option>
+                            <option value="70">70</option>
+                            <option value="80">80</option>
+                            <option value="90">90</option>
+                            <option value="100">100</option>
+                          </select>
+                    </div>
+
                     <div class="form-group row ml-2">
-                        <label for="exampleInputPassword1" class="form-label">Do you have access to devices at home? If so name 2 of them seperated by a comma. e.g(samsung tablet, hp laptop)</label>
-                        <input required="true" type="text" class="form-control" id="exampleInputPassword1" name="devices">
+                        <label for="exampleInputPassword1" class="form-label">In percentage(%) rate your attendance in classes?</label>
+                        <select class="form-control" aria-label="Default select example" name="attendance" id="attendance">
+                            <option disabled="disabled" selected value="">Choose below</option>
+                            <option value="0">0</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="40">40</option>
+                            <option value="50">50</option>
+                            <option value="60">60</option>
+                            <option value="70">70</option>
+                            <option value="80">80</option>
+                            <option value="90">90</option>
+                            <option value="100">100</option>
+                          </select>                    
+                    </div>
+
+                    <div class="form-group row ml-2">
+                        <label for="exampleInputPassword1" class="form-label">What device do you use to do majority of your school work?</label>
+                        <select class="form-control" aria-label="Default select example" name="device" id="device">
+                            <option disabled="disabled" selected value="">Choose below</option>
+                            <option value="Laptop">Laptop</option>
+                            <option value="Desktop Computer">Desktop Computer</option>
+                            <option value="iPad">iPad</option>
+                            <option value="Smart Phone">Smart Phone</option>
+                            <option value="Tablet">Tablet</option>
+                            <option value="I dont have any device">I dont have any device</option>
+                          </select>
                     </div>
 
                     <div class="form-group row ml-2">
                         <label for="exampleInputPassword1" class="form-label">Do you work currently?</label>
-                        <select required="true" class="form-control" aria-label="Default select example" name="workstatus">
+                        <select required="true" class="form-control" aria-label="Default select example" name="studentstatus">
                             <option disabled="disabled" selected value="">Choose below</option>
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
@@ -213,7 +267,7 @@
 
                     <div class="form-group row ml-2">
                         <label for="exampleInputPassword1" class="form-label">Select from range below, the combined range of your parents salary in a year.</label>
-                        <select required="true" class="form-control" aria-label="Default select example" name="workstatus">
+                        <select required="true" class="form-control" aria-label="Default select example" name="parentsstatus">
                             <option disabled="disabled" selected value="">Choose below</option>
                             <option value="$81000-$100000">$81000-$100000</option>
                             <option value="$61000-$80000">$61000-$80000</option>
@@ -224,16 +278,16 @@
 
                     <div class="form-group row ml-2">
                         <label for="exampleInputPassword1" class="form-label">Do you have wifi at home?</label>
-                        <select required="true" class="form-control" aria-label="Default select example" name="wifi">
+                        <select required="true" class="form-control" aria-label="Default select example" name="wifi" id="wifi" onclick="enableInternetQuestions()">
                             <option disabled="disabled" selected value="">Choose below</option>
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
                         </select>
                     </div>
 
-                    <div class="form-group row ml-2">
+                    <div id="companyname" hidden class="form-group row ml-2">
                         <label for="exampleInputPassword1" class="form-label">Which company are you getting wifi services from?</label>
-                        <select required="true" class="form-control" aria-label="Default select example" name="wificompany">
+                        <select class="form-control" aria-label="Default select example" name="wificompany" id="wificompany">
                             <option disabled="disabled" selected value="">Choose below</option>
                             <option value="Bell">Bell</option>
                             <option value="Rogers">Rogers</option>
@@ -247,31 +301,36 @@
                         </select>
                     </div>
 
-                    <div class="form-group row ml-2">
-                        <label for="exampleInputPassword1" class="form-label">Are you satisfied with the current wifi speed offered by your company?</label>
-                        <select required="true" class="form-control" aria-label="Default select example" name="wifispeed">
+                    <div id="speedrange" hidden class="form-group row ml-2">
+                        <label for="exampleInputPassword1" class="form-label">What is your typical download speed range in MBPS?</label>
+                        <select class="form-control" aria-label="Default select example" name="wifispeed" id="wifispeed">
                             <option disabled="disabled" selected value="">Choose below</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
+                            <option value="50-100">50-100</option>
+                            <option value="101-150">101-150</option>
+                            <option value="151-500">151-500</option>
+                            <option value="500-1000">500-1000</option>
+    
                         </select>
                     </div>
 
-
-                    <div class="form-group row ml-2">
-                        <label for="exampleInputPassword1" class="form-label">Do you have wifi at home?</label>
-                        <select required="true" class="form-control" aria-label="Default select example" name="wifi">
-                            <option disabled="disabled" selected value="">Choose below</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
 
                     
                     
                     <div class="form-group row ml-2 mt-2">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" id="submitbutton" class="btn btn-primary">Submit</button>
                     </div>
                   </form>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
                   <br>
                   <br>
                   <br>
@@ -289,5 +348,49 @@
 
 
     </div>
+
+  </body>
+
+
+  <script>
+      function enableInternetQuestions() {
+          let wifiAtHome = document.getElementById('wifi').value
+          
+          if (wifiAtHome == 'Yes') {
+            document.getElementById('companyname').hidden = false;
+            document.getElementById('wificompany').required = true;
+            document.getElementById('speedrange').hidden = false;
+            document.getElementById('wifispeed').required = true;
+          } 
+        
+          else {
+
+            document.getElementById('companyname').hidden = true; 
+            document.getElementById('speedrange').hidden = true;
+            document.getElementById('wificompany').required = false;
+            document.getElementById('wifispeed').required = false;
+
+          }
+      }
+
+      function enableOssltQuestion() {
+        let schoolGrade = document.getElementById('grade').value
+
+        if (schoolGrade == '3' || schoolGrade == '6' || schoolGrade == '9') {
+            console.log("you da man")
+            document.getElementById('studentscore').hidden = false;
+            document.getElementById('testscore').required = true
+
+        }
+        
+        else {
+            document.getElementById('studentscore').hidden = true;
+            document.getElementById('testscore').required = false
+        }
+      }
+
+
+  </script>
+</html>
      
 

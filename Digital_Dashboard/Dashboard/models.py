@@ -36,6 +36,21 @@ class EngagementInfo(models.Model):
     class Meta:
         db_table = "engagement_info"
 
+class StudentFormInfo(models.Model):
+    province = models.CharField(db_column='Province',max_length=255,blank=True, null=True)
+    schoolgrade = models.IntegerField(db_column="Grade",blank=True, null=True)
+    testscore = models.IntegerField(db_column='Testscore', blank=True, null=True)
+    attendancepercentage = models.IntegerField(db_column='Attendance', blank=True, null=True)
+    device = models.CharField(db_column='Device',max_length=255, blank=True, null=True)
+    studentworkstatus = models.CharField(db_column='Work',max_length=255, blank=True, null=True)
+    parentssalary = models.CharField(db_column='PSalary',max_length=255, blank=True, null=True)
+    wifi = models.CharField(db_column='Wifi',max_length=255, blank=True, null=True)
+    wificompany = models.CharField(db_column='WifiCompany',max_length=255, blank=True, null=True)
+    wifispeed = models.CharField(db_column='WifiSpeed',max_length=255, blank=True, null=True)
+
+    class Meta:
+        db_table = "studentform_info"
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
