@@ -19,8 +19,10 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from random import randint
 
 names_of_places = []
+library_places = []
 
 def create_user_for_signup(request):
 
@@ -100,14 +102,21 @@ def stat_collector_page(request):
 
 def show_wifi_hotspots_information(request):
     input_address = ''
-    names_of_places.clear();
+    names_of_places.clear()
+    library_places.clear();
+    in_latitude = ''
+    in_longitude = ''
+
     show_wifi_hotspots_page(request, "cafe");
     show_wifi_hotspots_page(request, "library");
 
     if (request.method == 'POST'):
         input_address = request.POST.get('address')
+        in_latitude = request.POST.get('cityLat')
+        in_longitude = request.POST.get('cityLng')
     print("The address is", input_address)
-    return render(request, 'wifihotspots.html', {'places' : names_of_places, 'address': input_address})
+
+    return render(request, 'wifihotspots.html', {'places' : names_of_places, 'libraries': library_places, 'address': input_address, 'lat': in_latitude, 'long': in_longitude})
         
 def show_wifi_hotspots_page(request, type):
     latitude = ''
@@ -115,11 +124,12 @@ def show_wifi_hotspots_page(request, type):
     payload={}
     headers = {}
     input_address = 'empty'
-    if request.method == 'POST':
+    if request.method == 'POST' and request.POST.get('cityLat'):
         latitude = request.POST.get('cityLat')
         longitude = request.POST.get('cityLng')
         opening_hours = ""
         open_period = ""
+        random_number = 0;
         url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+latitude+"%2C"+longitude+"&radius=10000&type="+type+"&key=AIzaSyDxQOJK5g7J9P6z9xXHq2hEt7zQMRxlspg";
         response = requests.request("GET", url, headers=headers, data=payload)
         json_data = json.loads(response.text)
@@ -129,12 +139,15 @@ def show_wifi_hotspots_page(request, type):
                 opening_hours = json_results[i].get("opening_hours").get("open_now")
             else:
                 opening_hours = "Not listed"
-                
-                                 
-            names_of_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': json_results[i].get("rating")})
-    print(names_of_places)
-    print("Lat is", latitude)
-    print('long is', longitude)
+            random_number = randint(10000, 99999);     
+            if type == 'cafe':                     
+                names_of_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': json_results[i].get("rating"), 'id': random_number})
+            elif (type == 'library'):
+                library_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': json_results[i].get("rating"), 'id': random_number})
+
+
+    # print(names_of_places)
+    # print('library places are',library_places)
     
 
 
@@ -520,6 +533,5 @@ def percentage_access_black_hispanic(request):
 
             # return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list , 'st':s, 'ex':exp, 'mydata': data, 'location_list': location_list, 'inputlocation': input_location, 'inputcountry': input_country, 'firststat': numberofdistricts })
 
-    
     return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp, 'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town, 'city': city})
 

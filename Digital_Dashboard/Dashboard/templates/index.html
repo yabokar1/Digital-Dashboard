@@ -1,7 +1,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -29,39 +29,20 @@
     <script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="https://d3js.org/d3.v4.js"></script>
-    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+    
+    <script src="https://d3js.org/d3.v4.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-   
     
   </head>
 
   <body>
     
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css' %} -->
-    <!-- ============================================================== -->
-<!--    <div class="preloader">-->
-<!--      <div class="lds-ripple">-->
-<!--        <div class="lds-pos"></div>-->
-<!--        <div class="lds-pos"></div>-->
-<!--      </div>-->
-<!--    </div>-->
-    <!-- ============================================================== -->
-    <!-- Main wrapper - style you can find in pages.scss -->
-    <!-- ============================================================== -->
+   
     
     <div id="main-wrapper">
-      <!-- ============================================================== -->
-      <!-- Topbar header - style you can find in pages.scss -->
-      <!-- ============================================================== -->
       
-      <!-- ============================================================== -->
-      <!-- End Topbar header -->
-      <!-- ============================================================== -->
-      <!-- ============================================================== -->
-      <!-- Left Sidebar - style you can find in sidebar.scss  -->
-      <!-- ============================================================== -->
       <aside class="left-sidebar" data-sidebarbg="skin5">
         <!-- Sidebar scroll-->
         <div class="scroll-sidebar">
@@ -178,81 +159,9 @@
         </div>
         <!-- End Sidebar scroll-->
       </aside>
-      <!-- ============================================================== -->
-      <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-      <!-- ============================================================== -->
-      <!-- ============================================================== -->
-      <!-- Page wrapper  -->
-      <!-- ============================================================== -->
+      
       <div class="page-wrapper">
-        <!-- ============================================================== -->
-        <!-- Bread crumb and right sidebar toggle -->
-        <!-- ============================================================== -->
-        <!-- <div class="page-breadcrumb">
-          <div class="row">
-            <div class="col-12 d-flex no-block align-items-center">
-              <h4 class="page-title">Dashboard</h4>
-              <div class="ml-auto text-right">
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb">
-                   
-                  </ol>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </div> -->
-        <!-- ============================================================== -->
-        <!-- End Bread crumb and right sidebar toggle -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Container fluid  -->
-        <!-- ============================================================== -->
-        <!-- <div class="container-fluid"> -->
-          <!-- ============================================================== -->
-          <!-- Sales Cards  -->
-          <!-- ============================================================== -->
-          <!-- <div class="row">
-            <!-- Column -->
-            <!-- <div class="col-md-6 col-lg-2 col-xlg-3">
-              <div class="card card-hover">
-                <div class="box bg-cyan text-center">
-                  <h1 class="font-light text-white">
-                    <i class="mdi mdi-view-dashboard"></i>
-                  </h1>
-                  <h6 class="text-white">Dashboard</h6>
-                </div>
-              </div>
-            </div>
-            <!-- Column -->
-            <!-- <div class="col-md-6 col-lg-4 col-xlg-3">
-              <div class="card card-hover">
-                <div class="box bg-success text-center">
-                  <h1 class="font-light text-white">
-                    <i class="mdi mdi-chart-areaspline"></i>
-                  </h1>
-                  <h6 class="text-white">Graphs</h6>
-                </div>
-              </div> -->
-            <!-- Column -->
-
-            <!-- Column -->
-          
-
-
-
-
-                  <!-- <form class="form-inline justify-content-center" method="POST">
-                    <div class="form-group mb-2">
-                      {% csrf_token %}
-                        {{form.as_p}}  
-                    
-              
-                                                       
-                    </div>  
-                    <button class="btn btn-primary btn-sm" style="width: 150px; height: 38px;" type="submit">Submit Query</button>
-                                       
-                  </form> -->
+        
                
            <br>
 
@@ -262,14 +171,11 @@
               <h4><strong>Digital Dashboard</strong></h4><br>
                 <form method="POST">
                   {% csrf_token %}
-                    <!-- <div class="row"> -->
-        
-                        <!-- <div class="col"> -->
-
+                  
                           <div class="form-inline">
                             <div class="form-group" style="margin-right: 15px;">
                               <input type="hidden">Country</input>
-                              <select name="country" id="different_countries" onchange=form.submit()>
+                              <select class="form-select" name="country" id="different_countries" onchange=form.submit()>
                                 <option disabled selected="true"> -- select an option -- </option>
                                 {% if inputcountry == 'usa' %}
                                 <option selected="true" value="usa">USA</option>
@@ -281,14 +187,11 @@
                                 <option value="canada">Canada</option>
                                 <option value="usa">USA</option>
                                 {% endif %}
-                                    <!-- <option value="usa">USA</option>
-                                    <option value="canada">Canada</option>
-                                  -->
+                                    
                               </select>
                             </div>
-                            
-                        <!-- </div>  -->
-                        <!-- <div class="col"> -->
+
+                           
                           <div class="form-group" style="margin-right: 15px;">
                             <input type="hidden">State/Province</input>
                             <select name="locations" id="different_locations">
@@ -302,17 +205,12 @@
                               {% endfor %}
                             </select>
                           </div>
-                        <!-- </div> -->
-                        <!-- <div class="col"> -->
+                        
                           <button type="submit" class="btn btn-primary btn w-40">Filter</button>
-                        <!-- </div>  -->
-
-                      
-                      
-                          
+                             
 
                     </div>
-                    <!-- <button type="submit" class="btn btn-primary btn mt-4 w-50">Filter</button> -->
+                    
                   </form> 
 
                  
@@ -350,11 +248,9 @@
                         <h4 class="card-title">Statistic 3 </h4>
                      </div>
                       <div class="card-body">
-                        <!-- <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                        
                         <div class="row">
-                          <h5 class="card-title mr-2">Number Of Learning Products</h5>
+                          <h5 class="card-title mr-2">Learning Products</h5>
                           <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                               Products
                           </button>
@@ -393,11 +289,6 @@
                         <h4 class="card-title">Statistic 4 </h4>
                      </div>
                       <div class="card-body">
-                        <!-- <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                        <!-- <h5 class="card-title">Count of Suburbs, Rural, Town and City</h5> -->
-                        <!-- <h1>{{suburb}}</h1> <h1>{{rural}}</h1> <h1>{{town}}</h1> <h1>{{city}}</h1> -->
                         <h5 class="card-title">Number Of states</h5>
                         <h1>{{secondstat}}</h1>
                       </div>
@@ -405,29 +296,27 @@
                   </div>
 
 
-                  <div class="col-sm-12 col-md-12 col-lg-6">
-                    <div class="card">
+                
+                  <div class="col-sm-12 col-md-12 col-xl-6">
+                    <div class="card" id="avgexpenditure">
                       <div class="card-header ">
                         <h4 class="card-title">Average Expenditure per pupil for different states </h4>
                      </div>
                       <div class="card-body align-items-center mx-auto mt-auto mb-auto">
-                        <!-- <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                        <div id="my_dataviz"></div>
+                        
+                        <div id="my_dataviz">
+
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <div class="col-sm-12 col-md-12 col-lg-6">
+                  <div class="col-sm-12 col-md-12 col-xl-6">
                     <div class="card">
                       <div class="card-header ">
                         <h4 class="card-title">Percentage of Locale in All States </h4>
                      </div>
                       <div class="card-body align-items-center mx-auto mt-auto mb-auto" >
-                        <!-- <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a> -->
                         <div id="my_datadonutviz"></div>
                         
                       </div>
@@ -465,194 +354,22 @@
 
           <br>
 
-          <!-- <div class="content ">
-            <div class="container-fluid">
-                <div class="row d-flex justify-content-center">
-                    <div class="col-md-8"> 
-                        <div class="card text-center">
-                            <div class="card-header ">
-                                <h4 class="card-title">Graph of Percentage Access of Black/Hispanic in different States </h4>
-                            </div>
-                            <div class="card-body">
-                              <div class="myChart">
-                                <canvas id="Chart1"></canvas>
-                              </div>
-                            </div>
-                         </div>
-                     </div>
-
-                    <div class="col-md-8">
-                      <div class="card">
-                          <div class="card-header ">
-                              <h4 class="card-title">Expenditure per pupil in Different States</h4>
-                              <p> Note the value of 0 indicates that no Kaggle data was found for these specific states.</p>
-                          </div>
-                          <div class="card-body align-items-center mx-auto mt-auto mb-auto">
-                            <div class="myChart">
-                              <div id="my_dataviz"></div>
-                            </div>
-                          </div>
-                          
-                      </div>
-                   </div>
-
-                   
-                 </div>
-                      
-                  {% if district %}
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header ">
-                                <h4 class="card-title">Graph of District Id's and County connections in <span id="userinput"></span></h4>
-                            </div>
-                            <div class="card-body" >
-                              <div class="myChart">
-                                <canvas id="Chart2"></canvas>
-                              </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                  {% endif %}
-
-
-                </div>              
-             </div>
-           </div> -->
-
-    
-        
          
 
         <script>
-
-          // const ctx3 = document.getElementById('Chart3').getContext('2d');
-          // var x = JSON.parse('{{ st | safe }}')
-          // var y = JSON.parse('{{ ex | safe }}')
-          // const Chart3 = new Chart(ctx3, {
-          //     type: 'bar',
-          //     data: {
-          //         labels: x,
-          //         datasets: [{
-          //             label: 'Expenditure in dollars',
-          //             data: y,
-          //             backgroundColor: [
-          //                 'rgba(255, 99, 132, 0.2)',
-          //                 'rgba(54, 162, 235, 0.2)',
-          //                 'rgba(255, 206, 86, 0.2)',
-          //                 'rgba(75, 192, 192, 0.2)',
-          //                 'rgba(153, 102, 255, 0.2)',
-          //                 'rgba(255, 159, 64, 0.2)'
-          //             ],
-          //             borderColor: [
-          //                 'rgba(255, 99, 132, 1)',
-          //                 'rgba(54, 162, 235, 1)',
-          //                 'rgba(255, 206, 86, 1)',
-          //                 'rgba(75, 192, 192, 1)',
-          //                 'rgba(153, 102, 255, 1)',
-          //                 'rgba(255, 159, 64, 1)'
-          //             ],
-          //             borderWidth: 1
-          //         }]
-          //     },
-          //     options: {
-                  
-          //     }
-          // });
-         
-          // const ctx1 = document.getElementById('Chart1').getContext('2d');
-          // var label = JSON.parse('{{ state | safe }}')
-          // var p = JSON.parse('{{ perc | safe }}')
-          // const Chart1 = new Chart(ctx1, {
-          //     type: 'bar',
-          //     data: {
-          //         labels: label,
-          //         datasets: [{
-          //             label: 'Percentage Access',
-          //             data: p,
-          //             backgroundColor: [
-          //                 'rgba(255, 99, 132, 0.2)',
-          //                 'rgba(54, 162, 235, 0.2)',
-          //                 'rgba(255, 206, 86, 0.2)',
-          //                 'rgba(75, 192, 192, 0.2)',
-          //                 'rgba(153, 102, 255, 0.2)',
-          //                 'rgba(255, 159, 64, 0.2)'
-                    
-          //             ],
-          //             borderColor: [
-          //                 'rgba(255, 99, 132, 1)',
-          //                 'rgba(54, 162, 235, 1)',
-          //                 'rgba(255, 206, 86, 1)',
-          //                 'rgba(75, 192, 192, 1)',
-          //                 'rgba(153, 102, 255, 1)',
-          //                 'rgba(255, 159, 64, 1)'
-                          
-          //             ],
-          //             borderWidth: 1
-          //         }]
-          //     },
-          //     options: {
-          //         scales: {
-          //           y: {
-          //                 beginAtZero: true
-          //             }
-                      
-          //         }
-
-          //     }
-          // });
-
-          // const ctx = document.getElementById('Chart2').getContext('2d');
-          // document.getElementById("userinput").innerHTML = document.getElementById('id_state').value
-          // var d = JSON.parse('{{ district | safe }}')
-          // var c = JSON.parse('{{ county | safe }}')
-          // const Chart2 = new Chart(ctx, {
-          //     type: 'bar',
-          //     data: {
-          //         labels: d,
-          //         datasets: [{
-          //             label: 'County Connections Percentage',
-          //             data: c,
-          //             backgroundColor: [
-          //                 'rgba(255, 99, 132, 0.2)',
-          //                 'rgba(54, 162, 235, 0.2)',
-          //                 'rgba(255, 206, 86, 0.2)',
-          //                 'rgba(75, 192, 192, 0.2)',
-          //                 'rgba(153, 102, 255, 0.2)',
-          //                 'rgba(255, 159, 64, 0.2)'
-          //             ],
-          //             borderColor: [
-          //                 'rgba(255, 99, 132, 1)',
-          //                 'rgba(54, 162, 235, 1)',
-          //                 'rgba(255, 206, 86, 1)',
-          //                 'rgba(75, 192, 192, 1)',
-          //                 'rgba(153, 102, 255, 1)',
-          //                 'rgba(255, 159, 64, 1)'
-          //             ],
-          //             borderWidth: 1
-          //         }]
-          //     },
-          //     options: {
-          //         scales: {
-          //             y: {
-          //                 beginAtZero: true
-          //             }
-          //         }
-          //     }
-          // });
-
-
+          
 
           var data = JSON.parse('{{ mydata | safe }}');
           var margin = {top: 30, right: 30, bottom: 70, left: 60},
-          width = 560 - margin.left - margin.right,
-          height = 300 - margin.top - margin.bottom;
+          width =  650 - margin.left - margin.right,
+          height = 410 - margin.top - margin.bottom;
 
           // append the svg object to the body of the page
           var svg = d3.select("#my_dataviz")
             .append("svg")
-              .attr("preserveAspectRatio", "xMinYMin meet")
-              .attr("viewBox", "0 0 600 300")
+              
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
             .append("g")
               .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
@@ -712,8 +429,7 @@
               .append("g")
                 .attr("transform", "translate(" + widthofdonut / 2 + "," + heightofdonut / 2 + ")");
 
-            // Create dummy data
-            // var data = {a: 9, b: 20, c:30, d:8, e:12, f:3, g:7, h:14}
+            
             let datafordonut = {suburb: s, rural: r, town:t, city:c}
 
             // set the color scale
@@ -789,32 +505,9 @@
 
           </script>
                          
-          
-                              
-                  
+        
 
-
-
-
-
-
-          <!-- ============================================================== -->
-          <!-- Sales chart -->
-          <!-- ============================================================== -->
-
-          <!-- ============================================================== -->
-          <!-- Sales chart -->
-          <!-- ============================================================== -->
-          <!-- ============================================================== -->
-          <!-- Recent comment and chats -->
-          <!-- ============================================================== -->
-
-              <!-- Card -->
-              <!-- card -->
-
-              <!-- card new -->
-
-            </div>
+        </div>
             <!-- column -->
 
             
@@ -867,5 +560,6 @@
     <script src="{% static 'js/jquery.flot.crosshair.js' %}"></script>
     <script src="{% static 'js/jquery.flot.tooltip.min.js' %}"></script>
     <script src="{% static 'js/chart-page-init.js' %}"></script>
+
   </body>
 </html>

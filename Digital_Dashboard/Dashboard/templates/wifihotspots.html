@@ -21,10 +21,10 @@
     <script>
       let longitude = 0;
       let latitude = 0;
+
       function initialize() {
         var input = document.getElementById("searchTextField");
         var autocomplete = new google.maps.places.Autocomplete(input);
-
         google.maps.event.addDomListener(input, 'keydown', function(event) { 
             if (event.keyCode === 13) { 
                 event.preventDefault(); 
@@ -47,10 +47,15 @@
             place.formatted_address
             var form = document.getElementById('myform')
             form.submit();
+            
           }
         );
       }
+      
       google.maps.event.addDomListener(window, "load", initialize);
+
+
+     
     </script>
   </head>
   <body>
@@ -80,30 +85,153 @@
             placeholder="Enter a location"
             autocomplete="on"
             
-            /> 
+            />   
         {% endif %}
 
       <input hidden id="address" name="address">
       <input hidden id="cityLat" name="cityLat"></h1>
       <input hidden id="cityLng" name="cityLng"></h1>
 
-      <button id="submitbtn" hidden type="submit">Submit</button>
-      </form>
 
+      <button id="submitbtn" hidden type="submit">Submit</button>
+      
+      <br>
+      
+      <div class="row">
+        <div class="col-auto">
+          {% if places %}
+            <a id="link" href="javascript:void(0);" onclick="document.getElementById('foundcafes').scrollIntoView(true);">Click here to navigate to found Cafe's</a>
+          {% endif %}
+        </div>
+        
+        <div class="col-auto">
+          {% if libraries %}
+            <a id="link" href="javascript:void(0);" onclick="document.getElementById('foundlibraries').scrollIntoView(true);">Click here to navigate to found Libraries</a>
+          {% endif %}
+
+        </div>
+
+      </div>
+      
+    </form>
+        
         <div class="row">
+          {% if places %}
+
+            <h2>Number of Cafe's found are {{ places|length }}</h2>
+          {% endif %}
           {% for p in places  %}
-            <div class="col-sm-12">
+            <div class="col-sm-12" id="foundcafes">
                 <div class="card">
                     <div class="card-body">
                     <h5 class="card-title">{{ p.name }}</h5>
                     <p class="card-text">{{ p.vicinity }}</p>
                     <p class="card-text">Is place open? {{ p.isOpen }}</p>
+                    <!-- <Button class="btn btn-primary">Go somewhere</Button> -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal{{ p.id }}">
+                      Mark this place as Visited
+                    </button>
+
+                    <div class="modal fade" id="modal{{ p.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Please provide feedback about your experience?</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          
+                          <form method="POST">
+                              {% csrf_token %}
+                              <div class="modal-body">   
+                                <label for="customRange1" class="form-label">How was your experience using Wifi at {{ p.name }}?</label>
+                                <input type="range" class="form-range" name="ratingRange" id="ratingRange" min="0" max="5" >
+                                <br>
+                                <label for="wifiquality">How would you rate the wifi?</label>
+                                <select class="form-select" name="wifiquality" id="wifiquality" aria-label="How would you rate the wifi?">
+                                  <option disabled="disabled" selected value="">Choose below</option>
+                                  <option value="3">Excellent</option>
+                                  <option value="2">Good</option>
+                                  <option value="0">Very Bad/ Not recommended</option>
+                                </select>
+
+
+                                <input type="text" hidden name="placename" value="{{ p.name }}"></input>
+                                <input type="text" hidden name="placeaddress" value="{{ p.vicinity }}"></input>
+                                <input hidden id="address" name="address" value="{{ address }}">
+                                <input hidden id="cityLat" name="cityLat" value="{{ lat }}"></h1>
+                                <input hidden id="cityLng" name="cityLng" value="{{ long }}"></h1>
+
+                                      
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                              </div>
+                          </form
+
+                        </div>
+                      </div>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+
+
+            <!-- {% for p in places %} -->
+            <!-- <div class="modal fade" id="{{p.name}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Please provide feedback about your experience?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  
+                    <div class="modal-body">
+                      
+                        <form method="POST">
+                          {% csrf_token %}
+                          <label for="customRange1" class="form-label">Please rate your experience at {{ p.name }}</label>
+                          <input type="range" class="form-range" id="ratingRange">
+                        </form>    
+                    </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <!-- {% endfor %} -->
+        </div>
+
+        
+
+
+        <br>
+        <div class="row">
+          {% if libraries %}
+
+            <h2>Number of Libraries's found are {{ libraries|length }}</h2>
+          {% endif %}
+          {% for l in libraries  %}
+            <div class="col-sm-12" id="foundlibraries">
+                <div class="card">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ l.name }}</h5>
+                    <p class="card-text">{{ l.vicinity }}</p>
+                    <p class="card-text">Is place open? {{ l.isOpen }}</p>
                     <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
+
+
+
     </div>
   </body>
 </html>
