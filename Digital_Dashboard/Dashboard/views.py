@@ -15,6 +15,7 @@ from .forms import DistrictForm
 from .forms import FilterForm
 from .models import UserProfile
 from .models import StudentFormInfo
+from .models import RatingInfo
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
 from django.http import JsonResponse
@@ -23,6 +24,7 @@ from random import randint
 
 names_of_places = []
 library_places = []
+rating_star_list = []
 
 def create_user_for_signup(request):
 
@@ -106,7 +108,22 @@ def show_wifi_hotspots_information(request):
     library_places.clear();
     in_latitude = ''
     in_longitude = ''
+    userRating = ''
+    qualityOfWifi = ''
+    placeName  = ''
+    placeAddress = ''
 
+    if (request.method == 'POST' and request.POST.get('ratingRange') and request.POST.get('wifiquality')):
+        userRating = int(request.POST.get('ratingRange'))
+        qualityOfWifi = int(request.POST.get('wifiquality'))
+        placeName = request.POST.get('placename')
+        placeAddress = request.POST.get('placeaddress')
+
+        RatingInfo.objects.create(rating=userRating,wifiquality=qualityOfWifi,name=placeName, placeaddress=placeAddress)
+
+
+
+    print('everything is',userRating,qualityOfWifi,placeName,placeAddress)
     show_wifi_hotspots_page(request, "cafe");
     show_wifi_hotspots_page(request, "library");
 
@@ -117,13 +134,14 @@ def show_wifi_hotspots_information(request):
     print("The address is", input_address)
 
     return render(request, 'wifihotspots.html', {'places' : names_of_places, 'libraries': library_places, 'address': input_address, 'lat': in_latitude, 'long': in_longitude})
-        
+
 def show_wifi_hotspots_page(request, type):
     latitude = ''
     longitude = ''
     payload={}
     headers = {}
     input_address = 'empty'
+    rating = 0
     if request.method == 'POST' and request.POST.get('cityLat'):
         latitude = request.POST.get('cityLat')
         longitude = request.POST.get('cityLng')
@@ -134,21 +152,34 @@ def show_wifi_hotspots_page(request, type):
         response = requests.request("GET", url, headers=headers, data=payload)
         json_data = json.loads(response.text)
         json_results = json_data["results"];
+
+        ratingInfo = RatingInfo.objects.all()
         for i in range(len(json_results)):
             if (json_results[i].get("opening_hours") and json_results[i].get("opening_hours").get("open_now")):
                 opening_hours = json_results[i].get("opening_hours").get("open_now")
             else:
                 opening_hours = "Not listed"
-            random_number = randint(10000, 99999);     
-            if type == 'cafe':                     
-                names_of_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': json_results[i].get("rating"), 'id': random_number})
-            elif (type == 'library'):
-                library_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': json_results[i].get("rating"), 'id': random_number})
+            random_number = randint(10000, 99999); 
+           
+            for items in ratingInfo:
+                if(items.name == json_results[i]["name"] and items.placeaddress in json_results[i]["vicinity"]):
+                    print('isequal', items.placeaddress,json_results[i]["vicinity"])
+                    rating = items.rating
+                     
+                    if type == 'cafe':                     
+                        names_of_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': rating, 'id': random_number})
+                        if ({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number} in names_of_places):
+                            names_of_places.remove({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number})
+                    elif (type == 'library'):
+                        library_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': rating, 'id': random_number})
+                        if ({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number} in library_places):
+                            library_places.remove({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number})
 
-
-    # print(names_of_places)
-    # print('library places are',library_places)
-    
+                elif (items.name != json_results[i]["name"] or items.placeaddress not in json_results[i]["vicinity"]):
+                    if type == 'cafe' and {'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number} not in names_of_places and {'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': rating, 'id': random_number} not in names_of_places:                     
+                        names_of_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number})
+                    elif type == 'library' and {'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number} not in library_places and {'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': rating, 'id': random_number} not in library_places:
+                        library_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number})
 
 
 def show_speed_test_page(request):

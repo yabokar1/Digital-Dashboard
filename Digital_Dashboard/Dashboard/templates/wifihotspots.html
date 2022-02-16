@@ -1,6 +1,14 @@
 {% load static %}
 <html>
   <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    .checked {
+      color: orange;
+    }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="jquery.star-rating-svg.js"></script>
     <script
       type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBi7TgK9-VU3DVkMugV795gkWM55y8bMt8&libraries=places"
@@ -127,6 +135,26 @@
                     <h5 class="card-title">{{ p.name }}</h5>
                     <p class="card-text">{{ p.vicinity }}</p>
                     <p class="card-text">Is place open? {{ p.isOpen }}</p>
+                    <!-- <h5 class="card-title"> Rating: {{ p.rating }}</h5> -->
+                    <!-- <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span> -->
+                    
+                    {% if p.rating == 'No rating found' %}
+                      <h5 class="card-title"> No Rating found</h5>
+
+                    {% else %}
+                      <span class="fa fa-star {% if p.rating > 0 %} checked {% endif %}"></span>
+                      <span class="fa fa-star {% if p.rating > 1 %} checked {% endif %}"></span>
+                      <span class="fa fa-star {% if p.rating > 2 %} checked {% endif %}"></span>
+                      <span class="fa fa-star {% if p.rating > 3 %} checked {% endif %}"></span>
+                      <span class="fa fa-star {% if p.rating > 4 %} checked {% endif %}"></span>
+                    {% endif %}
+
+    
+                    <br>
                     <!-- <Button class="btn btn-primary">Go somewhere</Button> -->
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal{{ p.id }}">
                       Mark this place as Visited
@@ -147,7 +175,7 @@
                                 <input type="range" class="form-range" name="ratingRange" id="ratingRange" min="0" max="5" >
                                 <br>
                                 <label for="wifiquality">How would you rate the wifi?</label>
-                                <select class="form-select" name="wifiquality" id="wifiquality" aria-label="How would you rate the wifi?">
+                                <select required="true" class="form-select" name="wifiquality" id="wifiquality" aria-label="How would you rate the wifi?">
                                   <option disabled="disabled" selected value="">Choose below</option>
                                   <option value="3">Excellent</option>
                                   <option value="2">Good</option>
@@ -223,7 +251,52 @@
                     <h5 class="card-title">{{ l.name }}</h5>
                     <p class="card-text">{{ l.vicinity }}</p>
                     <p class="card-text">Is place open? {{ l.isOpen }}</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">{{ l.rating }}</h5>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal{{ l.id }}">
+                      Mark this place as Visited
+                    </button>
+
+                    <div class="modal fade" id="modal{{ l.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Please provide feedback about your experience?</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          
+                          <form method="POST">
+                              {% csrf_token %}
+                              <div class="modal-body">   
+                                <label for="customRange1" class="form-label">How was your experience using Wifi at {{ l.name }}?</label>
+                                <input type="range" class="form-range" name="ratingRange" id="ratingRange" min="0" max="5" >
+                                <br>
+                                <label for="wifiquality">How would you rate the wifi?</label>
+                                <select required="true" class="form-select" name="wifiquality" id="wifiquality" aria-label="How would you rate the wifi?">
+                                  <option disabled="disabled" selected value="">Choose below</option>
+                                  <option value="3">Excellent</option>
+                                  <option value="2">Good</option>
+                                  <option value="0">Very Bad/ Not recommended</option>
+                                </select>
+
+
+                                <input type="text" hidden name="placename" value="{{ l.name }}"></input>
+                                <input type="text" hidden name="placeaddress" value="{{ l.vicinity }}"></input>
+                                <input hidden id="address" name="address" value="{{ address }}">
+                                <input hidden id="cityLat" name="cityLat" value="{{ lat }}"></h1>
+                                <input hidden id="cityLng" name="cityLng" value="{{ long }}"></h1>
+
+                                      
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                              </div>
+                          </form
+
+                        </div>
+                      </div>
+                    </div>
+
                     </div>
                 </div>
             </div>
@@ -233,5 +306,7 @@
 
 
     </div>
+
+    
   </body>
 </html>

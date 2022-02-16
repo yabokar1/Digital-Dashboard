@@ -52,6 +52,16 @@ class StudentFormInfo(models.Model):
         db_table = "studentform_info"
 
 
+class RatingInfo(models.Model):
+    rating = models.IntegerField(db_column="Rating",blank=True, null=True)
+    wifiquality = models.IntegerField(db_column="Quality",blank=True, null=True)
+    name = models.CharField(db_column='Name',max_length=255,blank=True, null=True)
+    placeaddress = models.CharField(db_column='Address',max_length=255,blank=True, null=True)
+
+    class Meta:
+        db_table = "ratingwifi_info"
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_type = models.CharField(max_length=12)
