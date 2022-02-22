@@ -8,6 +8,7 @@ class Districts(models.Model):
     state = models.CharField(db_column='State', max_length=255, blank=True, null=True)
     locale = models.CharField(db_column='Locale', max_length=255, blank=True, null=True)
     pct_black_hispanic = models.FloatField(db_column='Pct_ethnicity', blank=True, null=True)
+    free_reduced = models.FloatField(db_column='Free_reduced', blank=True, null=True)
     county_connection = models.FloatField(db_column='County_connection', blank=True, null=True)
     pp_total_raw = models.FloatField(db_column='PP_total_raw', blank=True, null=True)
 
@@ -27,11 +28,20 @@ class ProductsInfo(models.Model):
         db_table = "products_info"
 
 
+# class EngagementInfo(models.Model):
+#     time = models.CharField(db_column='Time',max_length=255, blank=True, null=True)
+#     lp_id = models.IntegerField(db_column="Lp_id",blank=True, null=True)
+#     pct_access = models.FloatField(db_column='Pct_access', blank=True, null=True)
+#     engagement_index = models.FloatField(db_column='Engagement_index', blank=True, null=True)
+
+#     class Meta:
+#         db_table = "engagement_info"
 class EngagementInfo(models.Model):
-    time = models.CharField(db_column='Time',max_length=255, blank=True, null=True)
-    lp_id = models.IntegerField(db_column="Lp_id",blank=True, null=True)
-    pct_access = models.FloatField(db_column='Pct_access', blank=True, null=True)
-    engagement_index = models.FloatField(db_column='Engagement_index', blank=True, null=True)
+    district_id = models.IntegerField(db_column='district_id', blank=True, null=True)
+    timestamp = models.CharField(db_column='timestamp',max_length=255, blank=True, null=True)
+    lp_id = models.IntegerField(db_column="lp_id",blank=True, null=True)
+    pct_access = models.FloatField(db_column='pct_access', blank=True, null=True)
+    engagement_index = models.FloatField(db_column='engagement_index', blank=True, null=True)
 
     class Meta:
         db_table = "engagement_info"
@@ -68,3 +78,14 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class CountyConnectionInfo(models.Model):
+    county_code = models.IntegerField(db_column='County_code',blank=True, null=True)
+    state = models.CharField(db_column='State',max_length=255,blank=True, null=True)
+    county_name = models.CharField(db_column='County_name', max_length=255,blank=True, null=True)
+    ratio = models.FloatField(db_column='Ratio', blank=True, null=True)
+
+
+    class Meta:
+        db_table = "county_connection"

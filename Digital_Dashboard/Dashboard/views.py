@@ -4,6 +4,7 @@ from django.core import serializers
 from django.http import JsonResponse
 import json
 import requests
+import collections, functools, operator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserForm, ProfileForm
@@ -16,11 +17,14 @@ from .forms import FilterForm
 from .models import UserProfile
 from .models import StudentFormInfo
 from .models import RatingInfo
+from .models import CountyConnectionInfo
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from random import randint
+from collections import defaultdict
+from operator import itemgetter
 
 names_of_places = []
 library_places = []
@@ -244,7 +248,7 @@ def expenditure_per_pupil_in_different_states():
     dis = []
     ari = []
     tex = []
-    states = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington', 'Connecticut', 'Massachusetts', 'New York', 'Indiana', 'Virginia', 'Ohio', 'New Jersey', 'California', 'District of Columbia', 'Arizona','Texas']
+    states = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington', 'New York', 'Indiana', 'Virginia', 'New Jersey','Texas']
 
     o = Districts.objects.all()
 
@@ -261,26 +265,26 @@ def expenditure_per_pupil_in_different_states():
             miss.append(item.pp_total_raw)
         elif item.state == 'Washington':
             wash.append(item.pp_total_raw)
-        elif item.state == 'Connecticut':
-            connect.append(item.pp_total_raw)
-        elif item.state == 'Massachusetts':
-            mass.append(item.pp_total_raw)
+        # elif item.state == 'Connecticut':
+        #     connect.append(item.pp_total_raw)
+        # elif item.state == 'Massachusetts':
+        #     mass.append(item.pp_total_raw)
         elif item.state == 'New York':
             newyork.append(item.pp_total_raw)
         elif item.state == 'Indiana':
             indiana.append(item.pp_total_raw)
         elif item.state == 'Virginia':
             vir.append(item.pp_total_raw)
-        elif item.state == 'Ohio':
-            ohio.append(item.pp_total_raw)
+        # elif item.state == 'Ohio':
+        #     ohio.append(item.pp_total_raw)
         elif item.state == 'New Jersey':
             jersey.append(item.pp_total_raw)
-        elif item.state == 'California':
-            cal.append(item.pp_total_raw)
-        elif item.state == 'District Of Columbia':
+        # elif item.state == 'California':
+        #     cal.append(item.pp_total_raw)
+        # elif item.state == 'District Of Columbia':
             dis.append(item.pp_total_raw)
-        elif item.state == 'Arizona':
-            ari.append(item.pp_total_raw)
+        # elif item.state == 'Arizona':
+        #     ari.append(item.pp_total_raw)
         elif item.state == 'Texas':
             tex.append(item.pp_total_raw)
 
@@ -308,14 +312,14 @@ def expenditure_per_pupil_in_different_states():
         avg_expenditure_for_states.append(avg(wash))
     else:
         avg_expenditure_for_states.append(0)
-    if len(connect) > 0:
-        avg_expenditure_for_states.append(avg(connect))
-    else:
-        avg_expenditure_for_states.append(0)
-    if len(mass) > 0:
-        avg_expenditure_for_states.append(avg(mass))
-    else:
-        avg_expenditure_for_states.append(0)
+    # # if len(connect) > 0:
+    # #     avg_expenditure_for_states.append(avg(connect))
+    # else:
+    #     avg_expenditure_for_states.append(0)
+    # if len(mass) > 0:
+    #     avg_expenditure_for_states.append(avg(mass))
+    # else:
+    #     avg_expenditure_for_states.append(0)
     if len(newyork) > 0:
         avg_expenditure_for_states.append(avg(newyork))
     else:
@@ -328,26 +332,26 @@ def expenditure_per_pupil_in_different_states():
         avg_expenditure_for_states.append(avg(vir))
     else:
         avg_expenditure_for_states.append(0)
-    if len(ohio) > 0:
-        avg_expenditure_for_states.append(avg(ohio))
-    else:
-        avg_expenditure_for_states.append(0)
+    # if len(ohio) > 0:
+    #     avg_expenditure_for_states.append(avg(ohio))
+    # else:
+    #     avg_expenditure_for_states.append(0)
     if len(jersey) > 0:
         avg_expenditure_for_states.append(avg(jersey))
     else:
         avg_expenditure_for_states.append(0)
-    if len(cal) > 0:
-        avg_expenditure_for_states.append(avg(cal))
-    else:
-        avg_expenditure_for_states.append(0)
-    if len(dis) > 0:
-        avg_expenditure_for_states.append(avg(dis))
-    else:
-        avg_expenditure_for_states.append(0)
-    if len(ari) > 0:
-        avg_expenditure_for_states.append(avg(ari))
-    else:
-        avg_expenditure_for_states.append(0)
+    # if len(cal) > 0:
+    #     avg_expenditure_for_states.append(avg(cal))
+    # else:
+    #     avg_expenditure_for_states.append(0)
+    # if len(dis) > 0:
+    #     avg_expenditure_for_states.append(avg(dis))
+    # else:
+    #     avg_expenditure_for_states.append(0)
+    # if len(ari) > 0:
+    #     avg_expenditure_for_states.append(avg(ari))
+    # else:
+    #     avg_expenditure_for_states.append(0)
     if len(tex) > 0:
         avg_expenditure_for_states.append(avg(tex))
     else:
@@ -356,6 +360,63 @@ def expenditure_per_pupil_in_different_states():
     # final_states_list = json.dumps(states)
     # final_expenditure_list = json.dumps(avg_expenditure_for_states)    #commenting lines 212 and 213 for now
     return states,avg_expenditure_for_states
+
+
+def productEngagement():
+    obj = EngagementInfo.objects.all().order_by('-engagement_index')
+
+    for x in obj:
+        print("I am are",x.lp_id, x.engagement_index)
+    products = ProductsInfo.objects.all()
+    products_data = []
+    consumer_products = []
+    unique_products = []
+    products_array = []
+    single_products_array = []
+    single_average_engagement_array = []
+
+    
+    for x in obj:
+        for product in products:
+            if x.lp_id == product.lpid:
+                products_data.append({'name': product.product_name, 'engagement': x.engagement_index})
+
+    print('product data is', products_data)
+    for dic in products_data:
+        for key in (dic.keys()):
+            if key == 'name':
+                consumer_products.append(dic[key])
+    unique_products = set(consumer_products)
+    print(unique_products)
+
+    for p in unique_products: 
+        average = 0
+        count = 0   
+        for dict in products_data:
+            if dict['name'] == p:
+                average = average + dict['engagement']
+                print('GS', p, average)
+                count = count + 1
+        products_array.append({'name': p, 'avg': average/count})
+
+
+    print(products_array)
+
+    top10products = sorted(products_array, key=itemgetter('avg'), reverse=True)[0:10]
+
+    least10products = sorted(products_array, key=itemgetter('avg'), reverse=True)[-20:]
+    print("least 10 is ", least10products)
+
+    for item in top10products:
+        for key, value in item.items():
+            if key == 'name':
+               single_products_array.append(value)
+            elif key == 'avg':
+                 single_average_engagement_array.append(value)
+
+
+    return top10products, least10products, single_products_array, single_average_engagement_array
+
 
 
 def totalNumberOfSchoolDistricts():
@@ -378,11 +439,42 @@ def total_number_of_products():
 
     return product_data, len(product_data)
 
+def broadband_connection():
+    broad_band = CountyConnectionInfo.objects.all()
+    state_broadband = {}
+    states = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington', 'Connecticut',
+              'Massachusetts', 'New York', 'Indiana', 'Virginia', 'Ohio', 'New Jersey', 'California', 'Arizona',
+              'Texas']
+    for x in broad_band:
+        if x.state not in state_broadband and x.state in states:
+            state_broadband[x.state] = []
+        elif x.state in states:
+            state_broadband[x.state].append((x.county_code, x.ratio, x.county_name))
+    for state in state_broadband.keys():
+        if state in states:
+            avg = 0.0
+            for x, item, y in state_broadband[state]:
+                if item != 0.0:
+                    # print("The item is",item)
+                    avg = avg + item
+            if avg / (len(state_broadband[state]) + 1) != 0.0:
+                # print(state)
+                # print(len(state_broadband[state])+1)
+                state_broadband[state] = round(avg / (len(state_broadband[state]) + 1), 2)
+
+    states = list(state_broadband.keys())
+    print("The states", states)
+
+    broadband_avg = list(state_broadband.values())
+    # print(broadband_avg)
+    return states, broadband_avg
+
 def total_locale_type():
     suburb = Districts.objects.filter(locale="Suburb")
     rural = Districts.objects.filter(locale="Rural")
     town = Districts.objects.filter(locale="Town")
     city = Districts.objects.filter(locale="City")
+    local_type = []
 
     suburb_list = []
     rural_list = []
@@ -393,21 +485,23 @@ def total_locale_type():
 
     for item in rural:
         rural_list.append(item)
-
     for item in town:
          town_list.append(item)
-
     for item in city:
         city_list.append(item)
 
-    return len(suburb_list), len(rural_list), len(town_list), len(city_list)
+    local_type.append(len(suburb_list))
+    local_type.append(len(rural_list))
+    local_type.append(len(town_list))
+    local_type.append(len(city_list))
+    return len(suburb_list), len(rural_list), len(town_list), len(city_list), local_type
 
 
 def avg(li):
     j = 0
     for i in li:
         j = j + i
-    return (j/len(li))
+    return (int(j/len(li)))
 
 @login_required(login_url='/dashboard/accounts/login/')
 def show_graphs_for_users(request):
@@ -438,14 +532,14 @@ def percentage_access_black_hispanic(request):
     miss = []
     wash = []
     connect = []
-    mass = []
+    # mass = []
     newyork = []
     indiana = []
     vir = []
     ohio = []
     jersey = []
     cal = []
-    dis = []
+    # dis = []
     ari = []
     tex = []
     s = []
@@ -469,8 +563,8 @@ def percentage_access_black_hispanic(request):
             wash.append(district_info.pct_black_hispanic)
         elif district_info.state == 'Connecticut':
             connect.append(district_info.pct_black_hispanic)
-        elif district_info.state == 'Massachusetts':
-            mass.append(district_info.pct_black_hispanic)
+        # elif district_info.state == 'Massachusetts':
+        #     mass.append(district_info.pct_black_hispanic)
         elif district_info.state == 'New York':
             newyork.append(district_info.pct_black_hispanic)
         elif district_info.state == 'Indiana':
@@ -483,8 +577,8 @@ def percentage_access_black_hispanic(request):
             jersey.append(district_info.pct_black_hispanic)
         elif district_info.state == 'California':
             cal.append(district_info.pct_black_hispanic)
-        elif district_info.state == 'District Of Columbia':
-            dis.append(district_info.pct_black_hispanic)
+        # elif district_info.state == 'District Of Columbia':
+        #     dis.append(district_info.pct_black_hispanic)
         elif district_info.state == 'Arizona':
             ari.append(district_info.pct_black_hispanic)
         elif district_info.state == 'Texas':
@@ -496,18 +590,20 @@ def percentage_access_black_hispanic(request):
     mean_perc.append((sum(north)) / len(north))
     mean_perc.append((sum(miss)) / len(miss))
     mean_perc.append((sum(wash)) / len(wash))
-    mean_perc.append((sum(mass)) / len(mass))
+    # mean_perc.append((sum(mass)) / len(mass))
     mean_perc.append((sum(newyork)) / len(newyork))
     mean_perc.append((sum(indiana)) / len(indiana))
     mean_perc.append((sum(vir)) / len(vir))
     mean_perc.append((sum(jersey)) / len(jersey))
     mean_perc.append((sum(tex)) / len(tex))
-    mean_perc.append((sum(dis)) / len(dis))
+    # mean_perc.append((sum(dis)) / len(dis))
     
     final_state_list = json.dumps(states)
     final_mean_perc_list = json.dumps(mean_perc)
     # print("The list is ",final_state_list)
     # print("The perc list is ",final_mean_perc_list)
+
+    
 
     s, exp = expenditure_per_pupil_in_different_states()
     print("Expenditure is",exp)
@@ -528,7 +624,19 @@ def percentage_access_black_hispanic(request):
 
     products, numberofproducts = total_number_of_products()                    #statistic 2
 
-    suburb, rural, town, city = total_locale_type()
+    suburb, rural, town, city,type_of_local = total_locale_type()
+
+    top10Products, bottom20Products, productsOnly, engagementOnly =  productEngagement()
+
+    topProducts = json.dumps(top10Products)
+    bottomProducts = json.dumps(bottom20Products)
+
+    productsOnly = json.dumps(productsOnly)
+    engagementOnly = json.dumps(engagementOnly)
+    
+    st, broadband_average = broadband_connection()
+    states_for_broadband = json.dumps(st)
+    average_for_broadband = json.dumps(broadband_average)
 
     if request.method == 'POST':
         # form = DistrictForm(request.POST)
@@ -564,5 +672,5 @@ def percentage_access_black_hispanic(request):
 
             # return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list , 'st':s, 'ex':exp, 'mydata': data, 'location_list': location_list, 'inputlocation': input_location, 'inputcountry': input_country, 'firststat': numberofdistricts })
 
-    return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp, 'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town, 'city': city})
+    return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp, 'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town, 'city': city, 'localtype':type_of_local ,'top10': topProducts, 'bottom20': bottomProducts, 'pro': productsOnly, 'engo': engagementOnly, 'stb': states_for_broadband, 'avgb': average_for_broadband})
 
