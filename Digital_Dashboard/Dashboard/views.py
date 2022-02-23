@@ -661,7 +661,8 @@ def percentage_access_black_hispanic(request):
                     #state related data
                     return render(request, 'state.html')
                 else:
-                    return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list , 'st':s, 'ex':exp, 'mydata': data, 'location_list': location_list, 'inputlocation': input_location, 'inputcountry': input_country, 'firststat': numberofdistricts, 'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town, 'city': city })
+                    # return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list , 'st':s, 'ex':exp, 'mydata': data, 'location_list': location_list, 'inputlocation': input_location, 'inputcountry': input_country, 'firststat': numberofdistricts, 'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town, 'city': city })
+                    return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp, 'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town, 'city': city, 'localtype':type_of_local ,'top10': topProducts, 'bottom20': bottomProducts, 'pro': productsOnly, 'engo': engagementOnly, 'stb': states_for_broadband, 'avgb': average_for_broadband, 'inputlocation': input_location, 'inputcountry': input_country, 'location_list': location_list})
 
             else:
                 # need to check here if user selected only country or also a state, if country show overview, if state show state related graphs
