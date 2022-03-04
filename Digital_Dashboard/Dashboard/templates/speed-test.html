@@ -1,43 +1,49 @@
-{% load static %}
-{% load crispy_forms_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <!-- Favicon icon -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="{% static 'images/favicon.png' %}"
-    />
-    <title>Digital Dashboard</title>
-    <!-- Custom CSS -->
-    <link href="{% static 'css/float-chart.css' %}" rel="stylesheet" />
-    <!-- Custom CSS -->
-    <link href="{% static 'css/style.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js' %}"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
-    <![endif]-->
+    <title>To detect network speed using JavaScript</title>
   </head>
+  <body>
+    <h3 id="myspeed"></h3>
+    <script type="text/javascript">
+      var userImageLink =
+        "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200714180638/CIP_Launch-banner.png";
+      var time_start, end_time;
 
- <body>
-    <div style="text-align:right;"><div style="min-height:360px;"><div style="width:100%;height:0;padding-bottom:50%;position:relative;"><iframe style="border:none;position:absolute;top:0;left:0;width:100%;height:100%;min-height:360px;border:none;overflow:hidden !important;" src="https://www.metercustom.net/plugin/"></iframe></div></div>Provided by <a href="https://www.meter.net">Meter.net</a></div>
+      // The size in bytes
+      var downloadSize = 5616998;
+      var downloadImgSrc = new Image();
 
- </body>
-            
-        
-    
+      downloadImgSrc.onload = function () {
+        end_time = new Date().getTime();
+        displaySpeed();
+      };
+      time_start = new Date().getTime();
+      downloadImgSrc.src = userImageLink;
+      // document.write("time start: " + time_start);
+      document.write("<br>");
+
+      function displaySpeed() {
+        var timeDuration = (end_time - time_start) / 1000;
+        var loadedBits = downloadSize * 8;
+
+        /* Converts a number into string
+				using toFixed(2) rounding to 2 */
+        var bps = (loadedBits / timeDuration).toFixed(2);
+        var speedInKbps = (bps / 1024).toFixed(2);
+        var speedInMbps = (speedInKbps / 1024).toFixed(2);
+        // alert(
+        //   "Your internet connection speed is: \n" +
+        //     bps +
+        //     " bps\n" +
+        //     speedInKbps +
+        //     " kbps\n" +
+        //     speedInMbps +
+        //     " Mbps\n"
+        // );
+        document.getElementById("myspeed").innerHTML =
+          "Internet speed is " + speedInMbps + " Mbps";
+      }
+    </script>
+  </body>
 </html>
