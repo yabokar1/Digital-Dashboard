@@ -16,8 +16,6 @@ from .models import RatingInfo
 from .models import CountyConnectionInfo
 from django.contrib.auth.decorators import login_required
 from random import randint
-import stats_can
-from stats_can import StatsCan
 
 from operator import itemgetter
 
@@ -85,16 +83,16 @@ def stat_collector_page(request):
         
         if (request.POST.get('wifispeed')):
             wifi_speed = request.POST.get('wifispeed')
-        # print("student_province is", student_province)
-        # print("school_grade is", school_grade)
-        # print("test_score is", test_score)
-        # print("attendance_percentage is", attendance_percentage)
-        # print("student_devices is", student_device)
-        # print("workstatus is", workstatus)
-        # print("parent_salary is", parent_salary)
-        # print("wifi_present is", wifi_present)
-        # print("wifi_company is", wifi_company)
-        # print("wifi_speed is", wifi_speed)
+        print("student_province is", student_province)
+        print("school_grade is", school_grade)
+        print("test_score is", test_score)
+        print("attendance_percentage is", attendance_percentage)
+        print("student_devices is", student_device)
+        print("workstatus is", workstatus)
+        print("parent_salary is", parent_salary)
+        print("wifi_present is", wifi_present)
+        print("wifi_company is", wifi_company)
+        print("wifi_speed is", wifi_speed)
 
     if (student_province != "" and school_grade != "" and attendance_percentage != "" ):
         StudentFormInfo.objects.create(province=student_province,schoolgrade=school_grade, testscore=test_score,attendancepercentage=attendance_percentage,device=student_device,studentworkstatus=workstatus,parentssalary=parent_salary,wifi=wifi_present, wificompany=wifi_company,wifispeed=wifi_speed)  
@@ -121,7 +119,7 @@ def show_wifi_hotspots_information(request):
 
 
 
-    
+    print('everything is',userRating,qualityOfWifi,placeName,placeAddress)
     show_wifi_hotspots_page(request, "cafe");
     show_wifi_hotspots_page(request, "library");
 
@@ -194,30 +192,7 @@ def show_join_us_page(request):
 def show_sign_up_page(request):
     return render(request, 'sign-up.html')
 
-def generate_data_for_online_activities_by_gender_from_stats_canada():
-    # df = stats_can.sc.vectors_to_df(['v1277761046', 'v1277761766', 'v1277761767'], periods = 24)
-    # print("the df is" ,df)
- 
-    # This method should be invoked only when there is a change to this table for today's date.
-    df = stats_can.sc.zip_table_to_dataframe('2210013701')
-    df.columns = [c.replace(' ', '_') for c in df.columns]
-    df = (df[(df.Gender == 'Total, gender') & ((df.COORDINATE == '1.1.1.1.1') | (df.COORDINATE == '1.2.1.1.1') | (df.COORDINATE == '1.3.1.1.1') | (df.COORDINATE == '1.4.1.1.1') | (df.COORDINATE == '1.5.1.1.1') | (df.COORDINATE == '1.6.1.1.1') | (df.COORDINATE == '1.13.1.1.1') | (df.COORDINATE == '1.12.1.1.1') | (df.COORDINATE == '1.23.1.1.1') | (df.COORDINATE == '1.26.1.1.1') | (df.COORDINATE == '1.28.1.1.1'))])
-    print(df.columns)
-    df = df[['REF_DATE', 'Online_activities', 'Gender', 'Age_group', 'VALUE']]
-    print(df)
-    
-    print(is_stats_canada_table_updated(2210013701))        
 
-def is_stats_canada_table_updated(productId):
-    # The logic to check if a table with a product id is updated, if it is updated then call the associated table methods to make a call to statscan api.
-    updated_tables_today_dict = (StatsCan.tables_updated_today())
-
-    for x in updated_tables_today_dict:
-        for key in x.keys():
-            if key == 'productId' and x[key] == productId:
-                return "Updated Today"
-
-    return "Not Updated Today"
 
 def generate_product_info(request):
     return render(request, 'main.html')
@@ -376,6 +351,8 @@ def expenditure_per_pupil_in_different_states():
 def productEngagement():
     obj = EngagementInfo.objects.all().order_by('-engagement_index')
 
+    for x in obj:
+        print("I am are", x.lp_id, x.engagement_index)
     products = ProductsInfo.objects.all()
     products_data = []
     consumer_products = []
@@ -391,11 +368,13 @@ def productEngagement():
             if x.lp_id == product.lpid:
                 products_data.append({'name': product.product_name, 'engagement': x.engagement_index})
 
+    print('product data is', products_data)
     for dic in products_data:
         for key in (dic.keys()):
             if key == 'name':
                 consumer_products.append(dic[key])
     unique_products = set(consumer_products)
+    print(unique_products)
 
     for p in unique_products:
         average = 0
@@ -403,13 +382,16 @@ def productEngagement():
         for dict in products_data:
             if dict['name'] == p:
                 average = average + dict['engagement']
+                print('GS', p, average)
                 count = count + 1
         products_array.append({'name': p, 'avg': average / count})
 
+    print(products_array)
 
     top10products = sorted(products_array, key=itemgetter('avg'), reverse=True)[0:10]
 
     least10products = sorted(products_array, key=itemgetter('avg'), reverse=True)[-15:-5]
+    print("least 10 is ", least10products)
 
     for item in top10products:
         for key, value in item.items():
@@ -505,6 +487,7 @@ def broadband_connection():
                 state_broadband[state] = round(avg / (len(state_broadband[state]) + 1), 2)
 
     states = list(state_broadband.keys())
+    print("The states", states)
 
     broadband_avg = list(state_broadband.values())
     return states, broadband_avg
@@ -547,6 +530,7 @@ def avg(li):
 def show_graphs_for_users(request):
     # userObject = UserProfile.objects.filter(user_id=request.user.id)
    logged_in_user_type = request.user.userprofile.user_type
+   print('Logged in user type is',logged_in_user_type )
    print('This statement is',logged_in_user_type == 'student')
    if (logged_in_user_type == 'student'):
        return HttpResponseRedirect('/dashboard/student/')
@@ -559,7 +543,6 @@ def show_graphs_for_users(request):
 
 @login_required(login_url='/dashboard/accounts/login/') 
 def percentage_access_black_hispanic(request):
-    generate_data_for_online_activities_by_gender_from_stats_canada()
     states = ['Utah', 'Illinois', 'Wisconsin', 'NC', 'Missouri', 'Washington', 'Massachusetts', 'NY', 'Indiana',
               'Virginia', 'New Jersey', 'Texas', 'DOC']
 
@@ -640,7 +623,7 @@ def percentage_access_black_hispanic(request):
     
 
     s, exp = expenditure_per_pupil_in_different_states()
-    
+    print("Expenditure is",exp)
     form = create_district_graph()
     county, district = percentage_access_in_state("Illinois")
 
@@ -654,7 +637,7 @@ def percentage_access_black_hispanic(request):
     data = json.dumps(originalData)              # data in JSON format ready to be used by d3.js
 
     numberofdistricts, numberofstates = totalNumberOfSchoolDistricts()         # statistic 1
-    
+    print('Total number of districts is', numberofdistricts)
 
     products, numberofproducts = total_number_of_products()                    #statistic 2
 
@@ -688,6 +671,7 @@ def percentage_access_black_hispanic(request):
     reduced_keys = list(reduced.keys())
     for x, y in reduced.items():
         if math.isnan(y):
+            print(":", y)
             reduced_values.remove(y)
             reduced_keys.remove(x)
 
