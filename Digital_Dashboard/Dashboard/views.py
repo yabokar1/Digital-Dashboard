@@ -5,6 +5,7 @@ from django.contrib.auth import login, authenticate
 import json
 import requests
 import numpy as np
+# from .models import LabourForce
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import UserForm, ProfileForm
 from .models import Districts
@@ -14,8 +15,19 @@ from .forms import FilterForm
 from .models import StudentFormInfo
 from .models import RatingInfo
 from .models import CountyConnectionInfo
+from .models import LabourForce
+from .models import PostSecondaryEnrollment
+from .models import ExpenditureColleges
+from .models import ParticipationRate
+from .models import UnemploymentRate
+from .models import ApprenticeshipRegistration
+from .models import AverageTestScores
+
 from django.contrib.auth.decorators import login_required
 from random import randint
+
+import stats_can
+from stats_can import StatsCan
 
 from operator import itemgetter
 
@@ -23,14 +35,14 @@ names_of_places = []
 library_places = []
 rating_star_list = []
 
-def create_user_for_signup(request):
 
-    if(request.method == 'POST'):
+def create_user_for_signup(request):
+    if (request.method == 'POST'):
         form = UserForm(request.POST)
         profile_form = ProfileForm(request.POST)
 
-        if(form.is_valid() and profile_form.is_valid()):
-            
+        if (form.is_valid() and profile_form.is_valid()):
+
             user = form.save()
             profile = profile_form.save(commit=False)
             profile.user = user
@@ -39,21 +51,19 @@ def create_user_for_signup(request):
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
 
-            print("The username is",username)
-            print("The password is",raw_password)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
 
-
-            return HttpResponseRedirect('/dashboard/home',{'form' : form})
+            return HttpResponseRedirect('/dashboard/home', {'form': form})
 
         else:
             print(form.errors)
-        
+
     else:
         form = UserForm()
         profile_form = ProfileForm()
-    return render(request, 'sign-up.html', {'form' : form, 'profile_form': profile_form})
+    return render(request, 'sign-up.html', {'form': form, 'profile_form': profile_form})
+
 
 def stat_collector_page(request):
     student_province = ""
@@ -68,7 +78,7 @@ def stat_collector_page(request):
     wifi_speed = ""
 
     if (request.method == 'POST'):
-        student_province =  request.POST.get('province')
+        student_province = request.POST.get('province')
         school_grade = int(request.POST.get('grade'))
         if (request.POST.get('testscore')):
             test_score = int(request.POST.get('testscore'))
@@ -80,23 +90,17 @@ def stat_collector_page(request):
 
         if (request.POST.get('wificompany')):
             wifi_company = request.POST.get('wificompany')
-        
+
         if (request.POST.get('wifispeed')):
             wifi_speed = request.POST.get('wifispeed')
-        print("student_province is", student_province)
-        print("school_grade is", school_grade)
-        print("test_score is", test_score)
-        print("attendance_percentage is", attendance_percentage)
-        print("student_devices is", student_device)
-        print("workstatus is", workstatus)
-        print("parent_salary is", parent_salary)
-        print("wifi_present is", wifi_present)
-        print("wifi_company is", wifi_company)
-        print("wifi_speed is", wifi_speed)
 
-    if (student_province != "" and school_grade != "" and attendance_percentage != "" ):
-        StudentFormInfo.objects.create(province=student_province,schoolgrade=school_grade, testscore=test_score,attendancepercentage=attendance_percentage,device=student_device,studentworkstatus=workstatus,parentssalary=parent_salary,wifi=wifi_present, wificompany=wifi_company,wifispeed=wifi_speed)  
+    if (student_province != "" and school_grade != "" and attendance_percentage != ""):
+        StudentFormInfo.objects.create(province=student_province, schoolgrade=school_grade, testscore=test_score,
+                                       attendancepercentage=attendance_percentage, device=student_device,
+                                       studentworkstatus=workstatus, parentssalary=parent_salary, wifi=wifi_present,
+                                       wificompany=wifi_company, wifispeed=wifi_speed)
     return render(request, 'informationcollector.html')
+
 
 def show_wifi_hotspots_information(request):
     input_address = ''
@@ -106,7 +110,7 @@ def show_wifi_hotspots_information(request):
     in_longitude = ''
     userRating = ''
     qualityOfWifi = ''
-    placeName  = ''
+    placeName = ''
     placeAddress = ''
 
     if (request.method == 'POST' and request.POST.get('ratingRange') and request.POST.get('wifiquality')):
@@ -115,11 +119,9 @@ def show_wifi_hotspots_information(request):
         placeName = request.POST.get('placename')
         placeAddress = request.POST.get('placeaddress')
 
-        RatingInfo.objects.create(rating=userRating,wifiquality=qualityOfWifi,name=placeName, placeaddress=placeAddress)
+        RatingInfo.objects.create(rating=userRating, wifiquality=qualityOfWifi, name=placeName,
+                                  placeaddress=placeAddress)
 
-
-
-    print('everything is',userRating,qualityOfWifi,placeName,placeAddress)
     show_wifi_hotspots_page(request, "cafe");
     show_wifi_hotspots_page(request, "library");
 
@@ -127,14 +129,16 @@ def show_wifi_hotspots_information(request):
         input_address = request.POST.get('address')
         in_latitude = request.POST.get('cityLat')
         in_longitude = request.POST.get('cityLng')
-    print("The address is", input_address)
 
-    return render(request, 'wifihotspots.html', {'places' : names_of_places, 'libraries': library_places, 'address': input_address, 'lat': in_latitude, 'long': in_longitude})
+    return render(request, 'wifihotspots.html',
+                  {'places': names_of_places, 'libraries': library_places, 'address': input_address, 'lat': in_latitude,
+                   'long': in_longitude})
+
 
 def show_wifi_hotspots_page(request, type):
     latitude = ''
     longitude = ''
-    payload={}
+    payload = {}
     headers = {}
     input_address = 'empty'
     rating = 0
@@ -144,7 +148,7 @@ def show_wifi_hotspots_page(request, type):
         opening_hours = ""
         open_period = ""
         random_number = 0;
-        url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+latitude+"%2C"+longitude+"&radius=10000&type="+type+"&key=AIzaSyDxQOJK5g7J9P6z9xXHq2hEt7zQMRxlspg";
+        url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude + "%2C" + longitude + "&radius=10000&type=" + type + "&key=AIzaSyDxQOJK5g7J9P6z9xXHq2hEt7zQMRxlspg";
         response = requests.request("GET", url, headers=headers, data=payload)
         json_data = json.loads(response.text)
         json_results = json_data["results"];
@@ -155,31 +159,56 @@ def show_wifi_hotspots_page(request, type):
                 opening_hours = json_results[i].get("opening_hours").get("open_now")
             else:
                 opening_hours = "Not listed"
-            random_number = randint(10000, 99999); 
-           
+            random_number = randint(10000, 99999);
+
             for items in ratingInfo:
-                if(items.name == json_results[i]["name"] and items.placeaddress in json_results[i]["vicinity"]):
-                    print('isequal', items.placeaddress,json_results[i]["vicinity"])
+                if (items.name == json_results[i]["name"] and items.placeaddress in json_results[i]["vicinity"]):
+                    # print('isequal', items.placeaddress,json_results[i]["vicinity"])
                     rating = items.rating
-                     
-                    if type == 'cafe':                     
-                        names_of_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': rating, 'id': random_number})
-                        if ({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number} in names_of_places):
-                            names_of_places.remove({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number})
+
+                    if type == 'cafe':
+                        names_of_places.append(
+                            {'name': json_results[i]["name"], 'vicinity': json_results[i]["vicinity"],
+                             'isOpen': opening_hours, 'rating': rating, 'id': random_number})
+                        if ({'name': json_results[i]["name"], 'vicinity': json_results[i]["vicinity"],
+                             'isOpen': opening_hours, 'rating': "No rating found",
+                             'id': random_number} in names_of_places):
+                            names_of_places.remove(
+                                {'name': json_results[i]["name"], 'vicinity': json_results[i]["vicinity"],
+                                 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number})
                     elif (type == 'library'):
-                        library_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': rating, 'id': random_number})
-                        if ({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number} in library_places):
-                            library_places.remove({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number})
+                        library_places.append({'name': json_results[i]["name"], 'vicinity': json_results[i]["vicinity"],
+                                               'isOpen': opening_hours, 'rating': rating, 'id': random_number})
+                        if ({'name': json_results[i]["name"], 'vicinity': json_results[i]["vicinity"],
+                             'isOpen': opening_hours, 'rating': "No rating found",
+                             'id': random_number} in library_places):
+                            library_places.remove(
+                                {'name': json_results[i]["name"], 'vicinity': json_results[i]["vicinity"],
+                                 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number})
 
                 elif (items.name != json_results[i]["name"] or items.placeaddress not in json_results[i]["vicinity"]):
-                    if type == 'cafe' and {'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number} not in names_of_places and {'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': rating, 'id': random_number} not in names_of_places:                     
-                        names_of_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number})
-                    elif type == 'library' and {'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number} not in library_places and {'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': rating, 'id': random_number} not in library_places:
-                        library_places.append({'name':json_results[i]["name"], 'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number})
+                    if type == 'cafe' and {'name': json_results[i]["name"], 'vicinity': json_results[i]["vicinity"],
+                                           'isOpen': opening_hours, 'rating': "No rating found",
+                                           'id': random_number} not in names_of_places and {
+                        'name': json_results[i]["name"], 'vicinity': json_results[i]["vicinity"],
+                        'isOpen': opening_hours, 'rating': rating, 'id': random_number} not in names_of_places:
+                        names_of_places.append(
+                            {'name': json_results[i]["name"], 'vicinity': json_results[i]["vicinity"],
+                             'isOpen': opening_hours, 'rating': "No rating found", 'id': random_number})
+                    elif type == 'library' and {'name': json_results[i]["name"],
+                                                'vicinity': json_results[i]["vicinity"], 'isOpen': opening_hours,
+                                                'rating': "No rating found",
+                                                'id': random_number} not in library_places and {
+                        'name': json_results[i]["name"], 'vicinity': json_results[i]["vicinity"],
+                        'isOpen': opening_hours, 'rating': rating, 'id': random_number} not in library_places:
+                        library_places.append({'name': json_results[i]["name"], 'vicinity': json_results[i]["vicinity"],
+                                               'isOpen': opening_hours, 'rating': "No rating found",
+                                               'id': random_number})
 
 
 def show_speed_test_page(request):
-    return render(request, 'speed-test.html')  
+    return render(request, 'speed-test.html')
+
 
 def show_user_login__page(request):
     return render(request, 'login.html')
@@ -193,9 +222,148 @@ def show_sign_up_page(request):
     return render(request, 'sign-up.html')
 
 
+def generate_data_for_online_activities_by_gender_from_stats_canada():
+    # This method should be invoked only when there is a change to this table for today's date.
+    df = stats_can.sc.zip_table_to_dataframe('2210013701')
+    df.columns = [c.replace(' ', '_') for c in df.columns]
+    df = (df[(df.Gender == 'Total, gender') & (
+            (df.COORDINATE == '1.1.1.1.1') | (df.COORDINATE == '1.2.1.1.1') | (df.COORDINATE == '1.3.1.1.1') | (
+            df.COORDINATE == '1.4.1.1.1') | (df.COORDINATE == '1.5.1.1.1') | (df.COORDINATE == '1.6.1.1.1') | (
+                    df.COORDINATE == '1.13.1.1.1') | (df.COORDINATE == '1.12.1.1.1') | (
+                    df.COORDINATE == '1.23.1.1.1') | (df.COORDINATE == '1.26.1.1.1') | (
+                    df.COORDINATE == '1.28.1.1.1'))])
+    print(df.columns)
+    df = df[['REF_DATE', 'Online_activities', 'Gender', 'Age_group', 'VALUE']]
+    print(df)
+
+    print(is_stats_canada_table_updated(2210013701))
+
+# heat map
+def labour_force_data():
+    labour_status = LabourForce.objects.all()
+    print("The labour status")
+    labour_dict = {}
+    for item in labour_status:
+        if item.reference_date not in labour_dict.keys():
+            labour_dict[item.reference_date] = {}
+        else:
+            labour_dict[item.reference_date][item.labour_force_status] = item.value
+
+    return labour_dict
+
+# line graph
+def post_enrollment_data():
+    enrollment_data = PostSecondaryEnrollment.objects.all()
+    print("The postsecondary status")
+    enrollment_dict = {}
+    for item in enrollment_data:
+        if item.reference_date not in enrollment_dict.keys():
+            enrollment_dict[item.reference_date] = {}
+        elif item.institution_type == "Total, institution type":
+            enrollment_dict[item.reference_date][item.geo] = item.value
+        else:
+            pass
+
+    return enrollment_dict
+
+
+# sychronized chart
+
+def expenditure_college_data():
+    expenditure_data = ExpenditureColleges.objects.all()
+    print("The expenditure status")
+    expenditure_dict = {}
+    for item in expenditure_data:
+        if item.reference_date not in expenditure_dict.keys():
+            expenditure_dict[item.reference_date] = {}
+        elif item.geo not in expenditure_dict[item.reference_date].keys():
+            expenditure_dict[item.reference_date][item.geo] = []
+        else:
+            expenditure_dict[item.reference_date][item.geo].append(item.value)
+    return expenditure_dict
+    print("the value is",expenditure_dict)
+
+# bar graph
+def apprentice_registration_data():
+    apprentice_data = ApprenticeshipRegistration.objects.all()
+    print("The apprentice status")
+    apprentice_dict = {}
+    for item in apprentice_data:
+        if item.reference_date not in apprentice_dict.keys():
+            apprentice_dict[item.reference_date] = {}
+        elif apprentice_data.trade_groups == "Total major trade groups":
+            apprentice_dict[item.reference_date][item.geo] = item.value
+        else:
+            pass
+
+    print("the value is",apprentice_dict)
+#  multi bar graph
+def avg_test_score_data():
+    test_score_data = AverageTestScores.objects.all()
+    print("The test score status")
+    test_score_dict = {}
+    for item in test_score_data:
+        if item.reference_date not in test_score_dict.keys():
+            test_score_dict[item.reference_date] = {}
+        elif item.gender not in test_score_dict[item.reference_date].keys():
+            test_score_dict[item.reference_date][item.gender] = []
+        elif item.characteristics == "Estimated average score":
+            test_score_dict[item.reference_date][gender].append(item.value)
+        else:
+            pass
+
+    print("the value is",apprentice_dict)
+
+# speedometer
+def participation_rate_data():
+    participation_data = ParticipationRate.objects.all()
+    print("The test score status")
+    participation_dict = {}
+    for item in participation_data:
+        if item.reference_date not in test_score_dict.keys():
+            participation_dict[item.reference_date] = {}
+        elif item.age not in participation_dict[item.reference_date].keys():
+            participation_dict[item.reference_date][item.age] = []
+        else:
+            participation_dict[item.reference_date][item.age].append(item.value)
+
+    print("the value is",apprentice_dict)
+
+#
+def unemployment_rate_data():
+    unemployment_data = UnemploymentRate.objects.all()
+    print("The test score status")
+    unemployment_dict = {}
+    for item in unemployment_data:
+        if item.reference_date not in test_score_dict.keys():
+            unemployment_dict[item.reference_date] = {}
+        elif item.age not in unemployment_dict [item.reference_date].keys():
+            unemployment_dict[item.reference_date][item.characteristics_of_the_population] = []
+        else:
+            unemployment_dict[item.reference_date][item.characteristics_of_the_population].append(item.value)
+
+    print("the value is",apprentice_dict)
+
+
+
+
+
+
+def is_stats_canada_table_updated(productId):
+    # The logic to check if a table with a product id is updated, if it is updated then call the associated table methods to make a call to statscan api.
+    updated_tables_today_dict = (StatsCan.tables_updated_today())
+
+    for x in updated_tables_today_dict:
+        for key in x.keys():
+            if key == 'productId' and x[key] == productId:
+                return "Updated Today"
+
+    return "Not Updated Today"
+
 
 def generate_product_info(request):
     return render(request, 'main.html')
+
 
 def create_district_graph():
     # form = DistrictForm()
@@ -211,8 +379,7 @@ def percentage_access_in_state(state):
         county_connection.append(x.county_connection)
         district_list.append(x.district_id)
 
-
-    return county_connection,district_list
+    return county_connection, district_list
 
 
 def expenditure_per_pupil_in_different_states():
@@ -235,7 +402,8 @@ def expenditure_per_pupil_in_different_states():
     dis = []
     ari = []
     tex = []
-    states = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington', 'New York', 'Indiana', 'Virginia', 'New Jersey','Texas']
+    states = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington', 'New York', 'Indiana',
+              'Virginia', 'New Jersey', 'Texas']
 
     o = Districts.objects.all()
 
@@ -252,26 +420,15 @@ def expenditure_per_pupil_in_different_states():
             miss.append(item.pp_total_raw)
         elif item.state == 'Washington':
             wash.append(item.pp_total_raw)
-        # elif item.state == 'Connecticut':
-        #     connect.append(item.pp_total_raw)
-        # elif item.state == 'Massachusetts':
-        #     mass.append(item.pp_total_raw)
         elif item.state == 'New York':
             newyork.append(item.pp_total_raw)
         elif item.state == 'Indiana':
             indiana.append(item.pp_total_raw)
         elif item.state == 'Virginia':
             vir.append(item.pp_total_raw)
-        # elif item.state == 'Ohio':
-        #     ohio.append(item.pp_total_raw)
         elif item.state == 'New Jersey':
             jersey.append(item.pp_total_raw)
-        # elif item.state == 'California':
-        #     cal.append(item.pp_total_raw)
-        # elif item.state == 'District Of Columbia':
             dis.append(item.pp_total_raw)
-        # elif item.state == 'Arizona':
-        #     ari.append(item.pp_total_raw)
         elif item.state == 'Texas':
             tex.append(item.pp_total_raw)
 
@@ -299,14 +456,6 @@ def expenditure_per_pupil_in_different_states():
         avg_expenditure_for_states.append(avg(wash))
     else:
         avg_expenditure_for_states.append(0)
-    # # if len(connect) > 0:
-    # #     avg_expenditure_for_states.append(avg(connect))
-    # else:
-    #     avg_expenditure_for_states.append(0)
-    # if len(mass) > 0:
-    #     avg_expenditure_for_states.append(avg(mass))
-    # else:
-    #     avg_expenditure_for_states.append(0)
     if len(newyork) > 0:
         avg_expenditure_for_states.append(avg(newyork))
     else:
@@ -319,44 +468,24 @@ def expenditure_per_pupil_in_different_states():
         avg_expenditure_for_states.append(avg(vir))
     else:
         avg_expenditure_for_states.append(0)
-    # if len(ohio) > 0:
-    #     avg_expenditure_for_states.append(avg(ohio))
-    # else:
-    #     avg_expenditure_for_states.append(0)
     if len(jersey) > 0:
         avg_expenditure_for_states.append(avg(jersey))
     else:
         avg_expenditure_for_states.append(0)
-    # if len(cal) > 0:
-    #     avg_expenditure_for_states.append(avg(cal))
-    # else:
-    #     avg_expenditure_for_states.append(0)
-    # if len(dis) > 0:
-    #     avg_expenditure_for_states.append(avg(dis))
-    # else:
-    #     avg_expenditure_for_states.append(0)
-    # if len(ari) > 0:
-    #     avg_expenditure_for_states.append(avg(ari))
-    # else:
-    #     avg_expenditure_for_states.append(0)
     if len(tex) > 0:
         avg_expenditure_for_states.append(avg(tex))
     else:
         avg_expenditure_for_states.append(0)
 
-
-    return states,avg_expenditure_for_states
+    return states, avg_expenditure_for_states
 
 
 def productEngagement():
     obj = EngagementInfo.objects.all().order_by('-engagement_index')
 
-    for x in obj:
-        print("I am are", x.lp_id, x.engagement_index)
     products = ProductsInfo.objects.all()
     products_data = []
     consumer_products = []
-    unique_products = []
     products_array = []
     single_products_array = []
     single_average_engagement_array = []
@@ -368,13 +497,11 @@ def productEngagement():
             if x.lp_id == product.lpid:
                 products_data.append({'name': product.product_name, 'engagement': x.engagement_index})
 
-    print('product data is', products_data)
     for dic in products_data:
         for key in (dic.keys()):
             if key == 'name':
                 consumer_products.append(dic[key])
     unique_products = set(consumer_products)
-    print(unique_products)
 
     for p in unique_products:
         average = 0
@@ -382,16 +509,12 @@ def productEngagement():
         for dict in products_data:
             if dict['name'] == p:
                 average = average + dict['engagement']
-                print('GS', p, average)
                 count = count + 1
         products_array.append({'name': p, 'avg': average / count})
-
-    print(products_array)
 
     top10products = sorted(products_array, key=itemgetter('avg'), reverse=True)[0:10]
 
     least10products = sorted(products_array, key=itemgetter('avg'), reverse=True)[-15:-5]
-    print("least 10 is ", least10products)
 
     for item in top10products:
         for key, value in item.items():
@@ -421,12 +544,13 @@ def totalNumberOfSchoolDistricts():
             states.append(item.state);
     return len(district_ids), len(states)
 
+
 def total_number_of_products():
     product_list = ProductsInfo.objects.filter()
     product_data = []
 
     for product in product_list:
-        product_data.append({ "product_name": product.product_name, "url": product.url })
+        product_data.append({"product_name": product.product_name, "url": product.url})
 
     return product_data, len(product_data)
 
@@ -443,7 +567,7 @@ def free_reduced():
             free_reduce[x.state].append(x.free_reduced)
     states = list(free_reduce.keys())
     for state in states:
-        free_reduce[state] = round(np.mean(free_reduce[state]),2)
+        free_reduce[state] = round(np.mean(free_reduce[state]), 2)
     return free_reduce
 
 
@@ -455,16 +579,16 @@ def product_engage(lp_id):
     engagement = []
     p_info = ''
 
-
     for product in products:
         engagement.append(product.engagement_index)
         time.append(product.timestamp)
 
     for info in products_info:
         p_info = info.product_name
-        print(p_info)
+        # print(p_info)
 
-    return engagement,time,p_info
+    return engagement, time, p_info
+
 
 def broadband_connection():
     broad_band = CountyConnectionInfo.objects.all()
@@ -487,10 +611,11 @@ def broadband_connection():
                 state_broadband[state] = round(avg / (len(state_broadband[state]) + 1), 2)
 
     states = list(state_broadband.keys())
-    print("The states", states)
+    # print("The states", states)
 
     broadband_avg = list(state_broadband.values())
     return states, broadband_avg
+
 
 def total_locale_type():
     suburb = Districts.objects.filter(locale="Suburb")
@@ -509,7 +634,7 @@ def total_locale_type():
     for item in rural:
         rural_list.append(item)
     for item in town:
-         town_list.append(item)
+        town_list.append(item)
     for item in city:
         city_list.append(item)
 
@@ -524,25 +649,31 @@ def avg(li):
     j = 0
     for i in li:
         j = j + i
-    return (int(j/len(li)))
+    return (int(j / len(li)))
+
 
 @login_required(login_url='/dashboard/accounts/login/')
 def show_graphs_for_users(request):
     # userObject = UserProfile.objects.filter(user_id=request.user.id)
-   logged_in_user_type = request.user.userprofile.user_type
-   print('Logged in user type is',logged_in_user_type )
-   print('This statement is',logged_in_user_type == 'student')
-   if (logged_in_user_type == 'student'):
-       return HttpResponseRedirect('/dashboard/student/')
-   elif (logged_in_user_type == 'educator'):
-       #call educator methods here
-       print('Hi educator')
-       return HttpResponseRedirect('/dashboard/speedtest/')
+    logged_in_user_type = request.user.userprofile.user_type
+    # print('Logged in user type is',logged_in_user_type )
+    # print('This statement is',logged_in_user_type == 'student')
+    if (logged_in_user_type == 'student'):
+        return HttpResponseRedirect('/dashboard/student/')
+    elif (logged_in_user_type == 'educator'):
+        # call educator methods here
+        # print('Hi educator')
+        return HttpResponseRedirect('/dashboard/speedtest/')
 
-      #forces user to login if they try to go /dashboard/home path
+    # forces user to login if they try to go /dashboard/home path
 
-@login_required(login_url='/dashboard/accounts/login/') 
+
+@login_required(login_url='/dashboard/accounts/login/')
 def percentage_access_black_hispanic(request):
+
+
+
+
     states = ['Utah', 'Illinois', 'Wisconsin', 'NC', 'Missouri', 'Washington', 'Massachusetts', 'NY', 'Indiana',
               'Virginia', 'New Jersey', 'Texas', 'DOC']
 
@@ -604,56 +735,49 @@ def percentage_access_black_hispanic(request):
         elif district_info.state == 'Texas':
             tex.append(district_info.pct_black_hispanic)
 
-    mean_perc.append(round((sum(Utah)) / len(Utah),2))
-    mean_perc.append(round((sum(Illi)) / len(Illi),2))
-    mean_perc.append(round((sum(Wisco)) / len(Wisco),2))
-    mean_perc.append(round((sum(north)) / len(north),2))
-    mean_perc.append(round((sum(miss)) / len(miss),2))
-    mean_perc.append(round((sum(wash)) / len(wash),2))
-    mean_perc.append(round((sum(newyork)) / len(newyork),2))
-    mean_perc.append(round((sum(indiana)) / len(indiana),2))
-    mean_perc.append(round((sum(vir)) / len(vir),2))
-    mean_perc.append(round((sum(jersey)) / len(jersey),2))
-    mean_perc.append(round((sum(tex)) / len(tex),2))
-    
+    mean_perc.append(round((sum(Utah)) / len(Utah), 2))
+    mean_perc.append(round((sum(Illi)) / len(Illi), 2))
+    mean_perc.append(round((sum(Wisco)) / len(Wisco), 2))
+    mean_perc.append(round((sum(north)) / len(north), 2))
+    mean_perc.append(round((sum(miss)) / len(miss), 2))
+    mean_perc.append(round((sum(wash)) / len(wash), 2))
+    mean_perc.append(round((sum(newyork)) / len(newyork), 2))
+    mean_perc.append(round((sum(indiana)) / len(indiana), 2))
+    mean_perc.append(round((sum(vir)) / len(vir), 2))
+    mean_perc.append(round((sum(jersey)) / len(jersey), 2))
+    mean_perc.append(round((sum(tex)) / len(tex), 2))
+
     final_state_list = json.dumps(states)
     final_mean_perc_list = json.dumps(mean_perc)
 
-
-    
-
     s, exp = expenditure_per_pupil_in_different_states()
-    print("Expenditure is",exp)
+    # print("Expenditure is",exp)
     form = create_district_graph()
     county, district = percentage_access_in_state("Illinois")
 
     keyVal = {};
-    originalData = []   # Data contains array of objects
+    originalData = []  # Data contains array of objects
 
     i = 0
     for i in range(len(s)):
-        originalData.append({ "state": s[i], "expenditure": exp[i] });
-    
-    data = json.dumps(originalData)              # data in JSON format ready to be used by d3.js
+        originalData.append({"state": s[i], "expenditure": exp[i]});
 
-    numberofdistricts, numberofstates = totalNumberOfSchoolDistricts()         # statistic 1
-    print('Total number of districts is', numberofdistricts)
+    data = json.dumps(originalData)  # data in JSON format ready to be used by d3.js
 
-    products, numberofproducts = total_number_of_products()                    #statistic 2
+    numberofdistricts, numberofstates = totalNumberOfSchoolDistricts()  # statistic 1
+    # print('Total number of districts is', numberofdistricts)
 
-    suburb, rural, town, city,type_of_local = total_locale_type()
+    products, numberofproducts = total_number_of_products()  # statistic 2
 
-    bottomProducts, engagementOfLeastProducts, productsOnly, engagementOnly =  productEngagement()
+    suburb, rural, town, city, type_of_local = total_locale_type()
+
+    bottomProducts, engagementOfLeastProducts, productsOnly, engagementOnly = productEngagement()
 
     productsOnly = json.dumps(productsOnly)
     engagementOnly = json.dumps(engagementOnly)
     leastProductsOnly = json.dumps(bottomProducts)
     leastEngagementOnly = json.dumps(engagementOfLeastProducts)
 
-
-
-
-    
     st, broadband_average = broadband_connection()
     states_for_broadband = json.dumps(st)
     average_for_broadband = json.dumps(broadband_average)
@@ -663,15 +787,13 @@ def percentage_access_black_hispanic(request):
     time = json.dumps(time)
     product_info = json.dumps(product_info)
 
-
     reduced = free_reduced()
-
 
     reduced_values = list(reduced.values())
     reduced_keys = list(reduced.keys())
     for x, y in reduced.items():
         if math.isnan(y):
-            print(":", y)
+            # print(":", y)
             reduced_values.remove(y)
             reduced_keys.remove(x)
 
@@ -688,41 +810,93 @@ def percentage_access_black_hispanic(request):
 
             # input_state = form.cleaned_data['state']
             input_country = request.POST.get('country')
-            print("The country is",input_country)
+            # print("The country is",input_country)
 
             # print('location list is ', location_list)
             input_location = ''
-            if (request.POST.get('locations') != None) :
-                 input_location = request.POST.get('locations')
-                 print('input Location is', input_location)
-
+            if (request.POST.get('locations') != None):
+                input_location = request.POST.get('locations')
+                # print('input Location is', input_location)
 
             if input_country == 'usa':
-                location_list = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington', 'Massachusetts', 'New York', 'Indiana',
-              'Virginia', 'New Jersey', 'Texas', 'District of Columbia']
+                location_list = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington',
+                                 'Massachusetts', 'New York', 'Indiana',
+                                 'Virginia', 'New Jersey', 'Texas', 'District of Columbia']
                 if input_location:
-                    #state related data
+                    # state related data
                     return render(request, 'state.html')
                 else:
-                    return render(request, 'index.html', {'district': district, 'county': county, 'form': form, 'state':final_state_list , 'perc': final_mean_perc_list , 'st':s, 'ex':exp, 'mydata': data, 'location_list': location_list, 'inputlocation': input_location, 'inputcountry': input_country, 'firststat': numberofdistricts, 'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town, 'city': city,
-                                                          'engagement': engagement, 'product_info': product_info,'time':time,
-                                                          'reduced_free': multiple_reduced_values,
-                                                          "pct_free": multiple_pct_ethic,
-                                                          'multiple_state': multiple_state,'lepro': leastProductsOnly, 'leeng': leastEngagementOnly
-                                                          })
+                    return render(request, 'index.html',
+                                  {'district': district, 'county': county, 'form': form, 'state': final_state_list,
+                                   'perc': final_mean_perc_list, 'st': s, 'ex': exp, 'mydata': data,
+                                   'location_list': location_list, 'inputlocation': input_location,
+                                   'inputcountry': input_country, 'firststat': numberofdistricts,
+                                   'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products,
+                                   'suburb': suburb, 'rural': rural, 'town': town, 'city': city,
+                                   'engagement': engagement, 'product_info': product_info, 'time': time,
+                                   'reduced_free': multiple_reduced_values,
+                                   "pct_free": multiple_pct_ethic,
+                                   'multiple_state': multiple_state, 'lepro': leastProductsOnly,
+                                   'leeng': leastEngagementOnly
+                                   })
 
             else:
                 # need to check here if user selected only country or also a state, if country show overview, if state show state related graphs
-                location_list = ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon']
+                location_list = ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick',
+                                 'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut',
+                                 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon']
+
+    return render(request, 'index.html',
+                  {'state': final_state_list, 'perc': final_mean_perc_list, 'form': form, 'st': s, 'ex': exp,
+                   'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates,
+                   'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town,
+                   'city': city, 'localtype': type_of_local, 'pro': productsOnly, 'engo': engagementOnly,
+                   'stb': states_for_broadband,
+                   'avgb': average_for_broadband, 'engagement': engagement, 'product_info': product_info, 'time': time,
+                   'reduced_free': multiple_reduced_values, "pct_free": multiple_pct_ethic,
+                   'multiple_state': multiple_state, 'lepro': leastProductsOnly, 'leeng': leastEngagementOnly
+                   })
 
 
-            
+def canadian_data(request):
+   # labour
+   labour_dic = labour_force_data()
+   labour_key = list(labour_dic["2018/2019"].keys())
+   labour_value = list(labour_dic["2018/2019"].values())
+   labour_key = json.dumps(labour_key)
+   labour_value = json.dumps(labour_value)
+   # enrollment
+   enrollment_dic = post_enrollment_data()
+   enrollment_key = list(enrollment_dic["2018/2019"].keys())
+   enrollment_value = list(enrollment_dic["2018/2019"].values())
+   enrollment_key = json.dumps(enrollment_key)
+   enrollment_value = json.dumps(enrollment_value)
+   # expenditure
+   expenditure = expenditure_college_data()
+   expenditure_key = ['Salaries and wages',
+                      'Teachers',
+                      'Other salaries and wages',
+                      'Fringe benefits',
+                      'Library acquisitions',
+                      'Operational supplies and expenses',
+                      'Utilities',
+                      'Furniture and equipment',
+                      'Scholarships and other related students support',
+                      'Fees and contracted services',
+                      'Debt services',
+                      'Buildings',
+                      'Land and site services',
+                      'Miscellaneous',
+                      'Ancillary enterprises']
+   expenditure_value = list(expenditure['2018/2019']['Canada'][1:])
+   expenditure_key = json.dumps(expenditure_key)
+   expenditure_value = json.dumps(expenditure_value)
 
 
 
-    return render(request, 'index.html', {'state':final_state_list , 'perc': final_mean_perc_list, 'form': form, 'st':s, 'ex':exp, 'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town, 'city': city, 'localtype':type_of_local , 'pro': productsOnly, 'engo': engagementOnly, 'stb': states_for_broadband,
-                                          'avgb': average_for_broadband,'engagement': engagement, 'product_info': product_info,'time':time,
-                                          'reduced_free': multiple_reduced_values, "pct_free": multiple_pct_ethic,
-                                          'multiple_state': multiple_state,'lepro': leastProductsOnly, 'leeng': leastEngagementOnly
-                                          })
 
+   return render(request,"index2.html", {
+       'labour_key': labour_key, 'labour_value': labour_value, 'enrollment_key': enrollment_key,
+       'enrollment_value': enrollment_value, 'expenditure_key': expenditure_key,
+       'expenditure_value': expenditure_value
+   })

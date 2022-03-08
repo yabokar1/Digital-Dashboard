@@ -13,5 +13,6 @@ urlpatterns = [
     path('signup/', views.create_user_for_signup),
     path('accounts/', include('django.contrib.auth.urls')),
     path('speedtest/', views.show_speed_test_page),
+    path('canadian/', views.canadian_data),
     path('', RedirectView.as_view(url='join-us-today/', permanent=True)),   # change here and change in settings.py
 ]

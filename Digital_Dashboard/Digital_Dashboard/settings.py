@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'Dashboard',
+    # 'Dashboard',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'educator.apps.EducatorConfig',
     'crispy_forms',
-    'django_extensions'
+    'django_extensions',
+    'Dashboard'
 
 ]
 
