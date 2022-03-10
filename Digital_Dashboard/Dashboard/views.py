@@ -22,6 +22,7 @@ from .models import ParticipationRate
 from .models import UnemploymentRate
 from .models import ApprenticeshipRegistration
 from .models import AverageTestScores
+from .view import covidviews
 
 from django.contrib.auth.decorators import login_required
 from random import randint
@@ -64,6 +65,9 @@ def create_user_for_signup(request):
         profile_form = ProfileForm()
     return render(request, 'sign-up.html', {'form': form, 'profile_form': profile_form})
 
+
+def show_password_change_page(request):
+    return render(request, '/registration/password_change_form.html')
 
 def stat_collector_page(request):
     student_province = ""
@@ -220,6 +224,227 @@ def show_join_us_page(request):
 
 def show_sign_up_page(request):
     return render(request, 'sign-up.html')
+
+
+def search_feature(word):
+    search_words = ('engagement', 'expenditure', 'product', 'school', 'schools', 'access', 'districts', 'broadband', 'internet', 'black')
+    context = {}
+    context.clear()
+
+    if (word in search_words):
+        if (word == 'expenditure'):
+            states, expenditure = expenditure_per_pupil_in_different_states()
+            context['states'] = states
+            context['exp'] = expenditure
+        if word == 'engagement' or word == 'product':
+            bottomProducts, engagementOfLeastProducts, productsOnly, engagementOnly = productEngagement()
+            
+            context['highengproducts'] = productsOnly
+            context['higheng'] = engagementOnly
+            context['lowengproducts'] = bottomProducts
+            context['loweng'] = engagementOfLeastProducts
+
+        if word == 'product':
+            products, numberofproducts = total_number_of_products()
+            
+            context['namesofproducts'] = products
+            context['learningproductcount'] = numberofproducts
+
+        if word == 'broadband' or word == 'internet':
+            st, broadband_average = broadband_connection()
+            context['statesforbroadband'] = st
+            context['avgbroadband'] = broadband_average
+        
+    return context
+    
+
+def show_pdf_page(request):
+     input_country = ''
+
+
+     states = ['Utah', 'Illinois', 'Wisconsin', 'NC', 'Missouri', 'Washington', 'Massachusetts', 'NY', 'Indiana',
+            'Virginia', 'New Jersey', 'Texas', 'DOC']
+
+    # Removed Massachusetts,District of Columbia
+
+     Utah = []
+     Illi = []
+     Wisco = []
+     mean_perc = []
+     north = []
+     miss = []
+     wash = []
+     connect = []
+    # mass = []
+     newyork = []
+     indiana = []
+     vir = []
+     ohio = []
+     jersey = []
+     cal = []
+    # dis = []
+     ari = []
+     tex = []
+
+     obj = Districts.objects.all()
+
+     for district_info in obj:
+        if district_info.state == 'Utah':
+            Utah.append(district_info.pct_black_hispanic)
+
+        elif district_info.state == 'Illinois':
+            Illi.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'Wisconsin':
+            Wisco.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'North Carolina':
+            north.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'Missouri':
+            miss.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'Washington':
+            wash.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'Connecticut':
+            connect.append(district_info.pct_black_hispanic)
+        # elif district_info.state == 'Massachusetts':
+        #     mass.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'New York':
+            newyork.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'Indiana':
+            indiana.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'Virginia':
+            vir.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'Ohio':
+            ohio.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'New Jersey':
+            jersey.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'California':
+            cal.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'Arizona':
+            ari.append(district_info.pct_black_hispanic)
+        elif district_info.state == 'Texas':
+            tex.append(district_info.pct_black_hispanic)
+
+     mean_perc.append(round((sum(Utah)) / len(Utah), 2))
+     mean_perc.append(round((sum(Illi)) / len(Illi), 2))
+     mean_perc.append(round((sum(Wisco)) / len(Wisco), 2))
+     mean_perc.append(round((sum(north)) / len(north), 2))
+     mean_perc.append(round((sum(miss)) / len(miss), 2))
+     mean_perc.append(round((sum(wash)) / len(wash), 2))
+     mean_perc.append(round((sum(newyork)) / len(newyork), 2))
+     mean_perc.append(round((sum(indiana)) / len(indiana), 2))
+     mean_perc.append(round((sum(vir)) / len(vir), 2))
+     mean_perc.append(round((sum(jersey)) / len(jersey), 2))
+     mean_perc.append(round((sum(tex)) / len(tex), 2))
+
+     final_state_list = json.dumps(states)
+     final_mean_perc_list = json.dumps(mean_perc)
+
+     s, exp = expenditure_per_pupil_in_different_states()
+    # print("Expenditure is",exp)
+     form = create_district_graph()
+     county, district = percentage_access_in_state("Illinois")
+
+     keyVal = {};
+     originalData = []  # Data contains array of objects
+
+     i = 0
+     for i in range(len(s)):
+        originalData.append({"state": s[i], "expenditure": exp[i]});
+
+     data = json.dumps(originalData)  # data in JSON format ready to be used by d3.js
+
+     numberofdistricts, numberofstates = totalNumberOfSchoolDistricts()  # statistic 1
+    # print('Total number of districts is', numberofdistricts)
+
+     products, numberofproducts = total_number_of_products()  # statistic 2
+
+     suburb, rural, town, city, type_of_local = total_locale_type()
+
+     bottomProducts, engagementOfLeastProducts, productsOnly, engagementOnly = productEngagement()
+
+     productsOnly = json.dumps(productsOnly)
+     engagementOnly = json.dumps(engagementOnly)
+     leastProductsOnly = json.dumps(bottomProducts)
+     leastEngagementOnly = json.dumps(engagementOfLeastProducts)
+
+     st, broadband_average = broadband_connection()
+     states_for_broadband = json.dumps(st)
+     average_for_broadband = json.dumps(broadband_average)
+
+     engagement, time, product_info = product_engage(60825)
+     engagement = json.dumps(engagement)
+     time = json.dumps(time)
+     product_info = json.dumps(product_info)
+
+     reduced = free_reduced()
+
+     reduced_values = list(reduced.values())
+     reduced_keys = list(reduced.keys())
+     for x, y in reduced.items():
+        if math.isnan(y):
+            # print(":", y)
+            reduced_values.remove(y)
+            reduced_keys.remove(x)
+
+     multiple_reduced_values = json.dumps(reduced_values[:len(mean_perc)])
+     multiple_pct_ethic = json.dumps(mean_perc[:len(mean_perc)])
+     multiple_state = json.dumps(reduced_keys[:len(mean_perc)])
+
+
+
+     if request.method == 'POST':
+        print('i am coming in here')
+        # form = DistrictForm(request.POST)
+        form = FilterForm(request.POST)
+        if form.is_valid():
+
+            # input_state = form.cleaned_data['state']
+            input_country = request.POST.get('country')
+            # print("The country is",input_country)
+
+            # print('location list is ', location_list)
+            input_location = ''
+            if (request.POST.get('locations') != None):
+                input_location = request.POST.get('locations')
+                # print('input Location is', input_location)
+
+            if input_country == 'usa':
+                location_list = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington',
+                                'Massachusetts', 'New York', 'Indiana',
+                                'Virginia', 'New Jersey', 'Texas', 'District of Columbia']
+                if input_location:
+                    # state related data
+                    return render(request, 'state.html')
+                else:
+                    return render(request, 'index.html',
+                                {'district': district, 'county': county, 'form': form, 'state': final_state_list,
+                                'perc': final_mean_perc_list, 'st': s, 'ex': exp, 'mydata': data,
+                                'location_list': location_list, 'inputlocation': input_location,
+                                'inputcountry': input_country, 'firststat': numberofdistricts,
+                                'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products,
+                                'suburb': suburb, 'rural': rural, 'town': town, 'city': city,
+                                'engagement': engagement, 'product_info': product_info, 'time': time,
+                                'reduced_free': multiple_reduced_values,
+                                "pct_free": multiple_pct_ethic,
+                                'multiple_state': multiple_state, 'lepro': leastProductsOnly,
+                                'leeng': leastEngagementOnly
+                                })
+
+            else:
+                # need to check here if user selected only country or also a state, if country show overview, if state show state related graphs
+                location_list = ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick',
+                                'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut',
+                                'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon']
+                
+     return render(request, 'pdfgenerator.html',
+                    {'state': final_state_list, 'perc': final_mean_perc_list, 'form': form, 'st': s, 'ex': exp,
+                    'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates,
+                    'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town,
+                    'city': city, 'localtype': type_of_local, 'pro': productsOnly, 'engo': engagementOnly,
+                    'stb': states_for_broadband,
+                    'avgb': average_for_broadband, 'engagement': engagement, 'product_info': product_info, 'time': time,
+                    'reduced_free': multiple_reduced_values, "pct_free": multiple_pct_ethic,
+                    'multiple_state': multiple_state, 'lepro': leastProductsOnly, 'leeng': leastEngagementOnly
+                    })
 
 
 def generate_data_for_online_activities_by_gender_from_stats_canada():
@@ -668,12 +893,47 @@ def show_graphs_for_users(request):
     # forces user to login if they try to go /dashboard/home path
 
 
-@login_required(login_url='/dashboard/accounts/login/')
-def percentage_access_black_hispanic(request):
+def canadian_data(request):
+   # labour
+   labour_dic = labour_force_data()
+   labour_key = list(labour_dic["2018/2019"].keys())
+   labour_value = list(labour_dic["2018/2019"].values())
+   labour_key = json.dumps(labour_key)
+   labour_value = json.dumps(labour_value)
+   # enrollment
+   enrollment_dic = post_enrollment_data()
+   enrollment_key = list(enrollment_dic["2018/2019"].keys())
+   enrollment_value = list(enrollment_dic["2018/2019"].values())
+   enrollment_key = json.dumps(enrollment_key)
+   enrollment_value = json.dumps(enrollment_value)
+   # expenditure
+   expenditure = expenditure_college_data()
+   expenditure_key = ['Salaries and wages',
+                      'Teachers',
+                      'Other salaries and wages',
+                      'Fringe benefits',
+                      'Library acquisitions',
+                      'Operational supplies and expenses',
+                      'Utilities',
+                      'Furniture and equipment',
+                      'Scholarships and other related students support',
+                      'Fees and contracted services',
+                      'Debt services',
+                      'Buildings',
+                      'Land and site services',
+                      'Miscellaneous',
+                      'Ancillary enterprises']
+   expenditure_value = list(expenditure['2018/2019']['Canada'][1:])
+   expenditure_key = json.dumps(expenditure_key)
+   expenditure_value = json.dumps(expenditure_value)
+
+   return labour_key, labour_value, enrollment_key, enrollment_value, expenditure_key, expenditure_value
 
 
-
-
+def mean_percentage_access_of_black_hispanic(request):
+    # covidviews.covid_summary()
+    # covidviews.all_sub_regions("ON")
+    covidviews.single_health_region_info('3561')
     states = ['Utah', 'Illinois', 'Wisconsin', 'NC', 'Missouri', 'Washington', 'Massachusetts', 'NY', 'Indiana',
               'Virginia', 'New Jersey', 'Texas', 'DOC']
 
@@ -747,11 +1007,31 @@ def percentage_access_black_hispanic(request):
     mean_perc.append(round((sum(jersey)) / len(jersey), 2))
     mean_perc.append(round((sum(tex)) / len(tex), 2))
 
+    return states, mean_perc
+
+
+@login_required(login_url='/dashboard/accounts/login/')
+def percentage_access_black_hispanic(request):
+    covidviews.covid_statistics_by_province_for_each_day('on', '2022')
+    location_list = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington',
+                                 'Massachusetts', 'New York', 'Indiana',
+                                 'Virginia', 'New Jersey', 'Texas', 'District of Columbia']
+    input_country = 'usa'
+    labour_dic = {}
+    labour_key = []
+    labour_value = []
+    enrollment_dic = {}
+    enrollment_key = []
+    enrollment_value = []
+    expenditure_key = []
+    expenditure_value = []
+    expenditure = {}
+    search = ''
+    states,mean_perc = mean_percentage_access_of_black_hispanic(request)
     final_state_list = json.dumps(states)
     final_mean_perc_list = json.dumps(mean_perc)
 
     s, exp = expenditure_per_pupil_in_different_states()
-    # print("Expenditure is",exp)
     form = create_district_graph()
     county, district = percentage_access_in_state("Illinois")
 
@@ -765,8 +1045,7 @@ def percentage_access_black_hispanic(request):
     data = json.dumps(originalData)  # data in JSON format ready to be used by d3.js
 
     numberofdistricts, numberofstates = totalNumberOfSchoolDistricts()  # statistic 1
-    # print('Total number of districts is', numberofdistricts)
-
+    
     products, numberofproducts = total_number_of_products()  # statistic 2
 
     suburb, rural, town, city, type_of_local = total_locale_type()
@@ -801,102 +1080,87 @@ def percentage_access_black_hispanic(request):
     multiple_pct_ethic = json.dumps(mean_perc[:len(mean_perc)])
     multiple_state = json.dumps(reduced_keys[:len(mean_perc)])
 
-
+    context = {'state': final_state_list, 'perc': final_mean_perc_list, 'form': form, 'st': s, 'ex': exp,
+                    'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates,
+                    'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town,
+                    'city': city, 'localtype': type_of_local, 'pro': productsOnly, 'engo': engagementOnly,
+                    'stb': states_for_broadband,
+                    'avgb': average_for_broadband, 'engagement': engagement, 'product_info': product_info, 'time': time,
+                    'reduced_free': multiple_reduced_values, "pct_free": multiple_pct_ethic,
+                    'multiple_state': multiple_state, 'lepro': leastProductsOnly, 'leeng': leastEngagementOnly,'inputcountry':input_country, 'location_list': location_list
+                }
+    template = 'index.html'
 
     if request.method == 'POST':
-        # form = DistrictForm(request.POST)
+        
         form = FilterForm(request.POST)
         if form.is_valid():
 
-            # input_state = form.cleaned_data['state']
             input_country = request.POST.get('country')
-            # print("The country is",input_country)
-
-            # print('location list is ', location_list)
             input_location = ''
             if (request.POST.get('locations') != None):
                 input_location = request.POST.get('locations')
-                # print('input Location is', input_location)
 
             if input_country == 'usa':
                 location_list = ['Utah', 'Illinois', 'Wisconsin', 'North Carolina', 'Missouri', 'Washington',
                                  'Massachusetts', 'New York', 'Indiana',
                                  'Virginia', 'New Jersey', 'Texas', 'District of Columbia']
-                if input_location:
+                if input_location in location_list:
                     # state related data
-                    return render(request, 'state.html')
-                else:
-                    return render(request, 'index.html',
-                                  {'district': district, 'county': county, 'form': form, 'state': final_state_list,
-                                   'perc': final_mean_perc_list, 'st': s, 'ex': exp, 'mydata': data,
-                                   'location_list': location_list, 'inputlocation': input_location,
-                                   'inputcountry': input_country, 'firststat': numberofdistricts,
-                                   'secondstat': numberofstates, 'thirdstat': numberofproducts, 'products': products,
-                                   'suburb': suburb, 'rural': rural, 'town': town, 'city': city,
-                                   'engagement': engagement, 'product_info': product_info, 'time': time,
-                                   'reduced_free': multiple_reduced_values,
-                                   "pct_free": multiple_pct_ethic,
-                                   'multiple_state': multiple_state, 'lepro': leastProductsOnly,
-                                   'leeng': leastEngagementOnly
-                                   })
+                    template = 'state.html'
+                
 
+                else:
+                    print("WE are in USA SECTION 1.0")
+                    template = 'index.html'
+                    context = {'state': final_state_list, 'perc': final_mean_perc_list, 'form': form, 'st': s, 'ex': exp,
+                    'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates,
+                    'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town,
+                    'city': city, 'localtype': type_of_local, 'pro': productsOnly, 'engo': engagementOnly,
+                    'stb': states_for_broadband,
+                    'avgb': average_for_broadband, 'engagement': engagement, 'product_info': product_info, 'time': time,
+                    'reduced_free': multiple_reduced_values, "pct_free": multiple_pct_ethic,
+                    'multiple_state': multiple_state, 'lepro': leastProductsOnly, 'leeng': leastEngagementOnly, 'inputcountry':input_country, 'inputlocation': input_location, 'location_list': location_list
+                    }
+                   
             else:
                 # need to check here if user selected only country or also a state, if country show overview, if state show state related graphs
                 location_list = ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick',
                                  'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut',
                                  'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon']
+                print("This is canada's section")
+                labour_key,labour_value,enrollment_key,enrollment_value,expenditure_key,expenditure_value = canadian_data(request)
+                print(labour_key)
+                print(labour_value)
+                template = 'index2.html'
+                context = {
+                    'labour_key': labour_key, 'labour_value': labour_value, 'enrollment_key': enrollment_key,
+                    'enrollment_value': enrollment_value, 'expenditure_key': expenditure_key,
+                    'expenditure_value': expenditure_value,'inputcountry':input_country, 'inputlocation': input_location, 'location_list': location_list
+                }
+        else:
+            search = request.POST.get('searchbox')
+            template = 'search.html'
 
-    return render(request, 'index.html',
-                  {'state': final_state_list, 'perc': final_mean_perc_list, 'form': form, 'st': s, 'ex': exp,
-                   'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates,
-                   'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town,
-                   'city': city, 'localtype': type_of_local, 'pro': productsOnly, 'engo': engagementOnly,
-                   'stb': states_for_broadband,
-                   'avgb': average_for_broadband, 'engagement': engagement, 'product_info': product_info, 'time': time,
-                   'reduced_free': multiple_reduced_values, "pct_free": multiple_pct_ethic,
-                   'multiple_state': multiple_state, 'lepro': leastProductsOnly, 'leeng': leastEngagementOnly
-                   })
+            if search == "":
+                template="index.html"
+                context = {'state': final_state_list, 'perc': final_mean_perc_list, 'form': form, 'st': s, 'ex': exp,
+                    'mydata': data, 'firststat': numberofdistricts, 'secondstat': numberofstates,
+                    'thirdstat': numberofproducts, 'products': products, 'suburb': suburb, 'rural': rural, 'town': town,
+                    'city': city, 'localtype': type_of_local, 'pro': productsOnly, 'engo': engagementOnly,
+                    'stb': states_for_broadband,
+                    'avgb': average_for_broadband, 'engagement': engagement, 'product_info': product_info, 'time': time,
+                    'reduced_free': multiple_reduced_values, "pct_free": multiple_pct_ethic,
+                    'multiple_state': multiple_state, 'lepro': leastProductsOnly, 'leeng': leastEngagementOnly, 'inputcountry':input_country, 'location_list': location_list
+                    }
+            else:
+                context = search_feature(search)
+                context['searchedword'] = search
 
-
-def canadian_data(request):
-   # labour
-   labour_dic = labour_force_data()
-   labour_key = list(labour_dic["2018/2019"].keys())
-   labour_value = list(labour_dic["2018/2019"].values())
-   labour_key = json.dumps(labour_key)
-   labour_value = json.dumps(labour_value)
-   # enrollment
-   enrollment_dic = post_enrollment_data()
-   enrollment_key = list(enrollment_dic["2018/2019"].keys())
-   enrollment_value = list(enrollment_dic["2018/2019"].values())
-   enrollment_key = json.dumps(enrollment_key)
-   enrollment_value = json.dumps(enrollment_value)
-   # expenditure
-   expenditure = expenditure_college_data()
-   expenditure_key = ['Salaries and wages',
-                      'Teachers',
-                      'Other salaries and wages',
-                      'Fringe benefits',
-                      'Library acquisitions',
-                      'Operational supplies and expenses',
-                      'Utilities',
-                      'Furniture and equipment',
-                      'Scholarships and other related students support',
-                      'Fees and contracted services',
-                      'Debt services',
-                      'Buildings',
-                      'Land and site services',
-                      'Miscellaneous',
-                      'Ancillary enterprises']
-   expenditure_value = list(expenditure['2018/2019']['Canada'][1:])
-   expenditure_key = json.dumps(expenditure_key)
-   expenditure_value = json.dumps(expenditure_value)
-
-
-
-
-   return render(request,"index2.html", {
-       'labour_key': labour_key, 'labour_value': labour_value, 'enrollment_key': enrollment_key,
-       'enrollment_value': enrollment_value, 'expenditure_key': expenditure_key,
-       'expenditure_value': expenditure_value
-   })
+                if(len(context) == 1):
+                    context["nothingfound"] = "No search results found"
+            
+            
+    return render(request, template, context)            
+    
+  

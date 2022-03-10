@@ -10,6 +10,8 @@ urlpatterns = [
     path('wifihotspots/', views.show_wifi_hotspots_information),
     path('statcollector/', views.stat_collector_page),
     # path('login/', views.show_user_login__page),
+    path('art/', views.canadian_data),
+    path('pdfgenerator/', views.show_pdf_page),
     path('signup/', views.create_user_for_signup),
     path('accounts/', include('django.contrib.auth.urls')),
     path('speedtest/', views.show_speed_test_page),
