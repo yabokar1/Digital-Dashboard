@@ -1,0 +1,189 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- Favicon icon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{% static 'images/favicon.png' %}"
+    />
+    <title>Digital Dashboard</title>
+    <!-- Custom CSS -->
+    <link href="{% static 'css/float-chart.css' %}" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js' %}"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    
+    <script src="https://d3js.org/d3.v4.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+    
+  </head>
+
+  <body>
+    
+   
+    
+    <div id="main-wrapper">
+      
+      <aside class="left-sidebar" data-sidebarbg="skin5">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+          <!-- Sidebar navigation-->
+          <nav class="sidebar-nav">
+            <ul id="sidebarnav" class="p-t-30">
+              <li class="sidebar-item">
+                <h4 class="sidebar-link waves-effect waves-dark"> <i class="material-icons">dashboard</i
+                  > Data Dash</h4>
+              </li>
+
+
+              {% if user.is_authenticated %}
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  aria-expanded="false"
+                  ><span class="hide-menu"> Welcome {{ user.username }} ({{user.userprofile.user_type}}) </span></a>
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/home"
+                  aria-expanded="false"
+                  ><i class="material-icons">dashboard</i
+                  ><span class="hide-menu">Dashboard </span></a
+                >
+              </li>
+              <!-- <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/logout"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Logout </span></a
+                >
+              </li> -->
+
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="javascript:void(0)"
+                  aria-expanded="false"
+                  ><i class="material-icons">settings</i
+                  ><span class="hide-menu">User Settings </span></a    
+             
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/password_change"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Change Password </span></a
+                >
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/speedtest/"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Speed Test </span></a
+                >
+              </li>
+
+              {% else %}
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/login"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Login </span></a
+                >
+              </li>
+              {% endif %}
+
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/wifihotspots"
+                  aria-expanded="false"
+                  ><i class="material-icons">logout</i><span class="hide-menu">Wifi Hotspots </span></a
+                >
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/statcollector"
+                  aria-expanded="false"
+                  ><i class="material-icons">logout</i><span class="hide-menu">Canadian Statistics </span></a
+                >
+              </li>
+              
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/logout"
+                  aria-expanded="false"
+                  ><i class="material-icons">logout</i><span class="hide-menu">Logout </span></a
+                >
+              </li>
+
+
+             
+              
+            </ul>
+          </nav>
+          <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+      </aside>
+      
+      <div>
+    </div>    
+               
+           <br>
+
+        <div class="page-wrapper" style="background: none;">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Please select a file for upload</label>
+                    <input type="file" accept=".csv" class="form-control" name="file" id="file" style="width: auto; border: none;">
+                    {% if errormessage %}
+                        <h4>Error {{errormessage}}. Please try again </h4>
+                    {% endif %}
+                </div>
+                  
+                <button type="submit" class="btn btn-primary">Submit</button>
+             </form>
+
+        </div>  
+          
+         
+    
