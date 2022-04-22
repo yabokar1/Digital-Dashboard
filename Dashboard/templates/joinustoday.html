@@ -1,0 +1,237 @@
+{% load static %} {% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- Favicon icon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{% static 'images/favicon.png' %}"
+    />
+    <title>Digital Dashboard</title>
+    <!-- Custom CSS -->
+    <link href="{% static 'css/float-chart.css' %}" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js' %}"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="main-wrapper">
+      <aside class="left-sidebar" data-sidebarbg="skin5">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+          <!-- Sidebar navigation-->
+          <nav class="sidebar-nav">
+            <ul id="sidebarnav" class="p-t-30">
+              <li class="sidebar-item">
+                <h4 class="sidebar-link waves-effect waves-dark">
+                  <i class="material-icons">dashboard</i> Data Zone
+                </h4>
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/login"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i
+                  ><span class="hide-menu">Login </span></a
+                >
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/signup"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i
+                  ><span class="hide-menu">Sign Up </span></a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
+      <div class="page-wrapper">
+        <br />
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+              <div class="col">
+                <h1 class="display-1">
+                  <strong>Data Zone</strong>
+                  <br>
+                  Improving Online Education
+                </h1>
+              </div>
+              <div class="col">
+                <!-- <div class="card">
+                            <img src="..." class="card-img-top" alt="...">
+                            <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                            </div>
+                        </div> -->
+                <img src="{% static 'images/100districts.jpg' %}" style="float: right;"/>
+              </div>
+            </div>
+            <br>
+
+            <div class="row pt-5">
+              <div class="col-12">
+                <h1 class="text-uppercase border-bottom mb-4 text-center"">
+                  <strong>Learn Insights for digital learning during COVID-19 period</strong>
+                </h1>
+              </div>
+            </div>
+            <div class="row">
+              <!--ADD CLASSES HERE d-flex align-items-stretch-->
+              <div class="col-lg-4 mb-3 d-flex align-items-stretch d-flex justify-content-center">
+                    <section>
+                    <i class="material-icons" style="font-size: 80px">bolt</i>
+        
+                    <h5 class="card-title">Fast Loadup</h5>
+
+                
+                    </section>
+              </div>
+
+
+                <!--ADD CLASSES HERE d-flex align-items-stretch-->
+                <div class="col-lg-4 mb-3 d-flex align-items-stretch d-flex justify-content-center">
+                        <section>
+                        <i class="material-icons" style="font-size: 80px">analytics</i>
+            
+                        <h5 class="card-title">Meaningful Data</h5>
+                    
+                        </section>
+                </div>
+  
+                  
+                    <div class="col-lg-4 mb-3 d-flex align-items-stretch d-flex justify-content-center">
+                        <section>
+                            <i class="material-icons" style="font-size: 80px">grid_view</i>
+            
+                            <h5 class="card-title">Simple User Interface</h5>
+                        </section>
+                    </div>
+                 
+              </div>
+            </div>
+          </div>
+
+
+          <div class="container">
+            <div class="row pt-5">
+              <div class="col-12">
+                <h1 class="text-uppercase border-bottom mb-4 text-center"><strong>How can you use our application?</strong></h1>
+              </div>
+            </div>
+            <div class="row">
+              <!--ADD CLASSES HERE d-flex align-items-stretch-->
+              <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+                <div class="card">
+                  <img src="https://i1.wp.com/www.additudemag.com/wp-content/uploads/2014/01/learn-more-in-less-time-scaled-e1584022737199.jpg" class="card-img-top" alt="Card Image" height="270" width="500">
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Study Visualizations<sup>1</sup></h5>
+                    <p class="card-text mb-4">Study and analyze data patterns to make an impact for students. </p>
+                    <a href="/dashboard/signup/" class="btn btn-primary mt-auto align-self-start">Sign Up Now</a>
+                  </div>
+                </div>
+              </div>
+              <!--ADD CLASSES HERE d-flex align-items-stretch-->
+              <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+                <div class="card">
+                  <img src="https://static01.nyt.com/images/2014/08/10/magazine/10wmt/10wmt-superJumbo-v4.jpg" class="card-img-top" alt="Card Image" height="270" width="500">
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Tweets Feature<sup>1</sup></h5>
+                    <p class="card-text mb-4">Get access to latest tweets in Canada relevant to digital learning.</p>
+                    <a href="/dashboard/signup/" class="btn btn-primary mt-auto align-self-start">Sign Up Now</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+                <div class="card">
+                  <img src="https://www.pngitem.com/pimgs/m/468-4680370_summary-icon-png-blue-summary-icon-png-transparent.png" class="card-img-top" alt="Card Image" height="270" width="500">
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">PDF Extractor Tool<sup>1</sup></h5>
+                    <p class="card-text mb-4">Read the summary of large pdf's scraped from google scholar relevant to digital learning upon a quick search.</p>
+                    <a href="/dashboard/signup/" class="btn btn-primary mt-auto align-self-start">Sign Up Now</a>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <!--ADD CLASSES HERE d-flex align-items-stretch-->
+              <div class="col-lg-4 mb-3 d-flex align-items-stretch">
+                <div class="card">
+                  <img src="https://learnenglishteens.britishcouncil.org/sites/teens/files/styles/article/public/istock_000028311770small.jpg?itok=WfpCieCI" class="card-img-top" alt="Card Image" height="270" width="500">
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">No Wifi at Home?<sup>2</sup></h5>
+                    <p class="card-text mb-4">Students can utilize the inbuilt maps feature to get to know nearest wifi locations and rate them to benefit everyone. View the internet speeds of nearest wifi locations to decide the best nearby place.</p>
+                    <a href="/dashboard/signup/" class="btn btn-primary mt-auto align-self-start">Sign Up Now</a>
+                  </div>
+                </div>
+              </div>
+              
+              
+              
+            
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      
+
+      
+    </div>
+  
+    <p style="margin:0;display:inline;float:left">content1</p>
+    <p style="margin:0;display:inline:float:right" >content2</p>
+
+    <footer style="text-align: center;">
+      All the rights belong to Data Zone and their respective owners. All rights reserved.
+      
+        <p>
+        <h6>This is a feature that is made available only to policy makers user type upon successful registration in our systems<sup>1</sup> </h6></p>
+        <h6>This is a feature that is made available only to Student user type upon successful registration in our system <sup>2</sup> </h6>
+     
+    </footer>
+  
+  </body>
+
+  
+</html>

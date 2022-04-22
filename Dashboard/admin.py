@@ -1,0 +1,27 @@
+from django.contrib import admin
+from .models import *
+
+
+admin.site.register(Districts)
+admin.site.register(ProductsInfo)
+admin.site.register(EngagementInfo)
+admin.site.register(StudentFormInfo)
+admin.site.register(RatingInfo)
+admin.site.register(UserProfile)
+admin.site.register(CountyConnectionInfo)
+admin.site.register(ParticipationRate)
+admin.site.register(UnemploymentRate)
+admin.site.register(LabourForce)
+admin.site.register(PostSecondaryEnrollment)
+admin.site.register(ExpenditureColleges)
+admin.site.register(ApprenticeshipRegistration)
+admin.site.register(AverageTestScores)
+admin.site.register(FileUploadInfo)
+admin.site.register(SpecialEducation)
+admin.site.register(SchoolBoardAchievements)
+admin.site.register(PdfSummary)
+admin.site.register(Students)
+admin.site.register(PolicyMaker)
+admin.site.register(Hotspot)
+admin.site.register(Tweets)
+admin.site.register(Analysis)

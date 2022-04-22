@@ -1,0 +1,596 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- Favicon icon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{% static 'images/favicon.png' %}"
+    />
+    <title>Digital Dashboard</title>
+    <!-- Custom CSS -->
+    <link href="{% static 'css/float-chart.css' %}" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js' %}"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    
+    <script src="https://d3js.org/d3.v4.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  </head>
+
+  <body>
+    
+   
+    
+    <div id="main-wrapper">
+      
+      <aside class="left-sidebar" data-sidebarbg="skin5">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+          <!-- Sidebar navigation-->
+          <nav class="sidebar-nav">
+            <ul id="sidebarnav" class="p-t-30">
+              <li class="sidebar-item">
+                <h4 class="sidebar-link waves-effect waves-dark"> <i class="material-icons">dashboard</i
+                  > Data Dash</h4>
+              </li>
+
+
+              {% if user.is_authenticated %}
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  aria-expanded="false"
+                  ><span class="hide-menu"> Welcome {{ user.username }} ({{user.userprofile.user_type}}) </span></a>
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/home"
+                  aria-expanded="false"
+                  ><i class="material-icons">dashboard</i
+                  ><span class="hide-menu">Dashboard </span></a
+                >
+              </li>
+              <!-- <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/logout"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Logout </span></a
+                >
+              </li> -->
+
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="javascript:void(0)"
+                  aria-expanded="false"
+                  ><i class="material-icons">settings</i
+                  ><span class="hide-menu">User Settings </span></a    
+             
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/password_change"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Change Password </span></a
+                >
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/speedtest/"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Speed Test </span></a
+                >
+              </li>
+
+              {% else %}
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/login"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Login </span></a
+                >
+              </li>
+              {% endif %}
+
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/wifihotspots"
+                  aria-expanded="false"
+                  ><i class="material-icons">logout</i><span class="hide-menu">Wifi Hotspots </span></a
+                >
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/statcollector"
+                  aria-expanded="false"
+                  ><i class="material-icons">logout</i><span class="hide-menu">Canadian Statistics </span></a
+                >
+              </li>
+              
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/logout"
+                  aria-expanded="false"
+                  ><i class="material-icons">logout</i><span class="hide-menu">Logout </span></a
+                >
+              </li>
+
+
+             
+              
+            </ul>
+          </nav>
+          <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+      </aside>
+      
+      <div class="page-wrapper">
+        
+               
+           <br>
+
+           <!-- Note the state/province probably needs to be updated based on the Country selected -->
+          <div class="content ">
+             <div class="container-fluid">
+              <h4><strong>Digital Dashboard</strong></h4><br>
+                <form method="POST">
+                  {% csrf_token %}
+                  
+                          <div class="form-inline">
+                            <div class="form-group" style="margin-right: 15px;">
+                              <input type="hidden">Country</input>
+                              <select class="form-select" name="country" id="different_countries" onchange=form.submit()>
+                                <option disabled selected="true"> -- select an option -- </option>
+                                {% if inputcountry == 'usa' %}
+                                <option selected="true" value="usa">USA</option>
+                                <option value="canada">Canada</option>
+                                {% elif inputcountry == 'canada' %}
+                                <option selected="true" value="canada">Canada</option>
+                                <option value="usa">USA</option>
+                                {% else %}
+                                <option value="canada">Canada</option>
+                                <option value="usa">USA</option>
+                                {% endif %}
+                                    
+                              </select>
+                            </div>
+
+                           
+                          <div class="form-group" style="margin-right: 15px;">
+                            <input type="hidden">State/Province</input>
+                            <select name="locations" id="different_locations">
+                              <option disabled selected="true"> -- select an option -- </option>
+                              {% for item in location_list  %}
+                                 {% if inputlocation == item %}
+                                 <option selected="true" value="{{item}}">{{ item }}</option>
+                                 {% else %}
+                                  <option value="{{item}}">{{ item }}</option>
+                                 {% endif %}
+                              {% endfor %}
+                            </select>
+                          </div>
+                        
+                          <button type="submit" class="btn btn-primary btn w-40">Filter</button>
+                             
+
+                    </div>
+                    
+                  </form> 
+
+                 
+                <br><br>
+                <div class="row">
+
+                  <div class="col-sm-3">
+                    <div class="card">
+                      <div class="card-header ">
+                        <h4 class="card-title">Statistic 1 </h4>
+                     </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Total number of School Districts</h5>
+                        <!-- <div id="my_dataviz"></div> -->
+                        <h1>{{firststat}}</h1>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <div class="card">
+                      <div class="card-header ">
+                        <h4 class="card-title">Statistic 2 </h4>
+                     </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Number Of states</h5>
+                        <h1>{{secondstat}}</h1>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <div class="card">
+                      <div class="card-header ">
+                        <h4 class="card-title">Statistic 3 </h4>
+                     </div>
+                      <div class="card-body">
+                        
+                        <div class="row">
+                          <h5 class="card-title mr-2">Learning Products</h5>
+                          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                              Products
+                          </button>
+                          
+                          
+                        </div>
+                        <h1>{{thirdstat}}</h1>
+                        
+                        
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">List of Products</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              {% for product in products %}
+                              <div class="modal-body">
+                                <a href="{{product.url}}">{{product.product_name}}</a>
+                              </div>
+                              {% endfor %}
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                         <!-- <button class="btn btn-primary">List of Learning Products</button> -->
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-3">
+                    <div class="card">
+                      <div class="card-header ">
+                        <h4 class="card-title">Statistic 4 </h4>
+                     </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Number Of states</h5>
+                        <h1>{{secondstat}}</h1>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+                  <div class="col-sm-6 col-sm-12 col-md-12 col-xl-6">
+                    <div class="card">
+                      <div class="card-header ">
+                        <h4 class="card-title">Labour Force </h4>
+                     </div>
+                      <div class="card-body">
+                      <div id="labour_force"></div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="col-sm-6 col-sm-12 col-md-12 col-xl-6">
+                    <div class="card">
+                      <div class="card-header ">
+                        <h4 class="card-title"> Post-Secondary Enrollment </h4>
+                     </div>
+                      <div class="card-body" >
+                        <div id="enrollment_data"></div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6 col-sm-12 col-md-12 col-xl-6">
+                    <div class="card">
+                        <div class="card-header ">
+                          <h4 class="card-title">Graph of Percentage Access of Black/Hispanic in different States </h4>
+                      </div>
+
+
+                      <div class="card-body " >
+                          <div id="expenditure_data"></div>
+                      </div>
+
+                    </div>
+                  </div>
+
+            <div class="col-sm-6 col-sm-12 col-md-12 col-xl-6">
+                    <div class="card">
+                      <div class="card-header ">
+                        <h4 class="card-title">Least 10 Products with respect to Engagement Index </h4>
+                     </div>
+                      <div class="card-body">
+                      <div id="my_seconddatanewbar"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6 col-sm-12 col-md-12 col-xl-6 graphcard">
+                    <div class="card">
+                      <div class="card-header ">
+                        <h4 class="card-title">Average Broadband Access > 200 KBPS </h4>
+                     </div>
+                      <div class="card-body">
+                        <div id="my_datasimpleline"></div> 
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6 col-sm-12 col-md-12 col-xl-6">
+                    <div class="card">
+                      <div class="card-header ">
+                        <h4 class="card-title">Top 10 Products with respect to Engagement Index </h4>
+                     </div> 
+                      <div class="card-body">
+                      <div id="my_datanewbar"></div> 
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="col-sm-6 col-sm-12 col-md-12 col-xl-6">
+                    <div class="card">
+                      <div class="card-header ">
+                        <h4 class="card-title">Average Expenditure per pupil for different states  </h4>
+                     </div>
+                      <div class="card-body">
+                      <div id="my_datanewverticalbar"></div> 
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6 col-sm-12 col-md-12 col-xl-6">
+                    <div class="card">
+                      <div class="card-header ">
+                        <h4 class="card-title">Percentage of Locale in All States  </h4>
+                     </div>
+                      <div class="card-body">
+                      <div id="my_datamydonutchart"></div> 
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+
+          <br>
+
+         
+
+        <script>
+
+
+              var labour_x_axis = {{ labour_key | safe }}
+              var labour_y_axis = {{ labour_value | safe }}
+              var enrollment_x_axis = {{ enrollment_key | safe }}
+              var enrollment_y_axis = {{ enrollment_value | safe }}
+              var expenditure_x_axis = {{ expenditure_key | safe }}
+              var expenditure_y_axis = {{ expenditure_value | safe }}
+              console.log(labour_x_axis)
+              console.log(labour_y_axis)
+              console.log(enrollment_x_axis)
+              console.log(enrollment_y_axis)
+              console.log(expenditure_x_axis)
+              console.log(expenditure_y_axis)
+              
+
+<!--    labour-->
+               
+              var labour_options = {
+              series: [{
+              data: labour_y_axis,
+            }],
+              chart: {
+              type: 'bar',
+              height: 350
+            },
+            plotOptions: {
+              bar: {
+                borderRadius: 4,
+                horizontal: true,
+              }
+            },
+            dataLabels: {
+              enabled: false
+            },
+            xaxis: {
+              categories: labour_x_axis,
+            }
+            
+            };
+
+
+            var barchart = new ApexCharts(document.querySelector("#labour_force"), labour_options);
+            barchart.render();
+
+<!--    enrollment-->
+
+                var enrollment_options = {
+          series: [{
+            name: "Enrollment",
+            data: enrollment_y_axis
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          text: 'Post-Secondary Enrollment',
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
+        },
+        xaxis: {
+          categories: enrollment_x_axis,
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#enrollment_data"), enrollment_options);
+        chart.render();
+
+
+
+<!--    expenditure-->
+
+      var expenditure_options = {
+          series: [{
+            name: "Enrollment",
+            data: expenditure_y_axis
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          text: 'Expenditure',
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
+        },
+        xaxis: {
+          categories: expenditure_x_axis,
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#expenditure_data"), expenditure_options);
+        chart.render();
+
+
+
+
+
+
+
+
+          </script>
+                         
+        
+
+        </div>
+            <!-- column -->
+
+            
+          </div>
+          <!-- ============================================================== -->
+          <!-- Recent comment and chats -->
+          <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+        <!-- End footer -->
+        <!-- ============================================================== -->
+      </div>
+      <!-- ============================================================== -->
+      <!-- End Page wrapper  -->
+      <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/perfect-scrollbar.jquery.min.js' %}"></script>
+    <script src="{% static 'js/sparkline.js' %}"></script>
+    <!--Wave Effects -->
+    <script src="{% static 'js/waves.js' %}"></script>
+    <!--Menu sidebar -->
+    <script src="{% static 'js/sidebarmenu.js' %}"></script>
+    <!--Custom JavaScript -->
+    <script src="{% static 'js/custom.min.js' %}"></script>
+    <!--This page JavaScript -->
+    <!-- <script src="dist/js/pages/dashboards/dashboard1.js' %}"></script> -->
+    <!-- Charts js Files -->
+    <script src="{% static 'js/excanvas.js' %}"></script>
+    <script src="{% static 'js/jquery.flot.js' %}"></script>
+    <script src="{% static 'js/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'js/jquery.flot.time.js' %}"></script>
+    <script src="{% static 'js/jquery.flot.stack.js' %}"></script>
+    <script src="{% static 'js/jquery.flot.crosshair.js' %}"></script>
+    <script src="{% static 'js/jquery.flot.tooltip.min.js' %}"></script>
+    <script src="{% static 'js/chart-page-init.js' %}"></script>
+
+    <script>
+
+
+    </script>
+
+  </body>
+</html>

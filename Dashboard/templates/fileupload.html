@@ -1,0 +1,429 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+{{ xdata|json_script:"dataforx" }}
+{{ ydata|json_script:"datafory" }}
+{{ horizontal_bar|json_script:"horbar" }}
+{{ vertical_bar|json_script:"verbar" }}
+{{ line_bar|json_script:"linbar" }}
+{{ xlabel|json_script:"labelx" }}
+{{ ylabel|json_script:"labely" }}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- Favicon icon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{% static 'images/favicon.png' %}"
+    />
+    <title>Digital Dashboard</title>
+    <!-- Custom CSS -->
+    <link href="{% static 'css/float-chart.css' %}" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js' %}"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    
+    <script src="https://d3js.org/d3.v4.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+    
+  </head>
+
+  <body>
+    
+   
+    
+    <div id="main-wrapper">
+      
+      <aside class="left-sidebar" data-sidebarbg="skin5">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+          <!-- Sidebar navigation-->
+          <nav class="sidebar-nav">
+            <ul id="sidebarnav" class="p-t-30">
+              <li class="sidebar-item">
+                <h4 class="sidebar-link waves-effect waves-dark"> <i class="material-icons">dashboard</i
+                  > Data Dash</h4>
+              </li>
+
+
+              {% if user.is_authenticated %}
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  aria-expanded="false"
+                  ><span class="hide-menu"> Welcome {{ user.username }} ({{user.userprofile.user_type}}) </span></a>
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/home"
+                  aria-expanded="false"
+                  ><i class="material-icons">dashboard</i
+                  ><span class="hide-menu">Dashboard </span></a
+                >
+              </li>
+              <!-- <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/logout"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Logout </span></a
+                >
+              </li> -->
+
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="javascript:void(0)"
+                  aria-expanded="false"
+                  ><i class="material-icons">settings</i
+                  ><span class="hide-menu">User Settings </span></a    
+             
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/password_change"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Change Password </span></a
+                >
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/speedtest/"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Speed Test </span></a
+                >
+              </li>
+
+              {% else %}
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/login"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Login </span></a
+                >
+              </li>
+              {% endif %}
+
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/wifihotspots"
+                  aria-expanded="false"
+                  ><i class="material-icons">logout</i><span class="hide-menu">Wifi Hotspots </span></a
+                >
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/statcollector"
+                  aria-expanded="false"
+                  ><i class="material-icons">logout</i><span class="hide-menu">Canadian Statistics </span></a
+                >
+              </li>
+              
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/logout"
+                  aria-expanded="false"
+                  ><i class="material-icons">logout</i><span class="hide-menu">Logout </span></a
+                >
+              </li>
+
+
+             
+              
+            </ul>
+          </nav>
+          <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+      </aside>
+      
+      <div>
+    </div>    
+               
+           <br>
+
+        <div class="page-wrapper" style="background: none;">
+           <div class="d-flex justify-content-center">
+              <form method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+
+                  <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Please select a file for upload</label>
+                      <input type="file" accept=".csv" class="form-control" name="file" id="file" style="width: auto; border: none;">
+                      {% if errormessage %}
+                          <h4>Error {{errormessage}}. Please try again </h4>
+                      {% endif %}
+                  </div>
+                   
+                  <div class="mb-3">
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                 </div>
+                </form>
+            </div>
+
+
+             <br>
+          
+          <h4 id="errortext" style="text-align: center;"></h4>
+
+          {% if col %}
+           <div class="d-flex justify-content-center">
+              <form method="POST" onsubmit="return formsubmit()">
+                  {% csrf_token %}
+                  <div class="row mb-3">
+                    <label for="inputEmail3" class="col col-form-label">Choose the x axis for graph</label>
+                    <div class="col-sm-10">
+                      <select class="form-select" aria-label="Default select example" name="xcolumn" id="xcolumn">
+                        {% for c in col  %}
+                          <option value="{{c}}">{{c}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <label for="inputPassword3" class="col col-form-label">Choose the y axis for graph</label>
+                    <div class="col-sm-10">
+                      <select class="form-select" aria-label="Default select example" name="ycolumn" id="ycolumn">
+                        {% for c in col  %}
+                          <option value="{{c}}">{{c}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <fieldset class="row mb-3">
+                    <legend class="col-form-label col pt-0">Choose graph type</legend>
+                    <div class="col-sm-10">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="graph" id="gridRadios1" value="line" checked>
+                        <label class="form-check-label" for="gridRadios1">
+                          Line
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="graph" id="gridRadios2" value="bar">
+                        <label class="form-check-label" for="gridRadios2">
+                          Bar
+                        </label>
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  <input hidden type="text" name="filename" value="{{fname}}"></input>
+                
+                  <button type="submit" class="btn btn-primary">Generate Graph</button>
+              </form>
+           </div>   
+          {% endif %}  
+
+
+         
+          {% if horizontal_bar %}
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header ">
+                    <h4 class="card-title">Relationship between {{xlabel}} and {{ylabel}}</h4>
+                </div>
+                  <div class="card-body">
+                  <div id="horizontalgraph"></div>
+                  </div>
+                </div>
+              </div>
+          {% endif %}
+
+
+          {% if vertical_bar %}
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header ">
+                    <h4 class="card-title">Relationship between {{xlabel}} and {{ylabel}}</h4>
+                </div>
+                  <div class="card-body">
+                  <div id="verticalgraph"></div>
+                  </div>
+                </div>
+              </div>
+          {% endif %}
+
+
+          {% if line_bar %}
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-header ">
+                    <h4 class="card-title">Relationship between {{xlabel}} and {{ylabel}}</h4>
+                </div>
+                  <div class="card-body">
+                  <div id="linegraph"></div>
+                  </div>
+                </div>
+              </div>
+          {% endif %}
+
+        </div>
+        
+    <script>
+      function formsubmit(){
+        var x = document.getElementById('xcolumn').value
+        var y = document.getElementById('ycolumn').value
+
+        if (x === y) {
+          // alert('Please select different column names for x and y.');
+          document.getElementById('errortext').innerHTML = "Please select different column names for x and y."
+          return false
+          
+        }
+        else {
+          return true
+        }
+      }
+    </script>
+
+
+
+    <script>
+      if (document.getElementById('dataforx') && document.getElementById('datafory') ) {
+        
+        const x = JSON.parse(document.getElementById('dataforx').textContent);
+        const y = JSON.parse(document.getElementById('datafory').textContent);
+        
+        var options = {
+          series: [{
+          data: x
+        }],
+          chart: {
+          type: 'bar',
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            borderRadius: 4,
+            horizontal: true,
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        xaxis: {
+          categories: y,
+        }
+        };
+
+        var horizontalbarchart = new ApexCharts(document.querySelector("#horizontalgraph"), options);
+        horizontalbarchart.render();
+
+      }
+
+    
+    
+      if (document.getElementById('dataforx') && document.getElementById('datafory') && document.getElementById('verbar')) {
+      const x = JSON.parse(document.getElementById('dataforx').textContent);
+      const y = JSON.parse(document.getElementById('datafory').textContent); 
+      var options = {
+            series: [{
+            data: y
+          }],
+            chart: {
+            type: 'bar',
+            height: 350
+          },
+          plotOptions: {
+            bar: {
+              borderRadius: 4,
+              horizontal: false,
+            }
+          },
+          dataLabels: {
+            enabled: false
+          },
+          xaxis: {
+            categories: x,
+          }
+          };
+
+          var verticalbarchart = new ApexCharts(document.querySelector("#verticalgraph"), options);
+          verticalbarchart.render();
+
+        }
+
+
+
+      if (document.getElementById('dataforx') && document.getElementById('datafory') && document.getElementById('linbar')) {
+      const x = JSON.parse(document.getElementById('dataforx').textContent);
+      const y = JSON.parse(document.getElementById('datafory').textContent); 
+      var options = {
+          series: [{
+            data: y
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
+        },
+        xaxis: {
+          categories: x,
+        }
+        };
+
+        var linechart = new ApexCharts(document.querySelector("#linegraph"), options);
+        linechart.render();
+
+        }
+
+
+
+
+    </script>
+
+    
+ </body>

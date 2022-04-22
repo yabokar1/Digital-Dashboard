@@ -1,0 +1,237 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- Favicon icon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{% static 'images/favicon.png' %}"
+    />
+    <title>Digital Dashboard</title>
+    <!-- Custom CSS -->
+    <link href="{% static 'css/float-chart.css' %}" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js' %}"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js' %}/1.4.2/respond.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+   
+    
+  </head>
+
+  <body>
+    
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css' %} -->
+    <!-- ============================================================== -->
+<!--    <div class="preloader">-->
+<!--      <div class="lds-ripple">-->
+<!--        <div class="lds-pos"></div>-->
+<!--        <div class="lds-pos"></div>-->
+<!--      </div>-->
+<!--    </div>-->
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    
+    <div id="main-wrapper">
+      <!-- ============================================================== -->
+      <!-- Topbar header - style you can find in pages.scss -->
+      <!-- ============================================================== -->
+      
+      <!-- ============================================================== -->
+      <!-- End Topbar header -->
+      <!-- ============================================================== -->
+      <!-- ============================================================== -->
+      <!-- Left Sidebar - style you can find in sidebar.scss  -->
+      <!-- ============================================================== -->
+      <aside class="left-sidebar" data-sidebarbg="skin5">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+          <!-- Sidebar navigation-->
+          <nav class="sidebar-nav">
+            <ul id="sidebarnav" class="p-t-30">
+              <li class="sidebar-item">
+                <h4 class="sidebar-link waves-effect waves-dark"> <i class="material-icons">dashboard</i
+                  > Data Zone</h4>
+              </li>
+
+
+              {% if user.is_authenticated %}
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  aria-expanded="false"
+                  ><span class="hide-menu"> Welcome {{ user.username }} ({{user.userprofile.user_type}}) </span></a>
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/home"
+                  aria-expanded="false"
+                  ><i class="material-icons">dashboard</i
+                  ><span class="hide-menu">Dashboard </span></a
+                >
+              </li>
+              <!-- <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/logout"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Logout </span></a
+                >
+              </li> -->
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="javascript:void(0)"
+                  aria-expanded="false"
+                  ><i class="material-icons">settings</i
+                  ><span class="hide-menu">User Settings </span></a> 
+             
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashbaord/mentalhealth"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i
+                  ><span class="hide-menu">Mental Health</span></a> 
+             
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/password_change"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Change Password </span></a
+                >
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/speedtest/"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Speed Test </span></a
+                >
+              </li>
+
+              {% else %}
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/login"
+                  aria-expanded="false"
+                  ><i class="material-icons">login</i><span class="hide-menu">Login </span></a
+                >
+              </li>
+              {% endif %}
+
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/wifihotspots"
+                  aria-expanded="false"
+                  ><i class="material-icons">logout</i><span class="hide-menu">Wifi Hotspots </span></a
+                >
+              </li>
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/statcollector"
+                  aria-expanded="false"
+                  ><i class="material-icons">logout</i><span class="hide-menu">Canadian Statistics </span></a
+                >
+              </li>
+              
+
+              <li class="sidebar-item">
+                <a
+                  class="sidebar-link waves-effect waves-dark"
+                  href="/dashboard/accounts/logout"
+                  aria-expanded="false"
+                  ><i class="material-icons">logout</i><span class="hide-menu">Logout </span></a
+                >
+              </li>
+
+
+             
+              
+            </ul>
+          </nav>
+          <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar scroll-->
+      </aside>
+      <div class="page-wrapper" style="background-color: white;">
+           <br>
+
+           <!-- Note the state/province probably needs to be updated based on the Country selected -->
+          <div class="content ">
+             <div class="container-fluid">
+              <h4><strong>Digital Dashboard</strong></h4><br>
+
+     		 </div>
+    		</div>
+      <div style="display: flex; justify-content: center;">
+        <div style="background-color:#eeeeee; padding: 20px; width:70%">
+          <h4><strong>Your Mental Wellness and Remote Learning</strong></h4><br>
+          <p>Attending school remotely is a new experience for all of us. That means that there will be some inevitable road bumps and curveballs for parents, teachers, and more importantly for you students to manage.
+            And while it may feel like everything about learning has changed. What follows are some tips on working through the tech challenges and other mental challengers u may go thorugh
+            <br>
+            Placement</p>
+          <a href=" https://www.canada.ca/en/public-health/services/mental-health-services/mental-health-get-help.html">Canada</a> 
+          <a href="https://togetherall.com/en-us/">USA</a>
+        </div>
+      </div>
+	  </div>
+	  <h4>Hello</h4>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/perfect-scrollbar.jquery.min.js' %}"></script>
+    <script src="{% static 'js/sparkline.js' %}"></script>
+    <!--Wave Effects -->
+    <script src="{% static 'js/waves.js' %}"></script>
+    <!--Menu sidebar -->
+    <script src="{% static 'js/sidebarmenu.js' %}"></script>
+    <!--Custom JavaScript -->
+    <script src="{% static 'js/custom.min.js' %}"></script>
+    <!--This page JavaScript -->
+    <!-- <script src="dist/js/pages/dashboards/dashboard1.js' %}"></script> -->
+    <!-- Charts js Files -->
+    <script src="{% static 'js/excanvas.js' %}"></script>
+    <script src="{% static 'js/jquery.flot.js' %}"></script>
+    <script src="{% static 'js/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'js/jquery.flot.time.js' %}"></script>
+    <script src="{% static 'js/jquery.flot.stack.js' %}"></script>
+    <script src="{% static 'js/jquery.flot.crosshair.js' %}"></script>
+    <script src="{% static 'js/jquery.flot.tooltip.min.js' %}"></script>
+    <script src="{% static 'js/chart-page-init.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,105 @@
+1646096524843	geckodriver	INFO	Listening on 127.0.0.1:50405
+1646096527906	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "50406" "-no-remote" "-profile" "C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofileLCU1xK"
+1646096528414	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofileLCU1xK\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:50406/devtools/browser/f8d2c4ee-3247-4870-8b44-1cb22fa84caf
+1646096531113	Marionette	INFO	Listening on port 50411
+1646096531166	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1646096607245	Marionette	INFO	Stopped listening on port 50411
+console.warn: TopSitesFeed: Failed to fetch data from Contile server: NetworkError when attempting to fetch resource.
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofilerD97mW\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:50556/devtools/browser/abbeb7f1-c66e-4a66-bcdc-48a2a8e1cb46
+1646096570462	Marionette	INFO	Listening on port 50561
+1646096570827	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1646096608237	Marionette	INFO	Stopped listening on port 50561
+console.warn: TopSitesFeed: Failed to fetch data from Contile server: NetworkError when attempting to fetch resource.
+1646096615363	geckodriver	INFO	Listening on 127.0.0.1:50696
+1646096618423	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "50697" "-no-remote" "-profile" "C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofileGhQ2ub"
+1646096618873	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofileGhQ2ub\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:50697/devtools/browser/6a73e805-3e6f-4877-9776-ce9428ab57fc
+1646096621269	Marionette	INFO	Listening on port 50702
+1646096621638	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1646096626447	Marionette	INFO	Stopped listening on port 50702
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1105: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\qasim\AppData\Local\Temp\rust_mozprofileGhQ2ub\protections.sqlite
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_Cancel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PBrowser::Msg___delete__) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+1646096697938	geckodriver	INFO	Listening on 127.0.0.1:50837
+1646096700998	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "50838" "-no-remote" "-profile" "C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofile2gbs6C"
+1646096701392	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofile2gbs6C\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:50838/devtools/browser/d7319cfc-f6b9-4e48-b95a-7da90396bf74
+1646096703735	Marionette	INFO	Listening on port 50843
+1646096704176	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1646096709143	Marionette	INFO	Stopped listening on port 50843
+console.warn: TopSitesFeed: Failed to fetch data from Contile server: NetworkError when attempting to fetch resource.
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1105: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\qasim\AppData\Local\Temp\rust_mozprofile2gbs6C\protections.sqlite
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PBrowser::Msg___delete__) Channel closing: too late to send/recv, messages will be lost
+
+1646096844838	geckodriver	INFO	Listening on 127.0.0.1:50977
+1646096847802	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "50978" "-no-remote" "-profile" "C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofileosaCVq"
+1646096848217	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofileosaCVq\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:50978/devtools/browser/18d0364b-9c2f-4d51-be79-4fd3b7d5ce10
+1646096851305	Marionette	INFO	Listening on port 50985
+1646096851498	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1646096941628	Marionette	INFO	Stopped listening on port 50985
+console.warn: TopSitesFeed: Failed to fetch data from Contile server: NetworkError when attempting to fetch resource.
+
+###!!! [Parent][PGPUParent] Error: RunMessage(msgname=PGPU::Msg_ShutdownVR) Channel closing: too late to send/recv, messages will be lost
+
+1646096945624	geckodriver	INFO	Listening on 127.0.0.1:51092
+1646096948678	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "51093" "-no-remote" "-profile" "C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofileM4rHYM"
+1646096949103	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofileM4rHYM\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:51093/devtools/browser/ff1899a9-8b42-4b03-960b-f36e0608bf99
+1646096951524	Marionette	INFO	Listening on port 51099
+1646096951880	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1646097271359	Marionette	INFO	Stopped listening on port 51099
+console.warn: TopSitesFeed: Failed to fetch data from Contile server: NetworkError when attempting to fetch resource.
+JavaScript error: chrome://remote/content/marionette/cert.js, line 55: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+ NotFoundError("Could not open the file at C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofileYjJmaY\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:51231/devtools/browser/786f6c43-f9df-4ba3-baf2-76cb33fd8e0a
+1646097256176	Marionette	INFO	Listening on port 51236
+1646097256275	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+1646263981868	Marionette	INFO	Stopped listening on port 51236
+console.warn: TopSitesFeed: Failed to fetch data from Contile server: NetworkError when attempting to fetch resource.
+profile9KE2yV"
+1646097304359	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\qasim\\AppData\\Local\\Temp\\rust_mozprofile9KE2yV\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:51334/devtools/browser/0f8b6227-1f2d-4a5b-9f44-b04d1d8ec329
+1646097306617	Marionette	INFO	Listening on port 51340
+1646097307117	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+1646263980739	Marionette	INFO	Stopped listening on port 51340
+console.warn: TopSitesFeed: Failed to fetch data from Contile server: NetworkError when attempting to fetch resource.
